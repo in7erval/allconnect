@@ -1,0 +1,35 @@
+.logo_all {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.logo_img {
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 20px;
+    background-color: royalblue;
+    border-radius: 20%;
+    color: white;
+    margin-right: 10px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.logo_text {
+    display: flex;
+    height: 25px;
+    font-weight: 500;
+    font-size: 20px;
+    text-decoration: none;
+}
+
+@media (max-width: 500px) {
+    .logo_text {
+        display: none;
+    }
+}

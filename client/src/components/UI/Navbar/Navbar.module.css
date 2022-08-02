@@ -1,0 +1,27 @@
+
+.navbar_link {
+    text-decoration: none;
+    margin-right: 10px;
+    color: black;
+    padding: 5px 10px;
+    border-radius: 10px;
+    font-size: 15px;
+}
+
+.navbar_link:hover {
+    background-color: #eeeeee;
+    color: royalblue;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+a:active {
+    color: black;
+}
+
+a:hover {
+    color: black;
+}
