@@ -1,21 +1,39 @@
 import React from 'react';
 import cl from './AsideNav.module.css';
-import {Link} from "react-router-dom";
-import {useSelector} from "react-redux";
 
-const AsideNav = () => {
+const AsideNav = ({isAbsolute}) => {
 
 	const userId = localStorage.getItem('userId');
 
+	isAbsolute = isAbsolute === undefined || isAbsolute === null ? false : isAbsolute;
+
 	return (
-		<aside className={cl.aside_nav}>
-			<ul>
-				<a href="/"><li><div>Главная</div></li></a>
-				<a href={`/user${userId}`}><li><div>Моя страница</div></li></a>
-				<a href="/posts"><li><div>Новости</div></li></a>
-				<a href="#"><li><div>Ещё что-нибудь</div></li></a>
-				<a href="#"><li><div>Сообщения</div></li></a>
-			</ul>
+		<aside className={`${cl.aside_nav} ${isAbsolute ? cl.aside_nav_ignore : ""}`}>
+			<div className={cl.aside_nav__content}>
+				<ul>
+					<a href="/">
+						<li>
+							<div>Главная</div>
+						</li>
+					</a>
+					<a href={`/user${userId}`}>
+						<li>
+							<div>Моя страница</div>
+						</li>
+					</a>
+					{/*<a href="/posts"><li><div>Новости</div></li></a>*/}
+					<a href="#">
+						<li>
+							<div>Ещё что-нибудь</div>
+						</li>
+					</a>
+					<a href="#">
+						<li>
+							<div>Сообщения</div>
+						</li>
+					</a>
+				</ul>
+			</div>
 		</aside>
 	);
 };

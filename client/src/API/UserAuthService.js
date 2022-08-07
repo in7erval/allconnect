@@ -12,6 +12,14 @@ export default class UserAuthService {
 		return response.data;
 	}
 
+	static async registerUser(user) {
+		const response = await axios.post('/api/register', {
+			...user
+		});
+		console.log("response", response.data);
+		return response.data;
+	}
+
 	// static async getAll(limit = 10, page = 1) {
 	// 	const response = await axios.get('/api/users', {
 	// 		params: {

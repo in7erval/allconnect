@@ -1,0 +1,119 @@
+.post {
+    margin-bottom: 25px;
+    border-radius: 5px;
+    min-width: 250px;
+}
+
+.post:hover {
+    box-shadow: rgb(0 16 61 / 20%) 0 6px 20px;
+    /*cursor: pointer;*/
+}
+
+.post__owner {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #4169E122;
+    box-shadow: rgb(0 16 61 / 7%) 0 6px 20px;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    justify-content: space-between;
+}
+
+.post__owner:hover {
+    box-shadow: rgb(50 50 255 / 15%) 0 6px 20px;
+    /*border: 1px solid #4169E155;*/
+    /*padding: 9px 19px;*/
+    cursor: pointer;
+    background-color: #4169E144;
+}
+
+.post__owner > img {
+    border-radius: 50%;
+    width: 50px;
+    margin-left: 0;
+    border: 3px solid #eeeeee;
+}
+
+.post__owner > p {
+    margin-left: 20px;
+    font-weight: bold;
+    color: #222222;
+}
+
+.post__publish_date {
+    font-size: 0.75rem;
+    padding: 5px 10px;
+    background-color: #f9f9f9;
+    text-align: right;
+}
+
+.post__content {
+    display: flex;
+    padding: 15px;
+    justify-content: center;
+    background-color: white;
+    box-shadow: rgb(0 16 61 / 7%) 0 6px 20px;
+    flex-direction: column;
+    min-height: 100px;
+}
+
+.post__content img {
+    width: auto;
+    max-width: 100%;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    align-self: center;
+    max-height: 400px;
+    object-fit: scale-down;
+}
+
+.post__content div {
+    margin: 0 10px;
+    font-size: 1rem;
+}
+
+.post__btns {
+    display: flex;
+    align-items: center;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    width: 100%;
+    background-color: #00000011;
+    padding: 10px;
+}
+
+.post__btns:hover {
+    cursor: pointer;
+    background-color: #00000033;
+}
+
+.post__btns div {
+    margin: 2px 10px;
+}
+
+/**
+    post -- название из CSSTransition
+ */
+
+.post_enter {
+    filter: opacity(0);
+    transform: scale(1.2);
+    /*transform: translateX(-600px);*/
+}
+
+.post_enter_active {
+    filter: opacity(1);
+    transform: scale(1);
+    /*transform: translateX(0px);*/
+    transition: all 500ms linear;
+}
+
+.post_exit_active {
+    /*transform: translateX(-600px);*/
+    filter: opacity(0);
+    transform: scale(1.2);
+    transition: all 500ms linear;
+}

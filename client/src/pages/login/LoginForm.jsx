@@ -9,7 +9,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {setId} from "../../store/authReducer";
 
-const LoginForm = () => {
+const LoginForm = ({returnToHome}) => {
 
 	const dispatch = useDispatch();
 
@@ -23,12 +23,13 @@ const LoginForm = () => {
 		e.preventDefault();
 		console.log('submit', login);
 		UserAuthService.checkLoginPassword(login, password)
+			.then(res => res.body)
 			.then(res => {
-				if (res.user !== null) {
+				if (res._id !== null) {
 					setIsAuth(true);
 					localStorage.setItem('auth', 'true');
-					localStorage.setItem('userId', res.user.userId);
-					dispatch(setId(res.user.userId))
+					localStorage.setItem('userId', res.user);
+					dispatch(setId(res.user))
 					navigate('/posts');
 				} else {
 					dispatch(parseError(res.error));
@@ -55,14 +56,19 @@ const LoginForm = () => {
 					</div>
 					<input type={passwordVisible ? "text" : "password"}
 								 onChange={e => setPassword(e.target.value)}
-					className={passwordVisible ? "" : "ls-5"}/>
+								 className={passwordVisible ? "" : "ls-5"}/>
 				</div>
 				<button type="submit"
-					className={cl.login_page__login_button}
-					disabled={!password || !login}>
+								className={cl.login_page__login_button}
+								disabled={!password || !login}>
 					Войти
 				</button>
+
 			</form>
+			<button className={cl.login_page__login_button}
+							onClick={returnToHome}>
+				Назад
+			</button>
 		</div>
 	);
 };

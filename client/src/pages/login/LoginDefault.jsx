@@ -1,7 +1,7 @@
 import React from 'react';
 import cl from './Login.module.css';
 
-const LoginDefault = ({setIsLoginOpen}) => {
+const LoginDefault = ({setIsLoginOpen, setIsRegistrationOpen}) => {
 	return (
 		<div className={cl.login_page__login + " w-400"}>
 			{/** fixme: LOGO */}
@@ -15,7 +15,8 @@ const LoginDefault = ({setIsLoginOpen}) => {
 					onClick={() => setIsLoginOpen(true)}>
 					Войти
 				</button>
-				<button className={cl.login_page__login_button + " " + cl.btn_register_color}>
+				<button className={cl.login_page__login_button + " " + cl.btn_register_color}
+				onClick={() => setIsRegistrationOpen(true)}>
 					Зарегистрироваться
 				</button>
 			</div>

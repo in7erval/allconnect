@@ -13,6 +13,20 @@ export default class PostService {
 		return response.data;
 	}
 
+	static async getAllForUser(limit = 10, page = 1, userId) {
+		const response = await axios.get('/api/posts', {
+			params: {
+				limit: limit,
+				page: page,
+				owner: true,
+				comments: true,
+				userId: userId
+			}
+		});
+		console.log("posts", response.data);
+		return response.data;
+	}
+
 	static
 	async getById(id) {
 		const response = await axios.get('/api/posts/' + id);

@@ -1,6 +1,6 @@
 import About from "../pages/About";
 import Posts from "../pages/Posts";
-import UserPage from "../pages/UserPage";
+import UserPage from "../pages/UserPage/UserPage";
 import Login from "../pages/login/Login";
 import Error from "../pages/Error";
 import {Navigate} from "react-router-dom";

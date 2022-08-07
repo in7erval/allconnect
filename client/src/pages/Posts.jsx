@@ -3,14 +3,12 @@ import {useFetching} from "../hooks/useFetching";
 import PostService from "../API/PostService";
 import {getPageCount} from "../utils/pages";
 import Loader from "../components/UI/Loader/Loader";
-import PostList from "../components/PostList";
+import PostList from "../components/UI/Post/PostList";
 import {useObserver} from "../hooks/useObserver";
 import AsideNav from "../components/AsideNav/AsideNav";
-import UserService from "../API/UserService";
 
 function Posts() {
 	const [posts, setPosts] = useState([]);
-	const [friends, setFriends] = useState([]);
 	const [totalPages, setTotalPages] = useState(0);
 	const LIMIT_POSTS = 10;
 	const [page, setPage] = useState(1);
@@ -18,23 +16,12 @@ function Posts() {
 	const userId = localStorage.getItem("userId");
 
 	const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
-		let response = await PostService.getAll(LIMIT_POSTS, page);
-		// todo: фильтрацию перенести в бэк (заодно и норм значение totalCount будет)
-		setPosts([...posts, ...response.body.filter(el => friends.includes(el.owner.id))]);
-		const totalCount = response.total;
+		let response = await PostService.getAllForUser(LIMIT_POSTS, page, userId);
+		setPosts([...posts, ...response.body]);
+		const totalCount = response.count;
 		console.log("totalCount: ", totalCount);
 		setTotalPages(getPageCount(totalCount, LIMIT_POSTS));
 	});
-
-	const [fetchUserFriends, isUserFriendsLoading, userFriendsError] = useFetching(async () => {
-		let response = await UserService.getById(userId);
-		setFriends(response.friends);
-		console.log("resp.friends", response.friends);
-	});
-
-	useEffect(() => {
-		fetchUserFriends();
-	}, []);
 
 	useEffect(() => {
 		fetchPosts();
@@ -65,12 +52,14 @@ function Posts() {
 			<div className="default_page__content">
 				<div
 					style={{
-						width: '70%',
+						width: '70%'
 					}}>
-					<PostList
-						remove={removePost}
-						posts={posts}
-					/>
+					<div style={{flex: 1}}>
+						<PostList
+							remove={null}
+							posts={posts}
+						/>
+					</div>
 					{isPostsLoading &&
 						<div style={{
 							display: "flex",

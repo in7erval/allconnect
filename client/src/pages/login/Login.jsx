@@ -2,10 +2,17 @@ import React, {useState} from 'react';
 import mock from '../../assets/mock-iphone.png';
 import LoginDefault from "./LoginDefault";
 import LoginForm from "./LoginForm";
+import RegistrationForm from "./RegistrationForm";
 import cl from "./Login.module.css";
 
 const Login = () => {
 	const [isLoginOpen, setIsLoginOpen] = useState(false);
+	const [isRegistrationOpen, setIsRegistrationOpen] = useState(false);
+
+	const returnToHome = () => {
+		setIsLoginOpen(false);
+		setIsRegistrationOpen(false);
+	};
 
 	return (
 		<div
@@ -33,10 +40,12 @@ const Login = () => {
 					/>
 				</div>
 			</div>
+			{!isLoginOpen && !isRegistrationOpen &&
+				<LoginDefault setIsLoginOpen={setIsLoginOpen}
+											setIsRegistrationOpen={setIsRegistrationOpen}/>}
 			{isLoginOpen ?
-				<LoginForm/>
-				: <LoginDefault setIsLoginOpen={setIsLoginOpen}/>
-			}
+				<LoginForm returnToHome={returnToHome}/>
+				: isRegistrationOpen ? <RegistrationForm returnToHome={returnToHome}/> : null}
 		</div>
 	);
 };

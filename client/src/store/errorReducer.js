@@ -14,13 +14,27 @@ const hasError = (errors, errorCode) => {
 	return false;
 }
 
+const findIndexErrorCode = (errors, errorCode) => {
+	for (let i = 0; i < errors.length; i++) {
+		if (errors[i].code === errorCode) {
+			return i;
+		}
+	}
+	return -1;
+}
+
 
 export const errorReducer = (state = defaultState, action) => {
 	switch (action.type) {
 		case SET_ERROR:
 			console.log("set error");
 			let alreadyHasThisError = hasError(state.errors, action.payload.code);
-			return {...state, errors: alreadyHasThisError ? state.errors : [...state.errors, action.payload]};
+			if (alreadyHasThisError) {
+				let indexCode = findIndexErrorCode(state.errors, action.payload.code);
+				state.errors.splice(indexCode, 1);
+			}
+
+			return {...state, errors: [...state.errors, action.payload]};
 		case DELETE_ERROR:
 			console.log("delete error");
 			let index = action.payload;
