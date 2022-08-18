@@ -4,7 +4,7 @@ import {useFetching} from "../../hooks/useFetching";
 import Loader from "../../components/UI/Loader/Loader";
 import UserService from "../../API/UserService";
 import AsideNav from "../../components/AsideNav/AsideNav";
-import PostList from "../../components/UI/Post/PostList";
+import PostList from "../../components/Post/PostList";
 import {getPageCount} from "../../utils/pages";
 import {useObserver} from "../../hooks/useObserver";
 import userpic from "../../assets/userpic.jpeg";
@@ -12,6 +12,7 @@ import FlexibleInput from "../../components/UI/FlexibleInput/FlexibleInput.jsx";
 import cl from "./UserPage.module.css";
 import MyModal from "../../components/UI/MyModal/MyModal";
 import ImageUploader from "../../components/UI/ImageUploader/ImageUploader";
+import PostForm from "../../components/Post/PostForm/PostForm.jsx";
 
 const determineIsFriend = (userFriendsId, friendId) => {
 	console.log(`determineIsFriend(${userFriendsId}, ${friendId})`);
@@ -137,17 +138,17 @@ const UserPage = () => {
 										</div>
 										<div className={cl.user_pic_btns}>
 											{isOwner &&
-												<div onClick={() => setShowImageUploader(true)}>
+												<button onClick={() => setShowImageUploader(true)}>
 													Загрузить фото
-												</div>
+												</button>
 											}
 											{!isOwner && (!isFriend ?
-												(<div onClick={addFriend}>
+												(<button onClick={addFriend}>
 													Добавить в друзья
-												</div>) :
-												(<div className={cl.danger} onClick={deleteFriend}>
+												</button>) :
+												(<button className={cl.danger} onClick={deleteFriend}>
 													Удалить из друзей
-												</div>))
+												</button>))
 											}
 										</div>
 									</div>
@@ -209,6 +210,7 @@ const UserPage = () => {
 									</div>
 								</div>
 								<div>
+									{isOwner && <PostForm />}
 									{isPostsLoading && <Loader/>}
 									<PostList
 										remove={null}

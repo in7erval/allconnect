@@ -1,0 +1,324 @@
+
+.messages {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    font-size: 1rem;
+    padding: 0.5rem 1.5rem;
+    background-color: white;
+    overflow-y: auto;
+    height: 70vh;
+}
+
+.message {
+    display: flex;
+    flex-direction: row;
+    margin: 10px 0;
+    align-items: center;
+}
+
+.message a {
+    width: fit-content;
+}
+
+.message button {
+    border: none;
+    background-color: white;
+    font-family: "Roboto", sans-serif;
+    font-size: 1rem;
+    max-width: 75%;
+    min-width: 10%;
+    text-align: left;
+}
+
+
+
+.message.from_me {
+    justify-content: right;
+}
+
+.message > img {
+    width: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+    align-self: end;
+}
+
+.name {
+    font-size: 0.75rem;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 0.25rem;
+    color: #000000;
+}
+
+
+.name:hover {
+    cursor: pointer;
+    color: #00000099;
+}
+
+/** */
+.message p {
+    border-radius: 1.15rem;
+    line-height: 1.25;
+    /*max-width: 75%;*/
+    padding: 0.5rem .875rem;
+    position: relative;
+    word-wrap: break-word;
+    animation-name: message-appear;
+    animation-duration: 1s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    /*min-width: 10%;*/
+}
+
+@keyframes message-appear {
+    from {
+        opacity: 0.5;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.message p::before,
+.message p::after {
+    bottom: -0.1rem;
+    content: "";
+    height: 1rem;
+    position: absolute;
+}
+
+p.from_me {
+    align-self: flex-end;
+    background-color: #ddddff;
+    color: black;
+}
+
+.highlight p.from_me {
+    background-color: #aaaaff;
+    box-shadow: 0 0 20px 5px #aaaaff;
+}
+
+p.from_me::before {
+    border-bottom-left-radius: 0.8rem 0.7rem;
+    border-right: 1rem solid #ddddff;
+    right: -0.35rem;
+    transform: translate(0, -0.1rem);
+}
+
+p.from_me::after {
+    background-color: white;
+    border-bottom-left-radius: 0.5rem;
+    right: -40px;
+    transform: translate(-30px, -2px);
+    width: 10px;
+}
+
+.highlight p.from_me::after {
+    width: 0;
+}
+
+.highlight p.from_me::before {
+    border-right: none;
+}
+
+p[class^="from_"] {
+    margin: 0.5rem 0;
+    width: fit-content;
+}
+
+p.from_me ~ p.from_me {
+    margin: 0.25rem 0 0;
+}
+
+p.from_me ~ p.from_me:not(:last-child) {
+    margin: 0.25rem 0 0;
+}
+
+p.from_me ~ p.from_me:last-child {
+    margin-bottom: 0.5rem;
+}
+
+p.from_them {
+    align-items: flex-start;
+    background-color: #e5e5ea;
+    color: #000;
+}
+
+.highlight p.from_them {
+    background-color: #d5d5d5;
+    box-shadow: 0 0 20px 5px #d5d5d5;
+}
+
+p.from_them::before {
+    border-bottom-right-radius: 0.8rem 0.7rem;
+    border-left: 1rem solid #e5e5ea;
+    left: -0.35rem;
+    transform: translate(0, -0.1rem);
+}
+
+.highlight p.from_them::before {
+    display: none;
+}
+
+p.from_them::after {
+    background-color: white;
+    border-bottom-right-radius: 0.5rem;
+    left: 20px;
+    transform: translate(-30px, -2px);
+    width: 10px;
+}
+
+.highlight p.from_them::after {
+    width: 0;
+}
+
+p[class^="from_"].emoji {
+    background: none;
+    font-size: 2.5rem;
+}
+
+p[class^="from_"].emoji::before {
+    content: none;
+}
+
+.no_tail p::before {
+    display: none;
+}
+
+.margin-b_none {
+    margin-bottom: 0 !important;
+}
+
+.margin-b_one {
+    margin-bottom: 1rem !important;
+}
+
+.margin-t_one {
+    margin-top: 1rem !important;
+}
+
+/*.comment__msg {*/
+/*    width: 100%;*/
+/*    padding: 5px 10px;*/
+/*    background: #eeeeee;*/
+/*    border-top: 3px solid #eeeeee;*/
+/*    display: flex;*/
+/*    align-items: flex-end;*/
+/*}*/
+
+/*.comment__msg textarea {*/
+/*    padding: 10px 20px;*/
+/*    font-family: "Roboto", sans-serif;*/
+/*    width: 100%;*/
+/*    font-size: 1rem;*/
+/*    border: none;*/
+/*    border-radius: 10px;*/
+/*    outline: none;*/
+/*    background-color: #cccccc;*/
+/*    resize: none;*/
+/*}*/
+
+/*.comment__msg textarea:focus {*/
+/*    background-color: #dddddd;*/
+/*}*/
+
+/*.comment__msg img {*/
+/*    width: 30px;*/
+/*    margin: 5px;*/
+/*    background-color: #be961e;*/
+/*    padding: 7px;*/
+/*    border-radius: 50%;*/
+/*    filter: invert(100%);*/
+/*}*/
+
+/*.comment__msg_img {*/
+/*    min-height: 50px;*/
+/*    display: flex;*/
+/*    align-items: flex-end;*/
+/*    border: none*/
+/*}*/
+
+/*.comment__msg_img:hover img {*/
+/*    animation-duration: 1s;*/
+/*    animation-timing-function: ease-in-out;*/
+/*    animation-name: slidetop;*/
+/*    animation-iteration-count: 1;*/
+/*    cursor: pointer;*/
+/*}*/
+
+/*@keyframes slidetop {*/
+/*    0% {*/
+/*        margin-bottom: 5px;*/
+/*    }*/
+/*    50% {*/
+/*        margin-bottom: 12px;*/
+/*    }*/
+/*    100% {*/
+/*        margin-bottom: 5px;*/
+/*    }*/
+/*}*/
+
+.message__input {
+    width: 100%;
+    padding: 5px 10px;
+    background: #eeeeee;
+    border-top: 3px solid #eeeeee;
+    display: flex;
+    align-items: flex-end;
+}
+
+.message__input textarea {
+    padding: 10px 20px;
+    font-family: "Roboto", sans-serif;
+    width: 100%;
+    font-size: 1rem;
+    border: none;
+    border-radius: 10px;
+    outline: none;
+    background-color: #cccccc;
+    resize: none;
+}
+
+.message__input textarea:focus {
+    background-color: #dddddd;
+}
+
+.message__input img {
+    width: 30px;
+    margin: 5px;
+    background-color: #be961e;
+    padding: 7px;
+    border-radius: 50%;
+    filter: invert(100%);
+}
+
+.message__input_img {
+    min-height: 50px;
+    display: flex;
+    align-items: flex-end;
+    border: none;
+    background-color: #eeeeee;
+}
+
+.message__input_img:hover img {
+    animation-duration: 1s;
+    animation-timing-function: ease-in-out;
+    animation-name: slidetop;
+    animation-iteration-count: infinite;
+    cursor: pointer;
+}
+
+@keyframes slidetop {
+    0% {
+        margin-bottom: 5px;
+    }
+    50% {
+        margin-bottom: 12px;
+    }
+    100% {
+        margin-bottom: 5px;
+    }
+}

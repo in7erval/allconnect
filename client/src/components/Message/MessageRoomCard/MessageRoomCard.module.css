@@ -1,0 +1,58 @@
+.message_card {
+    width: 100%;
+    min-height: 60px;
+    background-color: #D1D9F1;
+    padding: 10px 20px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: none;
+    font-family: "Roboto", sans-serif;
+    font-size: 1rem;
+    animation-name: smooth-scale-reverse;
+    animation-duration: 0.25s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+    margin-bottom: 20px;
+}
+
+.message_card:last-child {
+    margin-bottom: 0;
+}
+
+.message_card img {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border: 2px solid #B1B9F1;
+}
+
+.message_card:hover {
+    cursor: pointer;
+    animation-name: smooth-scale;
+    animation-duration: 0.25s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+}
+
+@keyframes smooth-scale {
+    from {
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(1.05);
+    }
+}
+
+@keyframes smooth-scale-reverse {
+    from {
+        transform: scale(1.05);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}

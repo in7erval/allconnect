@@ -27,7 +27,7 @@ const AsideNav = ({isAbsolute}) => {
 							<div>Ещё что-нибудь</div>
 						</li>
 					</a>
-					<a href="#">
+					<a href="/messages">
 						<li>
 							<div>Сообщения</div>
 						</li>

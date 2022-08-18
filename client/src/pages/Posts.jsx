@@ -3,7 +3,7 @@ import {useFetching} from "../hooks/useFetching";
 import PostService from "../API/PostService";
 import {getPageCount} from "../utils/pages";
 import Loader from "../components/UI/Loader/Loader";
-import PostList from "../components/UI/Post/PostList";
+import PostList from "../components/Post/PostList";
 import {useObserver} from "../hooks/useObserver";
 import AsideNav from "../components/AsideNav/AsideNav";
 
