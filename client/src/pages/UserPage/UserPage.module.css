@@ -160,6 +160,8 @@
 
 .user_page__friends_imgs a {
     margin: auto auto 10px;
+    width: 60px;
+    height: 60px;
 }
 
 .user_page__friends_imgs a img {
