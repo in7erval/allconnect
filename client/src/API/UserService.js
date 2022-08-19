@@ -1,9 +1,10 @@
 import axios from "axios";
+import {API_URL} from "../config";
 
 export default class UserService {
 
 	static async getAll(limit = 10, page = 1) {
-		const response = await axios.get('/api/users', {
+		const response = await axios.get(`${API_URL}/api/users`, {
 			params: {
 				limit: limit,
 				page: page
@@ -15,7 +16,7 @@ export default class UserService {
 
 	static async getFullById(id) {
 		console.debug(`getFullById(${id})`);
-		const response = await axios.get('/api/users/' + id, {
+		const response = await axios.get(`${API_URL}/api/users/${id}`, {
 			params: {
 				friends: true
 			}
@@ -32,7 +33,7 @@ export default class UserService {
 	}
 
 	static async getById(id) {
-		const response = await axios.get('/api/users/' + id);
+		const response = await axios.get(`${API_URL}/api/users/${id}`);
 		console.log("users: getById", response.data);
 		return response.data;
 	}
@@ -41,7 +42,7 @@ export default class UserService {
 	async getUserPosts(userId, limit, page) {
 		// todo: backend возвращает сразу все посты!!!!
 
-		const response = await axios.get(`/api/users/${userId}/posts`, {
+		const response = await axios.get(`${API_URL}/api/users/${userId}/posts`, {
 			params: {
 				limit: limit,
 				page: page,
@@ -55,7 +56,7 @@ export default class UserService {
 	}
 
 	static async getByName(firstName, lastName) {
-		const response = await axios.get(`/api/getUserByName`, {
+		const response = await axios.get(`${API_URL}/api/getUserByName`, {
 			params: {
 				firstName, lastName
 			}
@@ -66,7 +67,7 @@ export default class UserService {
 	}
 
 	static async addFriend(userId, friendId) {
-		const response = await axios.get(`/api/addFriend`, {
+		const response = await axios.get(`${API_URL}/api/addFriend`, {
 			params: {
 				userId, friendId
 			}
@@ -76,7 +77,7 @@ export default class UserService {
 	}
 
 	static async deleteFriend(userId, friendId) {
-		const response = await axios.get(`/api/deleteFriend`, {
+		const response = await axios.get(`${API_URL}/api/deleteFriend`, {
 			params: {
 				userId, friendId
 			}
@@ -86,7 +87,7 @@ export default class UserService {
 	}
 
 	static async changeName(userId, firstName, lastName) {
-		const response = await axios.post(`/api/users/update`, {
+		const response = await axios.post(`${API_URL}/api/users/update`, {
 			userId, firstName, lastName
 		});
 
@@ -97,7 +98,7 @@ export default class UserService {
 		const formData = new FormData();
 		formData.append('image', data);
 
-		const response = await axios.post(`/api/user/${userId}/image`, formData,
+		const response = await axios.post(`${API_URL}/api/user/${userId}/image`, formData,
 			{
 				headers: {
 					"Content-Type": "multipart/form-data"

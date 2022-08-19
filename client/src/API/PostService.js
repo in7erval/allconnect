@@ -1,9 +1,10 @@
 import axios from "axios";
+import {API_URL} from "../config";
 
 export default class PostService {
 
 	static async getAll(limit = 10, page = 1) {
-		const response = await axios.get('/api/posts', {
+		const response = await axios.get(`${API_URL}/api/posts`, {
 			params: {
 				limit: limit,
 				page: page
@@ -14,7 +15,7 @@ export default class PostService {
 	}
 
 	static async getAllForUser(limit = 10, page = 1, userId) {
-		const response = await axios.get('/api/posts', {
+		const response = await axios.get(`${API_URL}/api/posts`, {
 			params: {
 				limit: limit,
 				page: page,
@@ -32,7 +33,7 @@ export default class PostService {
 			text, owner: userId
 		};
 
-		const response = await axios.post("/api/posts", post);
+		const response = await axios.post(`${API_URL}/api/posts`, post);
 
 		return response.data;
 	}
@@ -40,20 +41,20 @@ export default class PostService {
 
 	static
 	async getById(id) {
-		const response = await axios.get('/api/posts/' + id);
+		const response = await axios.get(`${API_URL}/api/posts/${id}`);
 		console.log("getById", response.data);
 		return response.data;
 	}
 
 	static
 	async getCommentsByPostId(id) {
-		const response = await axios.get(`/api/posts/${id}/comments`);
+		const response = await axios.get(`${API_URL}/api/posts/${id}/comments`);
 		// console.log("getCommentsById", response.data);
 		return response.data;
 	}
 
 	static async addLike(postId, userLikedId) {
-		const response = await axios.post(`/api/posts/${postId}/likes?add`,
+		const response = await axios.post(`${API_URL}/api/posts/${postId}/likes?add`,
 			{
 				_id: postId,
 				userId: userLikedId
@@ -63,7 +64,7 @@ export default class PostService {
 	}
 
 	static async deleteLike(postId, userLikedId) {
-		const response = await axios.post(`/api/posts/${postId}/likes?delete`,
+		const response = await axios.post(`${API_URL}/api/posts/${postId}/likes?delete`,
 			{
 				userId: userLikedId
 			});

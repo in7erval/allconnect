@@ -1,10 +1,11 @@
 import axios from "axios";
+import {API_URL} from "../config";
 
 export default class UserAuthService {
 
 	static async checkLoginPassword(login, password) {
 
-		const response = await axios.post('/api/auth', {
+		const response = await axios.post(`${API_URL}/api/auth`, {
 			login: login,
 			loginPass: btoa(`${login}:${password}`)
 		});
@@ -13,7 +14,7 @@ export default class UserAuthService {
 	}
 
 	static async registerUser(user) {
-		const response = await axios.post('/api/register', {
+		const response = await axios.post(`${API_URL}/api/register`, {
 			...user
 		});
 		console.log("response", response.data);
