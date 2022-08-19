@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import cl from './ImageUploader.module.css';
 import UserService from "../../../API/UserService";
 import {useNavigate} from "react-router-dom";
+import Compress from "browser-image-compression";
 
 
 const ImageUploader = ({currentImg}) => {
@@ -22,17 +23,25 @@ const ImageUploader = ({currentImg}) => {
 		const _handleImageChange = (e) => {
 			e.preventDefault();
 
-			console.log("imageChange!");
-
-			let reader = new FileReader();
 			let file = e.target.files[0];
+			console.log("file", file);
 
-			reader.onloadend = () => {
-				setFile(file);
-				setImagePreviewUrl(reader.result);
+			const options = {
+				maxSizeMB: 0.5,
+				useWebWorker: true
 			}
 
-			reader.readAsDataURL(file);
+			Compress(file, options)
+				.then(compressedBlob => {
+					console.log(compressedBlob)
+					compressedBlob.lastModifiedDate = new Date()
+					const convertedBlobFile = new File([compressedBlob], file.name, { type: file.type, lastModified: Date.now()});
+					setFile(convertedBlobFile);
+					setImagePreviewUrl(URL.createObjectURL(compressedBlob));
+				})
+				.catch(e => {
+					// Show the user a toast message or notification that something went wrong while compressing file
+				});
 
 		}
 
@@ -54,7 +63,8 @@ const ImageUploader = ({currentImg}) => {
 								 name="image"
 								 onChange={_handleImageChange}/>
 					<button className={cl.submit}
-									type="submit">Upload Image
+									type="submit">
+						Upload Image
 					</button>
 				</form>
 			</div>

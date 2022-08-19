@@ -97,6 +97,7 @@ export default class UserService {
 	static async savePhoto(userId, data) {
 		const formData = new FormData();
 		formData.append('image', data);
+		console.log("data", data);
 
 		const response = await axios.post(`${API_URL}/api/user/${userId}/image`, formData,
 			{

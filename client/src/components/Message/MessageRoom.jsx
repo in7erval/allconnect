@@ -92,6 +92,7 @@ const MessageRoom = ({messages, sendMessage, removeMessage, toUser, log, refMess
 					<img
 						style={{
 							width: 50,
+							height: 50,
 							borderRadius: '50%',
 							objectFit: 'cover'
 						}}
