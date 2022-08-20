@@ -1,10 +1,10 @@
 import Posts from "../pages/Posts";
 import UserPage from "../pages/UserPage/UserPage";
 import Login from "../pages/Login/Login";
-import Error from "../pages/Error";
 import {Navigate} from "react-router-dom";
 import Messages from "../pages/Messages/Messages";
 import MessageRoom from "../pages/MessageRoom/MessageRoom";
+import Friends from "../pages/Friends/Friends";
 
 export const routes = [
 	{path: '/posts', element: isAuth => isAuth ? <Posts/> : <Navigate to="/login"/>},
@@ -12,6 +12,6 @@ export const routes = [
 	{path: '/Login', element: isAuth => isAuth ? <Navigate to="/posts"/> : <Login/>},
 	{path: '/messages', element: isAuth => isAuth ? <Messages/> : <Login/>},
 	{path: '/messages/:id', element: isAuth => isAuth ? <MessageRoom/> : <Login/>},
-	{path: '/', element: isAuth => isAuth ? <Navigate to="/posts"/> : <Login/>},
-	{path: '/*', element: () => <Error/>}
+	{path: '/friends', element: isAuth => isAuth ? <Friends/> : <Login/>},
+	{path: '/', element: isAuth => isAuth ? <Navigate to="/posts"/> : <Login/>}
 ]

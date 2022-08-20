@@ -81,7 +81,6 @@
 }
 
 .user_page__info input {
-    margin-bottom: 20px;
     font-size: 2em;
     font-weight: bold;
     border: none;
@@ -106,7 +105,7 @@
 .user_page__info form {
     display: flex;
     width: 100%;
-    flex-wrap: wrap;
+    margin-bottom: 20px;
 }
 
 .user_page__friends {

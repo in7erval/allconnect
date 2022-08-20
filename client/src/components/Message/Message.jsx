@@ -28,27 +28,28 @@ const Message = ({pic, id, ownerId, firstName, message, onContextMenu, highlight
 				<button onContextMenu={(event_) => onContextMenu(event_, id)}>
 					<p className={messageClass}>
 						{!isCurrentUserMessage && <a className={cl.name} href={`/user${ownerId}`}>{firstName}</a>}
-						<div>
+						<span>
 							{message}
-							<span
-								style={{
-									margin: 0,
-									padding: "0 0 0 10px",
-									fontSize: 11,
-									alignSelf: "end",
-									display: "flex"
-								}}
-							>
-							{stringTime}
-						</span>
-						</div>
-					</p>
+						<span
+							style={{
+								margin: 0,
+								padding: "0 0 0 10px",
+								fontSize: 11,
+								alignSelf: "end",
+								display: "flex"
+							}}
+						>
+								{stringTime}
+							</span>
+					</span>
+				</p>
 
-				</button>
-			</div>
+			</button>
 		</div>
+</div>
 
-	);
+)
+	;
 };
 
 Message.propTypes = {

@@ -1,6 +1,5 @@
 import {useContext} from 'react';
 import {Route, Routes} from "react-router-dom";
-import Error from "../pages/Error";
 import {AuthContext} from "../context";
 import Loader from "./UI/Loader/Loader";
 import {routes} from "../router";
@@ -16,7 +15,6 @@ const AppRouter = () => {
 
 	return (
 		<Routes>
-			<Route path="/error" element={<Error/>}/>
 			{/*<Route path="/" element={<Posts/>}/>*/}
 			{/*<Route path="/*" element={<Error/>}/>*/}
 

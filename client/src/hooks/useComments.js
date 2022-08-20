@@ -24,6 +24,8 @@ export default function useComments(postId) {
 	// иммутабельное состояние для сокета
 	const {current: socket} = useRef(
 		io(SERVER_URI, {
+			reconnectionDelayMax: 10_000,
+			forceNew: true,
 			query: {
 				postId: postId,
 				userId: loggedUserId,
@@ -44,16 +46,10 @@ export default function useComments(postId) {
 		// запрашиваем сообщения из БД
 		socket.emit('comments:get');
 
-
 		// обрабатываем получение системного сообщения
 		socket.on('log', (log) => {
 			setLog(log);
 		})
-
-		// // обрабатываем получение обновленного списка пользователей
-		// socket.on('user_list:update', (users) => {
-		// 	setUsers(users);
-		// })
 
 		// обрабатываем получение обновленного списка сообщений
 		socket.on('comment_list:update', (comments) => {

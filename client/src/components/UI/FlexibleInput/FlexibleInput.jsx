@@ -6,7 +6,7 @@ const FlexibleInput = ({content, onChange}) => {
 	const span = useRef();
 
 	useEffect(() => {
-			setWidth(span.current.offsetWidth + 10);
+			setWidth(span.current.offsetWidth);
 	}, [content]);
 	return (
 		<div>

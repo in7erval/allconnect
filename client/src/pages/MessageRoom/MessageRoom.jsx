@@ -162,7 +162,7 @@ const MessageRoom = () => {
 							<Loader/>
 						</div>
 						:
-						<div style={{flex: 1}} onClick={() => setShowContextMenu(false)}>
+						<div style={{flex: 1, height: "80vh"}} onClick={() => setShowContextMenu(false)}>
 							<a href={`/user${user._id}`}>
 								<div className={cl.to_user_card}>
 									{user.lastName} {user.firstName}

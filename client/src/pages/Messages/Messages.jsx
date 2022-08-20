@@ -74,51 +74,45 @@ const Messages = () => {
 		<div className="default_page">
 			<AsideNav/>
 			<div className="default_page__content">
-				<div
-					style={{
-						width: '90%',
-						maxWidth: 700
+				{isLoading ?
+					<div style={{
+						display: "flex",
+						justifyContent: 'center',
+						marginTop: 50
 					}}>
-					{isLoading ?
-						<div style={{
-							display: "flex",
-							justifyContent: 'center',
-							marginTop: 50
-						}}>
-							<Loader/>
-						</div> :
-						<div style={{flex: 1}}>
-							<div>
-								<h2 className={cl.messages_header}>
-									Сообщения
-								</h2>
+						<Loader/>
+					</div> :
+					<div style={{flex: 1, width: "100%"}}>
+						<div>
+							<h2 className={cl.messages_header}>
+								Сообщения
+							</h2>
 
-								<div className={cl.messages_rooms}>
-									{friendsWithLastMessages?.map(element => (
-										<a key={element._id} href={`/messages/${createRoomId(loggedUserId, element._id)}`}>
-											<MessageRoomCard
-												user={element}
-												id={element._id}
-												messagePreview={element.messagePreview}
-												messageTime={element.messageTime}
-											/>
-										</a>
-									))}
-									{user?.friends?.filter(element => checkFriendNotInLastMessages(element, lastMessages)).map(element => (
-										<a key={element._id} href={`/messages/${createRoomId(loggedUserId, element._id)}`}>
-											<MessageRoomCard
-												user={element}
-												id={element._id}
-											/>
-										</a>
-									))}
-								</div>
+							<div className={cl.messages_rooms}>
+								{friendsWithLastMessages?.map(element => (
+									<a key={element._id} href={`/messages/${createRoomId(loggedUserId, element._id)}`}>
+										<MessageRoomCard
+											user={element}
+											id={element._id}
+											messagePreview={element.messagePreview}
+											messageTime={element.messageTime}
+										/>
+									</a>
+								))}
+								{user?.friends?.filter(element => checkFriendNotInLastMessages(element, lastMessages)).map(element => (
+									<a key={element._id} href={`/messages/${createRoomId(loggedUserId, element._id)}`}>
+										<MessageRoomCard
+											user={element}
+											id={element._id}
+										/>
+									</a>
+								))}
 							</div>
 						</div>
-					}
-				</div>
-				{/*<div ref={lastElement} style={{height: 20}}/>*/}
+					</div>
+				}
 			</div>
+			{/*<div ref={lastElement} style={{height: 20}}/>*/}
 		</div>
 
 	);

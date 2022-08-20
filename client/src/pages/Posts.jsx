@@ -33,45 +33,24 @@ function Posts() {
 			console.log('useObser');
 		});
 
-
-	// const removePost = (post) => {
-	// 	setPosts(posts.filter(p => p.id !== post.id));
-	// }
-
-	// const createPost = (newPost) => {
-	// 	setPosts([...posts, newPost]);
-	// 	setModal(false);
-	// };
-	//
-	// const changePage = (page) => {
-	// 	setPage(page);
-	// }
-
 	return (
 		<div className="default_page">
 			<AsideNav/>
 			<div className="default_page__content">
-				<div
-					style={{
-						width: '70%'
+				<PostList
+					remove={Object.create(null)}
+					posts={posts}
+				/>
+				{isPostsLoading &&
+					<div style={{
+						display: "flex",
+						justifyContent: 'center',
+						marginTop: 50
 					}}>
-					<div style={{flex: 1}}>
-						<PostList
-							remove={Object.create(null)}
-							posts={posts}
-						/>
+						<Loader/>
 					</div>
-					{isPostsLoading &&
-						<div style={{
-							display: "flex",
-							justifyContent: 'center',
-							marginTop: 50
-						}}>
-							<Loader/>
-						</div>
-					}
-					<div ref={lastElement} style={{height: 20}}/>
-				</div>
+				}
+				<div ref={lastElement} style={{height: 20}}/>
 			</div>
 		</div>
 

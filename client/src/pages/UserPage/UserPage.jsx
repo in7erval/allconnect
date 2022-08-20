@@ -127,18 +127,14 @@ const UserPage = () => {
 		return (
 			<div className="default_page">
 				<AsideNav/>
-				<div
-					className="default_page__content justify-content-start"
-					style={{marginLeft: 25}}
-				>
+				<div className="default_page__content justify-content-start">
 					<div className={cl.user_page}>
 						{isLoading ?
 							<Loader/> : (
 								<div className={cl.user_page__pic_name}>
 									<div className={cl.user_page__pic_and_btns}>
 										<div className={cl.user_pic}>
-											<img src={user.picture === null || user.picture === undefined
-												? userpic : user.picture} alt={"pic"}/>
+											<img src={user.picture ?? userpic} alt={"pic"}/>
 										</div>
 										<div className={cl.user_pic_btns}>
 											{isOwner &&
