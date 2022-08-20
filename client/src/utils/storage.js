@@ -2,7 +2,7 @@ const storage = {
 	get: (key) =>
 		window.localStorage.getItem(key)
 			? JSON.parse(window.localStorage.getItem(key))
-			: null,
+			: undefined,
 	set: (key, value) => window.localStorage.setItem(key, JSON.stringify(value))
 }
 

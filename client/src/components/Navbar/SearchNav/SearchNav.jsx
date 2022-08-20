@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
 import cl from "./SearchNav.module.css";
 import UserService from "../../../API/UserService";
 import {parseError} from "../../../store/errorReducer";
@@ -11,17 +11,17 @@ const SearchNav = () => {
 		const dispatch = useDispatch();
 		const navigate = useNavigate();
 
-		const searchUser = e => {
-			e.preventDefault();
-			const params = searchInput.toString().split(" ");
-			const firstName = params[0].trim();
-			const lastName = params[1].trim();
+		const searchUser = event_ => {
+			event_.preventDefault();
+			const parameters = searchInput.toString().split(" ");
+			const firstName = parameters[0].trim();
+			const lastName = parameters[1].trim();
 
 			UserService.getByName(firstName, lastName)
-				.then(res => {
-						if (res.body != null) {
-							console.log(`user found: ${res.body._id}`);
-							navigate(`/user${res.body._id}`, { replace: true });
+				.then(response => {
+						if (response.body != null) {
+							console.log(`user found: ${response.body._id}`);
+							navigate(`/user${response.body._id}`, {replace: true});
 							navigate(0);
 						} else {
 							dispatch(parseError({code: 101, msg: `User ${searchInput} not found`}));
@@ -33,9 +33,12 @@ const SearchNav = () => {
 		return (
 			<div className={cl.search}>
 				<form onSubmit={searchUser}>
-					<input type="text" className={cl.search_input} placeholder="Поиск..."
-								 value={searchInput}
-								 onChange={e => setSearchInput(e.target.value)}
+					<input
+						type="text"
+						className={cl.search_input}
+						placeholder="Поиск..."
+						value={searchInput}
+						onChange={event_ => setSearchInput(event_.target.value)}
 					/>
 				</form>
 			</div>

@@ -7,17 +7,7 @@
 .logo_img {
     width: 25px;
     height: 25px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 900;
-    font-size: 20px;
-    background-color: royalblue;
-    border-radius: 20%;
-    color: white;
     margin-right: 10px;
-    text-align: center;
-    text-decoration: none;
 }
 
 .logo_text {

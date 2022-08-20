@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import AsideNav from "../../components/AsideNav/AsideNav";
 import Loader from "../../components/UI/Loader/Loader";
 import {USER_ID} from "../../constants";
@@ -11,14 +11,14 @@ import MessageRoomEnter from "../../components/Message/MessageRoomEnter";
 
 const Messages = () => {
 
-	const [roomId, setRoomId] = useState(null);
-	const [toUser, setToUser] = useState(null);
-	const [user, setUser] = useState(null);
+	const [roomId, setRoomId] = useState(Object.create(null));
+	const [toUser, setToUser] = useState(Object.create(null));
+	const [user, setUser] = useState(Object.create(null));
 
 
 	const loggedUserId = localStorage.getItem(USER_ID);
 
-	const [fetchUserForPage, isLoading, error] = useFetching(async () => {
+	const [fetchUserForPage, isLoading, _error] = useFetching(async () => {
 		await UserService.getFullById(loggedUserId)
 			.then(resp => resp.body)
 			.then(body => setUser(body));
@@ -68,9 +68,12 @@ const Messages = () => {
 
 									<div className={cl.messages_rooms}>
 										<div>
-											{user?.friends?.map(el => (
-												<MessageRoomCard user={el} id={el._id} key={el._id}
-																				 onClick={() => initRoom(el)}
+											{user?.friends?.map(element => (
+												<MessageRoomCard
+													user={element}
+													id={element._id}
+													key={element._id}
+													onClick={() => initRoom(element)}
 												/>
 											))
 											}

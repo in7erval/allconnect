@@ -1,76 +1,71 @@
-import React, {useEffect, useRef, useState} from 'react';
+import {useRef, useState} from 'react';
 import MessageInput from "./MessageInput";
-import useChat from "../../hooks/useChat";
-import {USER_ID} from "../../constants";
 import Message from "./Message.jsx";
 import cl from "./Message.module.css";
 import userpic from "../../assets/userpic.jpeg";
 import MessageContextMenu from "./MessageContextMenu/MessageContextMenu";
+import PropTypes from "prop-types";
+
+const getPosition = (event_) => {
+	let posx = 0;
+	let posy = 0;
+
+	if (!event_) event_ = window.event;
+
+	if (event_.pageX || event_.pageY) {
+		posx = event_.pageX;
+		posy = event_.pageY;
+	} else if (event_.clientX || event_.clientY) {
+		posx = event_.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+		posy = event_.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+	}
+
+	return {
+		x: posx,
+		y: posy
+	}
+};
 
 const MessageRoom = ({messages, sendMessage, removeMessage, toUser, log, refMessages}) => {
 
-	const loggedUserId = localStorage.getItem(USER_ID);
+	// const loggedUserId = localStorage.getItem(USER_ID);
 	const [showContextMenu, setShowContextMenu] = useState(false);
-	const contextMenuRef = useRef();
+	const contextMenuReference = useRef();
 	const [contextMenuFor, setContextMenuFor] = useState(null);
 
 	console.log("SERVER_LOG:", log);
 	console.log("messages", messages);
 
 
+	const onContextMenu = (event_, messageId) => {
+		event_.preventDefault();
+		console.log(contextMenuReference.current);
+		console.log(contextMenuReference.current.offsetWidth);
+		console.log(contextMenuReference.current.offsetHeight);
 
-	const onContextMenu = (e, messageId) => {
-		e.preventDefault();
-
-		const getPosition = (e) => {
-			let posx = 0;
-			let posy = 0;
-
-			if (!e) e = window.event;
-
-			if (e.pageX || e.pageY) {
-				posx = e.pageX;
-				posy = e.pageY;
-			} else if (e.clientX || e.clientY) {
-				posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-				posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
-			}
-
-			return {
-				x: posx,
-				y: posy
-			}
-		};
-		console.log(contextMenuRef.current);
-		console.log(contextMenuRef.current.offsetWidth);
-		console.log(contextMenuRef.current.offsetHeight);
-
-		const positionMenu = (e) => {
-			let clickCoords = getPosition(e);
+		const positionMenu = (eventInPositionMenu) => {
+			let clickCoords = getPosition(eventInPositionMenu);
 			let clickCoordsX = clickCoords.x;
 			let clickCoordsY = clickCoords.y;
 
-			let menuWidth = contextMenuRef.current.offsetWidth + 4;
-			let menuHeight = contextMenuRef.current.offsetHeight + 4;
+			let menuWidth = contextMenuReference.current.offsetWidth + 4;
+			let menuHeight = contextMenuReference.current.offsetHeight + 4;
 
 			let windowWidth = window.innerWidth;
 			let windowHeight = window.innerHeight;
 
-			if ((windowWidth - clickCoordsX) < menuWidth) {
-				contextMenuRef.current.style.left = windowWidth - menuWidth + "px";
-			} else {
-				contextMenuRef.current.style.left = clickCoordsX + "px";
-			}
+			contextMenuReference.current.style.left =
+				(((windowWidth - clickCoordsX) < menuWidth) ?
+					windowWidth - menuWidth : clickCoordsX) + "px";
 
-			if ((windowHeight - clickCoordsY) < menuHeight) {
-				contextMenuRef.current.style.top = windowHeight - menuHeight + "px";
-			} else {
-				contextMenuRef.current.style.top = clickCoordsY + "px";
-			}
+			contextMenuReference.current.style.top =
+				(((windowHeight - clickCoordsY) < menuHeight) ?
+					windowHeight - menuHeight : clickCoordsY) + "px";
+
 		}
 
-		console.log(getPosition(e));
-		positionMenu(e);
+		console.log(getPosition(event_));
+		positionMenu(event_);
 		setShowContextMenu(true);
 		setContextMenuFor(messageId);
 	};
@@ -96,21 +91,21 @@ const MessageRoom = ({messages, sendMessage, removeMessage, toUser, log, refMess
 							borderRadius: '50%',
 							objectFit: 'cover'
 						}}
-						src={toUser.picture ? toUser.picture : userpic} alt={`pic for ${toUser.firstName}`}/>
+						src={toUser.picture ?? userpic} alt={`pic for ${toUser.firstName}`}/>
 				</div>
 			</a>
-			{messages && messages.length !== 0 &&
+			{messages && messages.length > 0 &&
 				<div className={cl.messages} ref={refMessages}>
-					{messages.map(el => (
+					{messages.map(element => (
 							<Message
-								key={el._id}
-								id={el._id}
-								ownerId={el.user._id}
-								pic={el.user.picture ? el.user.picture : userpic}
-								firstName={el.user.firstName}
-								message={el.text}
+								key={element._id}
+								id={element._id}
+								ownerId={element.user._id}
+								pic={element.user.picture ?? userpic}
+								firstName={element.user.firstName}
+								message={element.text}
 								onContextMenu={onContextMenu}
-								highlight={showContextMenu && contextMenuFor === el._id}
+								highlight={showContextMenu && contextMenuFor === element._id}
 							/>
 						)
 					)}
@@ -121,7 +116,7 @@ const MessageRoom = ({messages, sendMessage, removeMessage, toUser, log, refMess
 			</div>
 			<MessageContextMenu
 				isActive={showContextMenu}
-				reference={contextMenuRef}
+				reference={contextMenuReference}
 				liMap={[
 					// {onClick: () => console.log("delete me"), text: "Удалить у меня", isDanger: true},
 					{onClick: () => removeMessage(contextMenuFor), text: "Удалить у всех", isDanger: true}
@@ -131,5 +126,14 @@ const MessageRoom = ({messages, sendMessage, removeMessage, toUser, log, refMess
 		</div>
 	);
 };
+
+MessageRoom.propTypes = {
+	messages: PropTypes.array.isRequired,
+	log: PropTypes.string.isRequired,
+	sendMessage: PropTypes.func.isRequired,
+	removeMessage: PropTypes.func.isRequired,
+	toUser: PropTypes.object.isRequired,
+	refMessages: PropTypes.element.isRequired
+}
 
 export default MessageRoom;

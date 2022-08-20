@@ -3,6 +3,8 @@ import {API_URL} from "../config";
 
 export default class UserService {
 
+	constructor() {}
+
 	static async getAll(limit = 10, page = 1) {
 		const response = await axios.get(`${API_URL}/api/users`, {
 			params: {
@@ -67,7 +69,7 @@ export default class UserService {
 	}
 
 	static async addFriend(userId, friendId) {
-		const response = await axios.get(`${API_URL}/api/addFriend`, {
+		const _response = await axios.get(`${API_URL}/api/addFriend`, {
 			params: {
 				userId, friendId
 			}
@@ -77,7 +79,7 @@ export default class UserService {
 	}
 
 	static async deleteFriend(userId, friendId) {
-		const response = await axios.get(`${API_URL}/api/deleteFriend`, {
+		const _response = await axios.get(`${API_URL}/api/deleteFriend`, {
 			params: {
 				userId, friendId
 			}
@@ -87,7 +89,7 @@ export default class UserService {
 	}
 
 	static async changeName(userId, firstName, lastName) {
-		const response = await axios.post(`${API_URL}/api/users/update`, {
+		const _response = await axios.post(`${API_URL}/api/users/update`, {
 			userId, firstName, lastName
 		});
 
@@ -99,7 +101,7 @@ export default class UserService {
 		formData.append('image', data);
 		console.log("data", data);
 
-		const response = await axios.post(`${API_URL}/api/user/${userId}/image`, formData,
+		const _response = await axios.post(`${API_URL}/api/user/${userId}/image`, formData,
 			{
 				headers: {
 					"Content-Type": "multipart/form-data"

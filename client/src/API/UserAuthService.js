@@ -3,6 +3,8 @@ import {API_URL} from "../config";
 
 export default class UserAuthService {
 
+	constructor() {}
+
 	static async checkLoginPassword(login, password) {
 
 		const response = await axios.post(`${API_URL}/api/auth`, {

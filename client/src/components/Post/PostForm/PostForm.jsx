@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
 import TextareaAutosize from "react-textarea-autosize";
 import cl from "./PostForm.module.css";
 import PostService from "../../../API/PostService";
@@ -6,29 +6,29 @@ import {useNavigate} from "react-router-dom";
 
 const PostForm = () => {
 
-	const [postMsg, setPostMsg] = useState("");
+	const [postMessage, setPostMessage] = useState("");
 	const userId = localStorage.getItem("userId");
 	const navigate = useNavigate();
 
 
-	const addNewPost = (e) => {
-		e.preventDefault();
-		console.log("new post!", postMsg);
-		PostService.addNewPost(userId, postMsg)
+	const addNewPost = (event_) => {
+		event_.preventDefault();
+		console.log("new post!", postMessage);
+		PostService.addNewPost(userId, postMessage)
 			.then(() => navigate(0));
 	};
 
 	return (
 		<form onSubmit={addNewPost} className={cl.post_form}>
 				<TextareaAutosize
-					value={postMsg}
+					value={postMessage}
 					placeholder="Что Вы хотите сказать?"
-					onChange={e => {
-						setPostMsg(e.target.value);
+					onChange={event_ => {
+						setPostMessage(event_.target.value);
 					}}
-					onKeyPress={(e) => {
-						if (e.code === "Enter" && !e.shiftKey) {
-							addNewPost(e);
+					onKeyPress={(event_) => {
+						if (event_.code === "Enter" && !event_.shiftKey) {
+							addNewPost(event_);
 						}
 					}}
 				/>

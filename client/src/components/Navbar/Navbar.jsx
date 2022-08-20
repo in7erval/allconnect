@@ -1,16 +1,15 @@
-import React, {useContext, useState} from 'react';
+import {useContext, useState} from 'react';
 import {Link} from "react-router-dom";
 import {AuthContext} from "../../context";
 import Logo from "./Logo/Logo";
 import SearchNav from "./SearchNav/SearchNav";
 import cl from "./Navbar.module.css";
-import LinksNav from "./LinksNav/LinksNav";
 import AsideNav from "../AsideNav/AsideNav";
 import MyModal from "../UI/MyModal/MyModal";
 
 const Navbar = () => {
 
-	const {isAuth, setIsAuth} = useContext(AuthContext);
+	const {_isAuth, setIsAuth} = useContext(AuthContext);
 	const [showMenu, setShowMenu] = useState(false);
 
 	const logout = () => {
@@ -24,8 +23,10 @@ const Navbar = () => {
 				<Link to="/"><Logo/></Link>
 				<SearchNav/>
 
-				<div className={cl.show_menu}
-						 onClick={() => setShowMenu(!showMenu)}>
+				<div
+					className={cl.show_menu}
+					onClick={() => setShowMenu(!showMenu)}
+				>
 					Меню
 				</div>
 
@@ -33,9 +34,11 @@ const Navbar = () => {
 					<a className={cl.navbar_link} onClick={logout}>Выйти</a>
 				</div>
 
-				<MyModal visible={showMenu} setVisible={setShowMenu}
-								 children={<AsideNav isAbsolute={true}/>}
-				/>
+				<MyModal
+					visible={showMenu} setVisible={setShowMenu}
+				>
+					<AsideNav isAbsolute={true}/>
+				</MyModal>
 
 			</div>
 		</nav>

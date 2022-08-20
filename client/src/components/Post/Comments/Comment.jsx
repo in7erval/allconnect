@@ -1,12 +1,13 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
 import cl from './Comment.module.css';
+import PropTypes from "prop-types";
 
 const Comment = ({pic, ownerId, firstName, lastName, message}) => {
 
 	const currentUserId = localStorage.getItem('userId');
 
 	/* fixme: DELETE random(). fix on det continious comms */
-	const [tail, setTail] = useState(((Math.random() > 0.5) ? "" : (" " + cl.no_tail)));
+	const [tail, _setTail] = useState(((Math.random() > 0.5) ? "" : (" " + cl.no_tail)));
 	/* fixme: delete random */
 
 	const isCurrentUserComment = ownerId === currentUserId;
@@ -23,5 +24,13 @@ const Comment = ({pic, ownerId, firstName, lastName, message}) => {
 		</div>
 	);
 };
+
+Comment.propTypes = {
+	pic: PropTypes.string.isRequired,
+	ownerId: PropTypes.string.isRequired,
+	firstName: PropTypes.string.isRequired,
+	lastName: PropTypes.string.isRequired,
+	message: PropTypes.string.isRequired
+}
 
 export default Comment;

@@ -1,19 +1,20 @@
-import React, {useEffect, useRef} from 'react';
+import {useEffect, useRef} from 'react';
 import useChat from "../../hooks/useChat";
 import MessageRoom from "./MessageRoom";
+import PropTypes from "prop-types";
 
 const MessageRoomEnter = ({roomId, user}) => {
 
 	const {messages, log, sendMessage, removeMessage} = useChat(roomId, user);
-	const refMessages = useRef();
+	const referenceMessages = useRef();
 
 
 	useEffect(() => {
 		// скролл до низа при рендере
-		if (refMessages.current) {
-			refMessages.current.scrollTop = refMessages.current.scrollHeight;
+		if (referenceMessages.current) {
+			referenceMessages.current.scrollTop = referenceMessages.current.scrollHeight;
 		}
-		// console.log(refMessages);
+		// console.log(referenceMessages);
 	}, []);
 
 
@@ -24,8 +25,14 @@ const MessageRoomEnter = ({roomId, user}) => {
 			sendMessage={sendMessage}
 			removeMessage={removeMessage}
 			toUser={user}
-			refMessages={refMessages}/>
+			refMessages={referenceMessages}
+		/>
 	);
 };
+
+MessageRoomEnter.propTypes = {
+	roomId: PropTypes.string.isRequired,
+	user: PropTypes.object.isRequired
+}
 
 export default MessageRoomEnter;

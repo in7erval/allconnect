@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 
 import './styles/App.css';
 import {BrowserRouter} from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
 import AppRouter from "./components/AppRouter";
 import {AuthContext} from "./context";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import Popup from './components/UI/Popup/Popup.jsx';
 
 function App() {

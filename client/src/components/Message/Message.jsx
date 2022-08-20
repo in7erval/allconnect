@@ -1,5 +1,5 @@
-import React from 'react';
 import cl from "./Message.module.css";
+import PropTypes from "prop-types";
 
 const Message = ({pic, id, ownerId, firstName, message, onContextMenu, highlight}) => {
 
@@ -17,7 +17,7 @@ const Message = ({pic, id, ownerId, firstName, message, onContextMenu, highlight
 		<div>
 			<div className={`${cl.message} ${messageClass} ${highlight ? cl.highlight : ""}`}>
 				{!isCurrentUserMessage && <img src={pic} alt={"comment owner"}/>}
-				<button onContextMenu={(e) => onContextMenu(e, id)}>
+				<button onContextMenu={(event_) => onContextMenu(event_, id)}>
 					<p className={messageClass}>
 						{!isCurrentUserMessage && <a className={cl.name} href={`/user${ownerId}`}>{firstName}</a>}
 						{message}
@@ -28,5 +28,16 @@ const Message = ({pic, id, ownerId, firstName, message, onContextMenu, highlight
 
 	);
 };
+
+Message.propTypes = {
+	key: PropTypes.string.isRequired,
+	id: PropTypes.string.isRequired,
+	ownerId: PropTypes.string.isRequired,
+	pic: PropTypes.string.isRequired,
+	firstName: PropTypes.string.isRequired,
+	message: PropTypes.string.isRequired,
+	onContextMenu: PropTypes.func.isRequired,
+	highlight: PropTypes.bool.isRequired
+}
 
 export default Message;

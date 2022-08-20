@@ -1,7 +1,7 @@
-import React from 'react';
 import PostItem from "./PostItem";
 import {CSSTransition, TransitionGroup} from "react-transition-group";
 import cl from "./Post.module.css";
+import PropTypes from "prop-types";
 
 const PostList = ({posts, remove}) => {
 	return (
@@ -16,13 +16,17 @@ const PostList = ({posts, remove}) => {
 						exitActive: cl.post_exit_active
 					}}
 				>
-					<PostItem remove={remove} number={post._id}
-										post={post}/>
+					<PostItem remove={remove} number={post._id} post={post}/>
 				</CSSTransition>
 			)}
 		</TransitionGroup>
 	);
 
 };
+
+PostList.propTypes = {
+	posts: PropTypes.array.isRequired,
+	remove: PropTypes.func.isRequired
+}
 
 export default PostList;

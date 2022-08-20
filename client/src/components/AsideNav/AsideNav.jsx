@@ -1,5 +1,5 @@
-import React from 'react';
 import cl from './AsideNav.module.css';
+import PropTypes from "prop-types";
 
 const AsideNav = ({isAbsolute}) => {
 
@@ -37,5 +37,9 @@ const AsideNav = ({isAbsolute}) => {
 		</aside>
 	);
 };
+
+AsideNav.propTypes = {
+	isAbsolute: PropTypes.bool.isRequired
+}
 
 export default AsideNav;

@@ -1,4 +1,5 @@
-import React, {useEffect, useRef, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
+import PropTypes from "prop-types";
 
 const FlexibleInput = ({content, onChange}) => {
 	const [width, setWidth] = useState(0);
@@ -19,5 +20,10 @@ const FlexibleInput = ({content, onChange}) => {
 		</div>
 	);
 };
+
+FlexibleInput.propTypes = {
+	content: PropTypes.string.isRequired,
+	onChange: PropTypes.func.isRequired
+}
 
 export default FlexibleInput;

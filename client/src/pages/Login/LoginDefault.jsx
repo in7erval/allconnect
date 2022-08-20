@@ -1,11 +1,13 @@
-import React from 'react';
 import cl from './Login.module.css';
+import logo from "../../assets/logo.png";
+import PropTypes from "prop-types";
 
 const LoginDefault = ({setIsLoginOpen, setIsRegistrationOpen}) => {
 	return (
 		<div className={cl.login_page__login + " w-400"}>
 			{/** fixme: LOGO */}
-			<div className={cl.logo}>A</div>
+			<img src={logo} className={cl.logo} alt="logo"/>
+			{/*<div className={cl.logo}>A</div>*/}
 			<div className={cl.login_page__login_title}>
 				Вход allconnect
 			</div>
@@ -28,5 +30,10 @@ const LoginDefault = ({setIsLoginOpen, setIsRegistrationOpen}) => {
 		</div>
 	);
 };
+
+LoginDefault.propTypes = {
+	setIsLoginOpen: PropTypes.func.isRequired,
+	setIsRegistrationOpen: PropTypes.func.isRequired
+}
 
 export default LoginDefault;

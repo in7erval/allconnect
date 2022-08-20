@@ -1,13 +1,14 @@
-import React, {useState, useContext} from 'react';
+import {useContext, useState} from 'react';
 import showPass from '../../assets/pass_show.png';
 import passVisible from '../../assets/pass_visible.png';
 import cl from './Login.module.css';
 import UserAuthService from "../../API/UserAuthService";
 import {parseError} from "../../store/errorReducer";
 import {AuthContext} from "../../context";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {setId} from "../../store/authReducer";
+import PropTypes from 'prop-types';
 
 const RegistrationForm = ({returnToHome}) => {
 
@@ -18,11 +19,11 @@ const RegistrationForm = ({returnToHome}) => {
 	const [surname, setSurname] = useState();
 	const [password, setPassword] = useState();
 	const [passwordVisible, setPasswordVisible] = useState(false);
-	const {isAuth, setIsAuth} = useContext(AuthContext);
+	const {_isAuth, setIsAuth} = useContext(AuthContext);
 	const navigate = useNavigate();
 
-	const sendData = (e) => {
-		e.preventDefault();
+	const sendData = (event_) => {
+		event_.preventDefault();
 		console.log('register', login);
 		UserAuthService.registerUser(
 			{
@@ -30,19 +31,19 @@ const RegistrationForm = ({returnToHome}) => {
 				loginPass: btoa(`${login}:${password}`),
 				firstName: name, lastName: surname
 			}
-		).then(res => {
-			console.log("registerResp", res);
-			if (res != null && res.body != null && res.body._id !== null) {
+		).then(response => {
+			console.log("registerResp", response);
+			if (response != null && response.body != null && response.body._id !== null) {
 				setIsAuth(true);
 				localStorage.setItem('auth', 'true');
-				localStorage.setItem('userId', res.body._id);
-				dispatch(setId(res.body._id));
-				navigate('/posts', { replace: true });
+				localStorage.setItem('userId', response.body._id);
+				dispatch(setId(response.body._id));
+				navigate('/posts', {replace: true});
 			} else {
-				dispatch(parseError(res.error));
+				dispatch(parseError(response.error));
 			}
 		})
-			.catch(err => dispatch(parseError(err)));
+			.catch(error => dispatch(parseError(error)));
 	}
 
 	return (
@@ -53,39 +54,51 @@ const RegistrationForm = ({returnToHome}) => {
 			<form className={cl.login_form} onSubmit={sendData}>
 				<div className={cl.login_form__input_group}>
 					<label>Имя</label>
-					<input type="text" autoFocus={true} onChange={e => setName(e.target.value)}/>
+					<input type="text" autoFocus={true} onChange={event_ => setName(event_.target.value)}/>
 				</div>
 				<div className={cl.login_form__input_group}>
 					<label>Фамилия</label>
-					<input type="text" autoFocus={true} onChange={e => setSurname(e.target.value)}/>
+					<input type="text" autoFocus={true} onChange={event_ => setSurname(event_.target.value)}/>
 				</div>
 				<div className={cl.login_form__input_group}>
 					<label>Логин</label>
-					<input type="text" autoFocus={true} onChange={e => setLogin(e.target.value)}/>
+					<input type="text" autoFocus={true} onChange={event_ => setLogin(event_.target.value)}/>
 				</div>
 				<div className={cl.login_form__input_group}>
 					<div className={cl.login_form__password_and_img}>
 						<label>Пароль</label>
-						<img src={passwordVisible ? passVisible : showPass}
-								 alt="showpass"
-								 onClick={() => setPasswordVisible(!passwordVisible)}/>
+						<img
+							src={passwordVisible ? passVisible : showPass}
+							alt="showpass"
+							onClick={() => setPasswordVisible(!passwordVisible)}
+						/>
 					</div>
-					<input type={passwordVisible ? "text" : "password"}
-								 onChange={e => setPassword(e.target.value)}
-								 className={passwordVisible ? "" : "ls-5"}/>
+					<input
+						type={passwordVisible ? "text" : "password"}
+						onChange={event_ => setPassword(event_.target.value)}
+						className={passwordVisible ? "" : "ls-5"}
+					/>
 				</div>
 
-				<button type="submit"
-								className={cl.login_page__login_button + " " + cl.btn_register_color}>
+				<button
+					type="submit"
+					className={cl.login_page__login_button + " " + cl.btn_register_color}
+				>
 					Зарегистрироваться
 				</button>
 			</form>
-			<button className={cl.login_page__login_button}
-							onClick={returnToHome}>
+			<button
+				className={cl.login_page__login_button}
+				onClick={returnToHome}
+			>
 				Назад
 			</button>
 		</div>
 	);
 };
+
+RegistrationForm.propTypes = {
+	returnToHome: PropTypes.func.isRequired
+}
 
 export default RegistrationForm;

@@ -1,8 +1,9 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
 import cl from './ImageUploader.module.css';
 import UserService from "../../../API/UserService";
 import {useNavigate} from "react-router-dom";
 import Compress from "browser-image-compression";
+import PropTypes from "prop-types";
 
 
 const ImageUploader = ({currentImg}) => {
@@ -12,18 +13,18 @@ const ImageUploader = ({currentImg}) => {
 		const userId = localStorage.getItem("userId");
 		const navigate = useNavigate();
 
-		const _handleSubmit = (e) => {
-			e.preventDefault();
-			console.log(e);
+		const _handleSubmit = (event_) => {
+			event_.preventDefault();
+			console.log(event_);
 			console.log('handle uploading-', file);
 			UserService.savePhoto(userId, file);
 			navigate(0);
 		}
 
-		const _handleImageChange = (e) => {
-			e.preventDefault();
+		const _handleImageChange = (event_) => {
+			event_.preventDefault();
 
-			let file = e.target.files[0];
+			let file = event_.target.files[0];
 			console.log("file", file);
 
 			const options = {
@@ -35,11 +36,11 @@ const ImageUploader = ({currentImg}) => {
 				.then(compressedBlob => {
 					console.log(compressedBlob)
 					compressedBlob.lastModifiedDate = new Date()
-					const convertedBlobFile = new File([compressedBlob], file.name, { type: file.type, lastModified: Date.now()});
+					const convertedBlobFile = new File([compressedBlob], file.name, {type: file.type, lastModified: Date.now()});
 					setFile(convertedBlobFile);
 					setImagePreviewUrl(URL.createObjectURL(compressedBlob));
 				})
-				.catch(e => {
+				.catch(_error => {
 					// Show the user a toast message or notification that something went wrong while compressing file
 				});
 
@@ -58,12 +59,13 @@ const ImageUploader = ({currentImg}) => {
 					{/*							console.log("base64", base64);*/}
 					{/*							// setPhoto({image: base64});*/}
 					{/*						}}/>*/}
-					<input className={cl.file_input}
-								 type="file"
-								 name="image"
-								 onChange={_handleImageChange}/>
-					<button className={cl.submit}
-									type="submit">
+					<input
+						className={cl.file_input}
+						type="file"
+						name="image"
+						onChange={_handleImageChange}
+					/>
+					<button className={cl.submit} type="submit">
 						Upload Image
 					</button>
 				</form>
@@ -71,5 +73,9 @@ const ImageUploader = ({currentImg}) => {
 		);
 	}
 ;
+
+ImageUploader.propTypes = {
+	currentImg: PropTypes.string.isRequired
+}
 
 export default ImageUploader;

@@ -3,6 +3,8 @@ import {API_URL} from "../config";
 
 export default class PostService {
 
+	constructor() {}
+
 	static async getAll(limit = 10, page = 1) {
 		const response = await axios.get(`${API_URL}/api/posts`, {
 			params: {

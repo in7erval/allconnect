@@ -1,32 +1,36 @@
-import React from 'react';
 import cl from "./Popup.module.css";
 import {useDispatch} from "react-redux";
 import {deleteError} from "../../../store/errorReducer";
+import PropTypes from "prop-types";
 
 const Popup = ({errors}) => {
 
 	const dispatch = useDispatch();
 	console.log("error in popup", errors);
 
-	const deleteErr = (e, key) => {
+	const deleteError_ = (key) => {
 		console.log(key);
 		dispatch(deleteError(key));
 	}
 
-	return errors ? (
+	return errors && (
 		<div className={cl.popups}>
-			{errors.map((el, ind) =>
+			{errors.map((element, index) =>
 				(
-					<div key={ind} className={cl.popup} onClick={event => deleteErr(event, ind)}>
+					<div key={index} className={cl.popup} onClick={_event => deleteError_(index)}>
 					<p className={cl.helper}>X</p>
-						{el.msg ? (<p>{el.msg}</p>) : (<p>{el}</p>)}
+						{element.msg ? (<p>{element.msg}</p>) : (<p>{element}</p>)}
 				</div>
 				)
 			)}
 
 		</div>
 
-	) : null;
+	);
 };
+
+Popup.propTypes = {
+	errors: PropTypes.array.isRequired
+}
 
 export default Popup;

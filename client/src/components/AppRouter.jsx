@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import {useContext} from 'react';
 import {Route, Routes} from "react-router-dom";
 import Error from "../pages/Error";
 import {AuthContext} from "../context";

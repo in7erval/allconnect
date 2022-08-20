@@ -6,8 +6,8 @@ const defaultState = {
 };
 
 const hasError = (errors, errorCode) => {
-	for (let err of errors) {
-		if (err.code === errorCode) {
+	for (let error of errors) {
+		if (error.code === errorCode) {
 			return true;
 		}
 	}
@@ -15,9 +15,9 @@ const hasError = (errors, errorCode) => {
 }
 
 const findIndexErrorCode = (errors, errorCode) => {
-	for (let i = 0; i < errors.length; i++) {
-		if (errors[i].code === errorCode) {
-			return i;
+	for (const [index, error] of errors.entries()) {
+		if (error.code === errorCode) {
+			return index;
 		}
 	}
 	return -1;
@@ -26,7 +26,7 @@ const findIndexErrorCode = (errors, errorCode) => {
 
 export const errorReducer = (state = defaultState, action) => {
 	switch (action.type) {
-		case SET_ERROR:
+		case SET_ERROR: {
 			console.log("set error");
 			let alreadyHasThisError = hasError(state.errors, action.payload.code);
 			if (alreadyHasThisError) {
@@ -35,10 +35,12 @@ export const errorReducer = (state = defaultState, action) => {
 			}
 
 			return {...state, errors: [...state.errors, action.payload]};
-		case DELETE_ERROR:
+		}
+		case DELETE_ERROR: {
 			console.log("delete error");
 			let index = action.payload;
-			return {...state, errors: state.errors.filter((v, i) => i !== index)}
+			return {...state, errors: state.errors.filter((v, index_) => index_ !== index)};
+		}
 		default:
 			return state;
 	}

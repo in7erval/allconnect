@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {useFetching} from "../hooks/useFetching";
 import PostService from "../API/PostService";
 import {getPageCount} from "../utils/pages";
@@ -15,11 +15,11 @@ function Posts() {
 	const lastElement = useRef();
 	const userId = localStorage.getItem("userId");
 
-	const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
+	const [fetchPosts, isPostsLoading, _postError] = useFetching(async () => {
 		let response = await PostService.getAllForUser(LIMIT_POSTS, page, userId);
 		setPosts([...posts, ...response.body]);
 		const totalCount = response.count;
-		console.log("totalCount: ", totalCount);
+		console.log("totalCount:", totalCount);
 		setTotalPages(getPageCount(totalCount, LIMIT_POSTS));
 	});
 
@@ -34,9 +34,9 @@ function Posts() {
 		});
 
 
-	const removePost = (post) => {
-		setPosts(posts.filter(p => p.id !== post.id));
-	}
+	// const removePost = (post) => {
+	// 	setPosts(posts.filter(p => p.id !== post.id));
+	// }
 
 	// const createPost = (newPost) => {
 	// 	setPosts([...posts, newPost]);
@@ -46,6 +46,7 @@ function Posts() {
 	// const changePage = (page) => {
 	// 	setPage(page);
 	// }
+
 	return (
 		<div className="default_page">
 			<AsideNav/>
@@ -56,7 +57,7 @@ function Posts() {
 					}}>
 					<div style={{flex: 1}}>
 						<PostList
-							remove={null}
+							remove={Object.create(null)}
 							posts={posts}
 						/>
 					</div>

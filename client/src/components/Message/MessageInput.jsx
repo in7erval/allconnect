@@ -1,15 +1,16 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
 import storage from "../../utils/storage";
 import {USER_KEY} from "../../constants";
 import cl from './Message.module.css';
 import TextareaAutosize from "react-textarea-autosize";
 import arrow from "../../assets/send.svg";
+import PropTypes from "prop-types";
 
 const MessageInput = ({sendMessage}) => {
 	const [text, setText] = useState('');
 	const user = storage.get(USER_KEY);
-	const onSubmit = async (e) => {
-		e.preventDefault()
+	const onSubmit = async (event_) => {
+		event_.preventDefault()
 		if (!text.trim()) return
 
 		// извлекаем данные пользователя и формируем начальное сообщение
@@ -34,8 +35,8 @@ const MessageInput = ({sendMessage}) => {
 		//
 		// 		message.messageType = type
 		// 		message.textOrPathToFile = path
-		// 	} catch (e) {
-		// 		console.error(e)
+		// 	} catch (event_) {
+		// 		console.error(event_)
 		// 	}
 		// }
 
@@ -78,12 +79,12 @@ const MessageInput = ({sendMessage}) => {
 					autoFocus
 					value={text}
 					placeholder="Сообщение..."
-					onChange={e => {
-						setText(e.target.value);
+					onChange={event_ => {
+						setText(event_.target.value);
 					}}
-					onKeyPress={(e) => {
-						if (e.code === "Enter" && !e.shiftKey) {
-							onSubmit(e);
+					onKeyPress={(event_) => {
+						if (event_.code === "Enter" && !event_.shiftKey) {
+							onSubmit(event_);
 						}
 					}}
 				/>
@@ -96,5 +97,9 @@ const MessageInput = ({sendMessage}) => {
 		</div>
 	);
 };
+
+MessageInput.propTypes = {
+	sendMessage: PropTypes.func.isRequired
+}
 
 export default MessageInput;

@@ -2,7 +2,7 @@ const SET_ID = "SET_ID";
 const DELETE_ID = "DELETE_ID";
 
 const defaultState = {
-	id: null
+	id: Object.create(null)
 };
 
 
@@ -13,7 +13,7 @@ export const authReducer = (state = defaultState, action) => {
 			return {...state, id: action.payload};
 		case DELETE_ID:
 			console.log("delete id");
-			return {...state, id: null};
+			return {...state, id: Object.create(null)};
 		default:
 			return state;
 	}

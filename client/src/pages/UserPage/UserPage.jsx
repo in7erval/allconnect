@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {useParams} from "react-router-dom";
 import {useFetching} from "../../hooks/useFetching";
 import Loader from "../../components/UI/Loader/Loader";
@@ -30,9 +30,9 @@ const determineIsFriend = (userFriendsId, friendId) => {
 const UserPage = () => {
 
 		const LIMIT_POSTS = 10;
-		const params = useParams();
-		const pageUserId = params.id;
-		console.log("pageUserId: ", pageUserId, params);
+		const parameters = useParams();
+		const pageUserId = parameters.id;
+		console.log("pageUserId:", pageUserId, parameters);
 		const loggedUserId = localStorage.getItem("userId");
 		const isOwner = pageUserId === loggedUserId;
 
@@ -63,7 +63,7 @@ const UserPage = () => {
 			setIsFriend(false);
 		}
 
-		const [fetchUserForPage, isLoading, error] = useFetching(async () => {
+		const [fetchUserForPage, isLoading, _error] = useFetching(async () => {
 			let resp = await UserService.getFullById(pageUserId);
 			let user = resp.body;
 
@@ -72,7 +72,7 @@ const UserPage = () => {
 			if (!isOwner) {
 				let resp = await UserService.getById(loggedUserId);
 				let loggedUser = resp.body;
-				console.debug("logged user: ", loggedUser);
+				console.debug("logged user:", loggedUser);
 				setEditedFirstName(loggedUser.firstName);
 				setEditedLastName(loggedUser.lastName);
 				const _isFriend = determineIsFriend(loggedUser.friends, pageUserId);
@@ -86,11 +86,11 @@ const UserPage = () => {
 			}
 		});
 
-		const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
+		const [fetchPosts, isPostsLoading, _postError] = useFetching(async () => {
 			let response = await UserService.getUserPosts(pageUserId, LIMIT_POSTS, pagePost);
 			setPosts([...posts, ...response.body]);
 			const totalCount = response.count;
-			console.log("totalCount: ", totalCount);
+			console.log("totalCount:", totalCount);
 			setTotalPosts(totalCount);
 			setTotalPages(getPageCount(totalCount, LIMIT_POSTS));
 		});
@@ -115,18 +115,22 @@ const UserPage = () => {
 		}, [pagePost]);
 
 
-		const changeName = (e) => {
-			e.preventDefault();
+		const changeName = (event_) => {
+			event_.preventDefault();
 			UserService.changeName(loggedUserId, editedFirstName, editedLastName)
 				.then(() => console.debug("name changed successfully"));
-		}
+		};
+
+		const indexForFriendsArray = showAllFriends ? undefined : 6;
 
 		/* todo: fix loader */
 		return (
 			<div className="default_page">
 				<AsideNav/>
-				<div className="default_page__content justify-content-start"
-						 style={{marginLeft: 25}}>
+				<div
+					className="default_page__content justify-content-start"
+					style={{marginLeft: 25}}
+				>
 					<div className={cl.user_page}>
 						{isLoading ?
 							<Loader/> : (
@@ -157,11 +161,11 @@ const UserPage = () => {
 												<form onSubmit={changeName}>
 													<FlexibleInput
 														content={editedLastName}
-														onChange={e => setEditedLastName(e.target.value)}
+														onChange={event_ => setEditedLastName(event_.target.value)}
 													/>
 													<FlexibleInput
 														content={editedFirstName}
-														onChange={e => setEditedFirstName(e.target.value)}
+														onChange={event_ => setEditedFirstName(event_.target.value)}
 													/>
 													<button type="submit" hidden/>
 												</form>
@@ -187,17 +191,18 @@ const UserPage = () => {
 												<p>{user?.friends?.length}</p>
 											</div>
 										</div>
-										<div className={cl.user_page__friends_imgs}
-												 onClick={() => setShowAllFriends(!showAllFriends)}>
+										<div
+											className={cl.user_page__friends_imgs}
+											onClick={() => setShowAllFriends(!showAllFriends)}
+										>
 											{
-												(showAllFriends ? user?.friends : user?.friends?.slice(0, 6))
-													?.map(el =>
-														(<a key={el._id} href={"/user" + el._id} className="tooltip">
-																<span className="tooltiptext">{el.lastName} {el.firstName}</span>
-																<img src={el.picture ? el.picture : userpic} alt="pic"/>
-															</a>
-														)
+												user?.friends?.slice(0, indexForFriendsArray)?.map(element =>
+													(<a key={element._id} href={"/user" + element._id} className="tooltip">
+															<span className="tooltiptext">{element.lastName} {element.firstName}</span>
+															<img src={element.picture ?? userpic} alt="pic"/>
+														</a>
 													)
+												)
 											}
 										</div>
 									</div>
@@ -210,10 +215,10 @@ const UserPage = () => {
 									</div>
 								</div>
 								<div>
-									{isOwner && <PostForm />}
+									{isOwner && <PostForm/>}
 									{isPostsLoading && <Loader/>}
 									<PostList
-										remove={null}
+										remove={Object.create(null)}
 										posts={posts}
 									/>
 									<div ref={lastElement} style={{height: 20}}/>
@@ -230,11 +235,12 @@ const UserPage = () => {
 					<MyModal
 						visible={showImageUploader}
 						setVisible={setShowImageUploader}
-						children={<ImageUploader
+					>
+						<ImageUploader
 							currentImg={user.picture === null || user.picture === undefined
 								? userpic : user.picture}
-						/>}
-					/>
+						/>
+					</MyModal>
 				}
 
 			</div>

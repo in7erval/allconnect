@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
 import mock from '../../assets/mock-iphone.png';
 import LoginDefault from "./LoginDefault";
 import LoginForm from "./LoginForm";
@@ -45,7 +45,8 @@ const Login = () => {
 											setIsRegistrationOpen={setIsRegistrationOpen}/>}
 			{isLoginOpen ?
 				<LoginForm returnToHome={returnToHome}/>
-				: isRegistrationOpen ? <RegistrationForm returnToHome={returnToHome}/> : null}
+				: (isRegistrationOpen ? <RegistrationForm returnToHome={returnToHome}/> : null)
+			}
 		</div>
 	);
 };
