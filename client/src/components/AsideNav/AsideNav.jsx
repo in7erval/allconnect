@@ -39,7 +39,7 @@ const AsideNav = ({isAbsolute}) => {
 };
 
 AsideNav.propTypes = {
-	isAbsolute: PropTypes.bool.isRequired
+	isAbsolute: PropTypes.bool
 }
 
 export default AsideNav;

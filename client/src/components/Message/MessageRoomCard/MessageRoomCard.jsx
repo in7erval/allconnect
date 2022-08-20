@@ -13,7 +13,7 @@ const MessageRoomCard = ({user, id, onClick}) => {
 
 MessageRoomCard.propTypes = {
 	user: PropTypes.object.isRequired,
-	id: PropTypes.string.isRequired,
+	id: PropTypes.object.isRequired,
 	onClick: PropTypes.func.isRequired
 }
 

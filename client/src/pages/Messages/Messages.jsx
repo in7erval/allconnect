@@ -11,16 +11,16 @@ import MessageRoomEnter from "../../components/Message/MessageRoomEnter";
 
 const Messages = () => {
 
-	const [roomId, setRoomId] = useState(Object.create(null));
-	const [toUser, setToUser] = useState(Object.create(null));
-	const [user, setUser] = useState(Object.create(null));
+	const [roomId, setRoomId] = useState(null);
+	const [toUser, setToUser] = useState(null);
+	const [user, setUser] = useState(null);
 
 
 	const loggedUserId = localStorage.getItem(USER_ID);
 
 	const [fetchUserForPage, isLoading, _error] = useFetching(async () => {
 		await UserService.getFullById(loggedUserId)
-			.then(resp => resp.body)
+			.then(response => response.body)
 			.then(body => setUser(body));
 	});
 
@@ -31,9 +31,9 @@ const Messages = () => {
 	}, []);
 
 	const initRoom = (friend) => {
-		const roomId = loggedUserId > friend._id ? `${loggedUserId}:${friend._id}` :
+		const roomId_ = loggedUserId > friend._id ? `${loggedUserId}:${friend._id}` :
 			`${friend._id}:${loggedUserId}`;
-		setRoomId(roomId);
+		setRoomId(roomId_);
 		setToUser(friend);
 	};
 
