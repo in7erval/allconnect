@@ -15,9 +15,9 @@
     border-radius: 5px;
 }
 
-.messages_rooms > div {
+.messages_rooms > a {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 20px;
+    padding: 10px;
 }

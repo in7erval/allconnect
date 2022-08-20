@@ -3,11 +3,11 @@ import { useEffect, useRef, useState } from 'react'
 import { io } from 'socket.io-client'
 import storage from "../utils/storage";
 
-export default function useChat(roomId, loggedUser) {
+export default function useChat(roomId) {
 	// извлекаем данные пользователя из локального хранилища
 	const user = {
 		userId: localStorage.getItem(USER_ID),
-		userName: loggedUser.firstName,
+		// userName: loggedUser.firstName,
 		roomId: roomId
 	};
 	storage.set(USER_KEY, user);
@@ -23,7 +23,8 @@ export default function useChat(roomId, loggedUser) {
 			query: {
 				// отправляем идентификатор комнаты и имя пользователя на сервер
 				roomId: user.roomId,
-				userName: user.userName
+				userId: user.userId,
+				action: "message"
 			}
 		})
 	);

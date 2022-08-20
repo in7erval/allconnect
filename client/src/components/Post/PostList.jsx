@@ -26,7 +26,7 @@ const PostList = ({posts, remove}) => {
 
 PostList.propTypes = {
 	posts: PropTypes.array.isRequired,
-	remove: PropTypes.func.isRequired
+	remove: PropTypes.func
 }
 
 export default PostList;

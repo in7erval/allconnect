@@ -18,7 +18,7 @@ const MessageContextMenu = ({isActive, reference, liMap}) => {
 
 MessageContextMenu.propTypes = {
 	isActive: PropTypes.bool.isRequired,
-	reference: PropTypes.element.isRequired,
+	reference: PropTypes.object.isRequired,
 	liMap: PropTypes.array.isRequired
 }
 

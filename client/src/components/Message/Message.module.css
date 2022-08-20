@@ -1,15 +1,4 @@
 
-.messages {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    font-size: 1rem;
-    padding: 0.5rem 1.5rem;
-    background-color: white;
-    overflow-y: auto;
-    height: 70vh;
-}
-
 .message {
     display: flex;
     flex-direction: row;
@@ -31,8 +20,6 @@
     text-align: left;
 }
 
-
-
 .message.from_me {
     justify-content: right;
 }
@@ -44,6 +31,10 @@
     border-radius: 50%;
     margin-right: 10px;
     align-self: end;
+}
+
+.hide {
+    visibility: hidden;
 }
 
 .name {
@@ -73,6 +64,14 @@
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
     /*min-width: 10%;*/
+}
+
+.message div {
+    display: flex;
+    align-items: end;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    overflow-wrap: anywhere;
 }
 
 @keyframes message-appear {

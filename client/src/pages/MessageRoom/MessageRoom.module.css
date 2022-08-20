@@ -1,0 +1,46 @@
+.messages {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    font-size: 1rem;
+    padding: 0.5rem 1.5rem;
+    background-color: white;
+    overflow-y: auto;
+    height: 70vh;
+}
+
+.main {
+    width: 90%;
+    max-width: 700px;
+}
+
+.to_user_card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #dddddd;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    padding: 10px 15px;
+}
+
+.to_user_card img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.message_date {
+    position: sticky;
+    top: 0;
+    background-color: #eeeeee;
+    color: #555555;
+    z-index: 2;
+    text-align: center;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 5px 20px;
+    border-radius: 25px;
+}

@@ -79,6 +79,20 @@
     box-shadow: #32CD3277 0px 0px 20px 5px;
 }
 
+.btn_return {
+    width: fit-content;
+    height: 25px;
+    padding: 5px 15px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn_return:hover {
+    width: fit-content;
+    background-color: #dddddd;
+    border: none;
+}
 
 .login_page__login_info {
     margin-top: 50px;

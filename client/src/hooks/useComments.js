@@ -26,7 +26,8 @@ export default function useComments(postId) {
 		io(SERVER_URI, {
 			query: {
 				postId: postId,
-				userId: loggedUserId
+				userId: loggedUserId,
+				action: "comment"
 				// // отправляем идентификатор комнаты и имя пользователя на сервер
 				// roomId: user.roomId,
 				// userName: user.userName

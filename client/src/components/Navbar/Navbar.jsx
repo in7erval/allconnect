@@ -31,7 +31,9 @@ const Navbar = () => {
 				</div>
 
 				<div className={cl.navbar__links}>
-					<a className={cl.navbar_link} onClick={logout}>Выйти</a>
+					<a className={cl.navbar_link} onClick={logout}>
+						<i className="bi bi-box-arrow-right"></i>
+					</a>
 				</div>
 
 				<MyModal

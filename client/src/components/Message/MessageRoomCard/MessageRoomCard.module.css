@@ -2,10 +2,10 @@
     width: 100%;
     min-height: 60px;
     background-color: #D1D9F1;
-    padding: 10px 20px;
+    padding: 0 10px;
     border-radius: 5px;
     display: flex;
-    justify-content: space-between;
+    /*justify-content: space-between;*/
     align-items: center;
     border: none;
     font-family: "Roboto", sans-serif;
@@ -15,6 +15,10 @@
     animation-timing-function: ease-in-out;
     animation-fill-mode: forwards;
     margin-bottom: 20px;
+}
+
+.no_messages {
+    background-color: #eeeeee;
 }
 
 .message_card:last-child {
@@ -27,6 +31,24 @@
     height: 50px;
     object-fit: cover;
     border: 2px solid #B1B9F1;
+    margin-right: 25px;
+}
+
+.message_card_name {
+    height: 100%;
+    flex: 1;
+    text-align: left;
+}
+
+.message_card div .message_preview {
+    font-size: 13px;
+}
+
+.message_time {
+    font-size: 13px;
+    height: 100%;
+    align-self: flex-start;
+    margin-top: 10px;
 }
 
 .message_card:hover {

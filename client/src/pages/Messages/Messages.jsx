@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import AsideNav from "../../components/AsideNav/AsideNav";
 import Loader from "../../components/UI/Loader/Loader";
 import {USER_ID} from "../../constants";
@@ -7,22 +7,44 @@ import UserService from "../../API/UserService";
 import MessageRoomCard from "../../components/Message/MessageRoomCard/MessageRoomCard";
 
 import cl from "./Messages.module.css";
-import MessageRoomEnter from "../../components/Message/MessageRoomEnter";
+import MessageService from "../../API/MessageService";
+
+const createRoomId = (firstId, secondId) => firstId > secondId ? `${firstId}:${secondId}` : `${secondId}:${firstId}`;
+
+const checkFriendNotInLastMessages = (friend, lastMessages) => {
+	for (let message of lastMessages) {
+		if (message.roomId.includes(friend._id)) {
+			return false;
+		}
+	}
+	return true;
+}
 
 const Messages = () => {
-
-	const [roomId, setRoomId] = useState(null);
-	const [toUser, setToUser] = useState(null);
-	const [user, setUser] = useState(null);
-
+	const [user, setUser] = useState({});
+	const [lastMessages, setLastMessages] = useState([]);
 
 	const loggedUserId = localStorage.getItem(USER_ID);
 
 	const [fetchUserForPage, isLoading, _error] = useFetching(async () => {
 		await UserService.getFullById(loggedUserId)
 			.then(response => response.body)
-			.then(body => setUser(body));
+			.then(body => {
+				setUser(body);
+				return body
+			})
+			.then(body => body.friends)
+			.then(friends_ => Promise.all(
+				friends_.map(friend => MessageService.getLastMessage(createRoomId(friend._id, loggedUserId)))
+			))
+			.then(lastMessages => {
+				console.log("lastMessages", lastMessages);
+				setLastMessages(lastMessages.filter(element => element !== undefined));
+			});
+
 	});
+
+	console.log(lastMessages);
 
 
 	useEffect(() => {
@@ -30,12 +52,23 @@ const Messages = () => {
 		fetchUserForPage();
 	}, []);
 
-	const initRoom = (friend) => {
-		const roomId_ = loggedUserId > friend._id ? `${loggedUserId}:${friend._id}` :
-			`${friend._id}:${loggedUserId}`;
-		setRoomId(roomId_);
-		setToUser(friend);
-	};
+	const findLastMessageByUserId = (userId) => {
+		return lastMessages.find(element => element.roomId === createRoomId(userId, loggedUserId));
+	}
+
+	const friendsWithLastMessages = useMemo(() =>
+		user?.friends?.filter(element => !checkFriendNotInLastMessages(element, lastMessages))
+			.map(element => {
+					let lastMessage = findLastMessageByUserId(element._id);
+					return {...element, messagePreview: lastMessage.text, messageTime: lastMessage.createdAt};
+				}
+			).sort((element1, element2) => {
+			let date1 = new Date(element1.messageTime);
+			let date2 = new Date(element2.messageTime);
+			console.log(date1, date2, date2 - date1);
+
+			return date2 - date1;
+		}), [user, lastMessages]);
 
 	return (
 		<div className="default_page">
@@ -55,35 +88,34 @@ const Messages = () => {
 							<Loader/>
 						</div> :
 						<div style={{flex: 1}}>
-							{roomId ?
-								<MessageRoomEnter
-									user={toUser}
-									roomId={roomId}
-								/>
-								:
-								<div>
-									<h2 className={cl.messages_header}>
-										Сообщения
-									</h2>
+							<div>
+								<h2 className={cl.messages_header}>
+									Сообщения
+								</h2>
 
-									<div className={cl.messages_rooms}>
-										<div>
-											{user?.friends?.map(element => (
-												<MessageRoomCard
-													user={element}
-													id={element._id}
-													key={element._id}
-													onClick={() => initRoom(element)}
-												/>
-											))
-											}
-										</div>
-									</div>
+								<div className={cl.messages_rooms}>
+									{friendsWithLastMessages?.map(element => (
+										<a key={element._id} href={`/messages/${createRoomId(loggedUserId, element._id)}`}>
+											<MessageRoomCard
+												user={element}
+												id={element._id}
+												messagePreview={element.messagePreview}
+												messageTime={element.messageTime}
+											/>
+										</a>
+									))}
+									{user?.friends?.filter(element => checkFriendNotInLastMessages(element, lastMessages)).map(element => (
+										<a key={element._id} href={`/messages/${createRoomId(loggedUserId, element._id)}`}>
+											<MessageRoomCard
+												user={element}
+												id={element._id}
+											/>
+										</a>
+									))}
 								</div>
-							}
+							</div>
 						</div>
 					}
-
 				</div>
 				{/*<div ref={lastElement} style={{height: 20}}/>*/}
 			</div>

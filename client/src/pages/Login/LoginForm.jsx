@@ -73,10 +73,10 @@ const LoginForm = ({returnToHome}) => {
 
 			</form>
 			<button
-				className={cl.login_page__login_button}
+				className={cl.btn_return}
 				onClick={returnToHome}
 			>
-				Назад
+				<i className="bi bi-caret-left"></i>
 			</button>
 		</div>
 	);

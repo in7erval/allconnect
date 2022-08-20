@@ -1,27 +1,49 @@
 import cl from "./Message.module.css";
 import PropTypes from "prop-types";
 
-const Message = ({pic, id, ownerId, firstName, message, onContextMenu, highlight}) => {
+const Message = ({pic, id, ownerId, firstName, message, onContextMenu, highlight, createdAt, continuous}) => {
 
 	const currentUserId = localStorage.getItem('userId');
 
-	/* fixme: DELETE random(). fix on det continious comms */
-	// const [tail, setTail] = useState(((Math.random() > 0.5) ? "" : (" " + cl.no_tail)));
-	/* fixme: delete random */
-
 	const isCurrentUserMessage = ownerId === currentUserId;
 
-	let messageClass = isCurrentUserMessage ? cl.from_me : cl.from_them;
+	const date = new Date(createdAt);
+	const stringTime = date.toLocaleTimeString([], {timeStyle: 'short'});
+
+	const tail = continuous ? cl.no_tail : "";
+
+	let messageClass = (isCurrentUserMessage ? cl.from_me : cl.from_them) + " " + tail;
+
+	// console.log(date.getHours(), date.getMinutes());
 
 	return (
 		<div>
 			<div className={`${cl.message} ${messageClass} ${highlight ? cl.highlight : ""}`}>
-				{!isCurrentUserMessage && <img src={pic} alt={"comment owner"}/>}
+				{!isCurrentUserMessage &&
+					<img
+						src={pic}
+						alt={"comment owner"}
+						className={continuous ? cl.hide : ""}
+					/>}
 				<button onContextMenu={(event_) => onContextMenu(event_, id)}>
 					<p className={messageClass}>
 						{!isCurrentUserMessage && <a className={cl.name} href={`/user${ownerId}`}>{firstName}</a>}
-						{message}
+						<div>
+							{message}
+							<span
+								style={{
+									margin: 0,
+									padding: "0 0 0 10px",
+									fontSize: 11,
+									alignSelf: "end",
+									display: "flex"
+								}}
+							>
+							{stringTime}
+						</span>
+						</div>
 					</p>
+
 				</button>
 			</div>
 		</div>
@@ -30,10 +52,11 @@ const Message = ({pic, id, ownerId, firstName, message, onContextMenu, highlight
 };
 
 Message.propTypes = {
-	key: PropTypes.string.isRequired,
-	id: PropTypes.string.isRequired,
+	id: PropTypes.any.isRequired,
 	ownerId: PropTypes.string.isRequired,
 	pic: PropTypes.string.isRequired,
+	continuous: PropTypes.bool.isRequired,
+	createdAt: PropTypes.string.isRequired,
 	firstName: PropTypes.string.isRequired,
 	message: PropTypes.string.isRequired,
 	onContextMenu: PropTypes.func.isRequired,
