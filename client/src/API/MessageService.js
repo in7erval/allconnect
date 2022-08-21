@@ -16,4 +16,10 @@ export default class MessageService {
 		return response.data.body[0];
 	}
 
+	static async addMessage(message) {
+		const _response = await axios.post(`${API_URL}/api/messages`, {
+			...message
+		});
+	}
+
 }

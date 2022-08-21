@@ -9,6 +9,7 @@ const PostForm = () => {
 	const [postMessage, setPostMessage] = useState("");
 	const userId = localStorage.getItem("userId");
 	const navigate = useNavigate();
+	const [textareaFocused, setTextareaFocused] = useState(false);
 
 
 	const addNewPost = (event_) => {
@@ -20,20 +21,24 @@ const PostForm = () => {
 
 	return (
 		<form onSubmit={addNewPost} className={cl.post_form}>
-				<TextareaAutosize
-					value={postMessage}
-					placeholder="Что Вы хотите сказать?"
-					onChange={event_ => {
-						setPostMessage(event_.target.value);
-					}}
-					onKeyPress={(event_) => {
-						if (event_.code === "Enter" && !event_.shiftKey) {
-							addNewPost(event_);
-						}
-					}}
-				/>
+			<TextareaAutosize
+				onFocus={() => setTextareaFocused(true)}
+				onBlur={() => setTextareaFocused(false)}
+				value={postMessage}
+				placeholder="Что Вы хотите сказать?"
+				onChange={event_ => {
+					setPostMessage(event_.target.value);
+				}}
+				onKeyPress={(event_) => {
+					if (event_.code === "Enter" && !event_.shiftKey) {
+						addNewPost(event_);
+					}
+				}}
+			/>
 			{/*<input type="file"/>*/}
-			<button type="submit" >Поделиться</button>
+			{textareaFocused &&
+				<button type="submit">Поделиться</button>
+			}
 		</form>
 	);
 };

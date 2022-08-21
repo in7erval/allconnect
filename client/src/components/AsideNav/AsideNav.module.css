@@ -35,13 +35,18 @@
     margin: 10px 0;
     padding: 5px 10px;
     border-radius: 5px;
-    /*color: #4b67bd;*/
-    color: midnightblue;
-    /*color: blue*/
     height: 32px;
     display: flex;
     align-items: center;
     font-size: 15px;
+}
+
+.aside_nav ul li i {
+    font-size: 1.25rem;
+}
+
+.aside_nav ul li div {
+    margin-left: 10px;
 }
 
 .aside_nav ul li:hover {
@@ -61,9 +66,5 @@ a {
 @media (max-width: 700px) {
     .aside_nav {
         display: none;
-    }
-
-    .aside_nav_ignore {
-        display: flex;
     }
 }

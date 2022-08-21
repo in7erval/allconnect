@@ -162,42 +162,38 @@ const MessageRoom = () => {
 							<Loader/>
 						</div>
 						:
-						<div style={{flex: 1, height: "80vh"}} onClick={() => setShowContextMenu(false)}>
+						<div style={{flex: 1}} onClick={() => setShowContextMenu(false)}>
 							<a href={`/user${user._id}`}>
 								<div className={cl.to_user_card}>
 									{user.lastName} {user.firstName}
 									<img src={user.picture ?? userpic} alt={`pic for ${user.firstName}`}/>
 								</div>
 							</a>
-
-							{messages && messages.length > 0 &&
-								<div className={cl.messages} ref={referenceMessages}>
-									{
-										[...messagesMap.keys()].map(key =>
-											(<div key={key}>
-													<div className={cl.message_date}>
-														{key}
-													</div>
-													{messagesMap.get(key).map(element => (
-														<Message
-															id={element._id}
-															key={element._id}
-															ownerId={element.user._id}
-															pic={element.user.picture ?? userpic}
-															firstName={element.user.firstName}
-															message={element.text}
-															createdAt={element.createdAt}
-															onContextMenu={onContextMenu}
-															continuous={element.continuous}
-															highlight={showContextMenu && contextMenuFor === element._id}
-														/>
-													))}
+							<div className={cl.messages} ref={referenceMessages}>
+								{messages && messages.length > 0 && [...messagesMap.keys()].map(key =>
+										(<div key={key}>
+												<div className={cl.message_date}>
+													{key}
 												</div>
-											)
+												{messagesMap.get(key).map(element => (
+													<Message
+														id={element._id}
+														key={element._id}
+														ownerId={element.user._id}
+														pic={element.user.picture ?? userpic}
+														firstName={element.user.firstName}
+														message={element.text}
+														createdAt={element.createdAt}
+														onContextMenu={onContextMenu}
+														continuous={element.continuous}
+														highlight={showContextMenu && contextMenuFor === element._id}
+													/>
+												))}
+											</div>
 										)
-									}
-								</div>
-							}
+									)
+								}
+							</div>
 							<div>
 								<MessageInput sendMessage={sendMessage}/>
 							</div>

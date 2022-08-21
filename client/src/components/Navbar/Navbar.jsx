@@ -1,16 +1,14 @@
-import {useContext, useState} from 'react';
+import {useContext} from 'react';
 import {Link} from "react-router-dom";
 import {AuthContext} from "../../context";
 import Logo from "./Logo/Logo";
 import SearchNav from "./SearchNav/SearchNav";
 import cl from "./Navbar.module.css";
-import AsideNav from "../AsideNav/AsideNav";
-import MyModal from "../UI/MyModal/MyModal";
+import Nav from "../Nav";
 
 const Navbar = () => {
 
-	const {_isAuth, setIsAuth} = useContext(AuthContext);
-	const [showMenu, setShowMenu] = useState(false);
+	const {isAuth, setIsAuth} = useContext(AuthContext);
 
 	const logout = () => {
 		setIsAuth(false);
@@ -23,24 +21,19 @@ const Navbar = () => {
 				<Link to="/"><Logo/></Link>
 				<SearchNav/>
 
-				<div
-					className={cl.show_menu}
-					onClick={() => setShowMenu(!showMenu)}
-				>
-					Меню
-				</div>
+				{isAuth &&
+					<div className={cl.show_menu}>
+						<Nav/>
+					</div>
+				}
+
 
 				<div className={cl.navbar__links}>
 					<a className={cl.navbar_link} onClick={logout}>
-						<i className="bi bi-box-arrow-right"></i>
+						<i className="bi bi-box-arrow-right" style={{fontSize: "1.25rem"}}></i>
 					</a>
 				</div>
 
-				<MyModal
-					visible={showMenu} setVisible={setShowMenu}
-				>
-					<AsideNav isAbsolute={true}/>
-				</MyModal>
 
 			</div>
 		</nav>

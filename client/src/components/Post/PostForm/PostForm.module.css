@@ -1,31 +1,27 @@
 
 .post_form {
-    width: 100%;
-    min-height: 100px;
     background-color: #dddddd;
-    border-radius: 5px;
-    padding: 10px 15px;
-    margin-bottom: 25px;
+    margin: 10px 20px;
 }
 
 .post_form textarea {
     width: 100%;
     border: none;
-    min-height: 50px;
     resize: none;
     outline: none;
+    min-height: 25px;
     border-radius: 5px;
     background-color: #f1f1f1;
     padding: 10px 15px;
     font-family: "Roboto", sans-serif;
     font-size: 1rem;
-    margin-bottom: 20px;
-    margin-top: 20px;
 }
 
 .post_form textarea:focus {
     background-color: #f9f9f9;
     box-shadow: white 0 0 5px 3px;
+    margin-bottom: 10px;
+    min-height: 50px;
 }
 
 .post_form button {

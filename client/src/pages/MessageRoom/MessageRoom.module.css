@@ -7,7 +7,12 @@
     background-color: white;
     overflow-y: auto;
     overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
     height: 60vh;
+}
+
+.messages::-webkit-scrollbar {
+    width: 0;
 }
 
 .main {
@@ -44,4 +49,10 @@
     margin-right: auto;
     padding: 5px 20px;
     border-radius: 25px;
+}
+
+@media (max-width: 600px) {
+    .messages {
+        height: calc(90vh - 50px - 220px);
+    }
 }

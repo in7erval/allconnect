@@ -73,8 +73,6 @@ const UserPage = () => {
 				let resp = await UserService.getById(loggedUserId);
 				let loggedUser = resp.body;
 				console.debug("logged user:", loggedUser);
-				setEditedFirstName(loggedUser.firstName);
-				setEditedLastName(loggedUser.lastName);
 				const _isFriend = determineIsFriend(loggedUser.friends, pageUserId);
 				console.debug("isFriend", _isFriend);
 				setIsFriend(_isFriend);
@@ -152,23 +150,28 @@ const UserPage = () => {
 											}
 										</div>
 									</div>
-									<div className={cl.user_page__info}>
-										{isOwner ? (
-												<form onSubmit={changeName}>
-													<FlexibleInput
-														content={editedLastName}
-														onChange={event_ => setEditedLastName(event_.target.value)}
-													/>
-													<FlexibleInput
-														content={editedFirstName}
-														onChange={event_ => setEditedFirstName(event_.target.value)}
-													/>
-													<button type="submit" hidden/>
-												</form>
-											) :
-											(<h1>{user.lastName} {user.firstName}</h1>)
-										}
-										<hr/>
+									<div className={cl.user_page__info_stats}>
+										<div className={cl.user_page__info}>
+											{isOwner ? (
+													<form onSubmit={changeName}>
+														<FlexibleInput
+															content={editedLastName}
+															onChange={event_ => setEditedLastName(event_.target.value)}
+														/>
+														<FlexibleInput
+															content={editedFirstName}
+															onChange={event_ => setEditedFirstName(event_.target.value)}
+														/>
+														<button type="submit" hidden/>
+													</form>
+												) :
+												(<h1>{user.lastName} {user.firstName}</h1>)
+											}
+											<hr/>
+										</div>
+										<div className={cl.user_page__stats}>
+											Заготовка для статистики
+										</div>
 									</div>
 								</div>
 							)}
@@ -205,13 +208,13 @@ const UserPage = () => {
 								)}
 							<div style={{flex: 1}}>
 								<div className={cl.user_page__posts_header}>
-									<div>Посты</div>
 									<div>
+										<p>Посты</p>
 										<p>{totalPosts}</p>
 									</div>
+									{isOwner && <PostForm/>}
 								</div>
 								<div>
-									{isOwner && <PostForm/>}
 									{isPostsLoading && <Loader/>}
 									<PostList
 										remove={Object.create(null)}

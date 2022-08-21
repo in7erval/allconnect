@@ -113,7 +113,7 @@ const PostItem = ({post}) => {
 				</div>
 				{isOwner &&
 					<button onClick={deletePost} className={cl.post__btns_btn_delete}>
-						Удалить
+						{/*Удалить*/}
 					</button>
 				}
 			</div>
