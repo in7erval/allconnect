@@ -11,6 +11,7 @@ import {useFetching} from "../../hooks/useFetching";
 import UserService from "../../API/UserService";
 import Loader from "../../components/UI/Loader/Loader";
 import AsideNav from "../../components/AsideNav/AsideNav";
+import {useRouter} from "next/router";
 
 const getPosition = (event_) => {
 	let posx = 0;
@@ -76,9 +77,9 @@ const parseMessageRoomId = (messageRoomId) => {
 
 const MessageRoom = () => {
 
-	const parameters = useParams();
+	const router = useRouter();
 	const loggedUserId = localStorage.getItem(USER_ID);
-	const [id1, id2] = parseMessageRoomId(parameters.id);
+	const [id1, id2] = parseMessageRoomId(router.query.roomId);
 	let toUserId = (loggedUserId === id1) ? id2 : id1;
 
 	const referenceMessages = useRef();

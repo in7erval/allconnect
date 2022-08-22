@@ -1,5 +1,4 @@
 import {useEffect, useRef, useState} from 'react';
-import {Link, useParams} from "react-router-dom";
 import {useFetching} from "../../hooks/useFetching";
 import Loader from "../../components/UI/Loader/Loader";
 import UserService from "../../API/UserService";
@@ -13,6 +12,7 @@ import cl from "./UserPage.module.css";
 import MyModal from "../../components/UI/MyModal/MyModal";
 import ImageUploader from "../../components/UI/ImageUploader/ImageUploader";
 import PostForm from "../../components/Post/PostForm/PostForm.jsx";
+import {useRouter} from "next/router";
 
 const determineIsFriend = (userFriendsId, friendId) => {
 	console.log(`determineIsFriend(${userFriendsId}, ${friendId})`);
@@ -29,9 +29,10 @@ const determineIsFriend = (userFriendsId, friendId) => {
 
 const UserPage = () => {
 
+		const router = useRouter();
+
 		const LIMIT_POSTS = 10;
-		const parameters = useParams();
-		const pageUserId = parameters.id;
+		const {pageUserId} = router.query;
 		console.log("pageUserId:", pageUserId, parameters);
 		const loggedUserId = localStorage.getItem("userId");
 		const isOwner = pageUserId === loggedUserId;
@@ -193,24 +194,24 @@ const UserPage = () => {
 							{isLoading ?
 								<Loader/> : (
 									<div className={cl.user_page__friends}>
-										<Link to={`/friends/${isOwner ? "" : pageUserId}`}>
+										<a href={`/friends/${isOwner ? "" : pageUserId}`}>
 											<div className={cl.user_page__friends_header}>
 												<div>Друзья</div>
 												<div>
 													<p>{user?.friends?.length}</p>
 												</div>
 											</div>
-										</Link>
+										</a>
 										<div
 											className={cl.user_page__friends_imgs}
 											onClick={() => setShowAllFriends(!showAllFriends)}
 										>
 											{
 												user?.friends?.slice(0, indexForFriendsArray)?.map(element =>
-													(<Link key={element._id} to={"/user" + element._id} className="tooltip">
+													(<a key={element._id} href={"/user" + element._id} className="tooltip">
 															<span className="tooltiptext">{element.lastName} {element.firstName}</span>
 															<img src={element.picture ?? userpic} alt="pic"/>
-														</Link>
+														</a>
 													)
 												)
 											}

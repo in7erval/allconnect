@@ -6,9 +6,9 @@ import UserAuthService from "../../API/UserAuthService";
 import {parseError} from "../../store/errorReducer";
 import {AuthContext} from "../../context";
 import {useDispatch} from "react-redux";
-import {useNavigate} from "react-router-dom";
 import {setId} from "../../store/authReducer";
 import PropTypes from 'prop-types';
+import {useRouter} from "next/router";
 
 const RegistrationForm = ({returnToHome}) => {
 
@@ -20,7 +20,7 @@ const RegistrationForm = ({returnToHome}) => {
 	const [password, setPassword] = useState();
 	const [passwordVisible, setPasswordVisible] = useState(false);
 	const {_isAuth, setIsAuth} = useContext(AuthContext);
-	const navigate = useNavigate();
+	const router = useRouter();
 
 	const sendData = (event_) => {
 		event_.preventDefault();
@@ -38,7 +38,7 @@ const RegistrationForm = ({returnToHome}) => {
 				localStorage.setItem('auth', 'true');
 				localStorage.setItem('userId', response.body._id);
 				dispatch(setId(response.body._id));
-				navigate('/posts', {replace: true});
+				router.replace('/posts');
 			} else {
 				dispatch(parseError(response.error));
 			}

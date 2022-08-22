@@ -29,9 +29,9 @@ const AppRouter = () => {
 				{/*<Route path="/" element={<Posts/>}/>*/}
 				{/*<Route path="/*" element={<Error/>}/>*/}
 
-				{/*<Route path="/Login" element={isAuth ? <Navigate to={"/posts"}/> : <Login/>}/>*/}
-				{/*<Route path="/posts" element={isAuth ? <Posts/> : <Navigate to={"/Login"}/>}/>*/}
-				{/*<Route path="*" element={isAuth ? <Posts/> : <Navigate to={"/Login"}/>}/>*/}
+				{/*<Route path="/Index" element={isAuth ? <Navigate to={"/posts"}/> : <Index/>}/>*/}
+				{/*<Route path="/posts" element={isAuth ? <Posts/> : <Navigate to={"/Index"}/>}/>*/}
+				{/*<Route path="*" element={isAuth ? <Posts/> : <Navigate to={"/Index"}/>}/>*/}
 
 				{routes.map(route =>
 					<Route key={route.path} path={route.path} element={route.element(isAuth)}/>

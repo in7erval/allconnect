@@ -60,7 +60,7 @@ function shuffle(array) {
 
 // for (let userAuth of userAuths) {
 // 	const newUserAuth = new UserAuth({
-// 		Login: userAuth.Login,
+// 		Index: userAuth.Index,
 // 		loginPassBase64: userAuth.loginPassBase64,
 // 		user: new mongoose.Types.ObjectId(userAuth.userId),
 // 	});

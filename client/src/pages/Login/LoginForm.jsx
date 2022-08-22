@@ -6,19 +6,19 @@ import UserAuthService from "../../API/UserAuthService";
 import {parseError} from "../../store/errorReducer";
 import {AuthContext} from "../../context";
 import {useDispatch} from "react-redux";
-import {useNavigate} from "react-router-dom";
 import {setId} from "../../store/authReducer";
 import PropTypes from "prop-types";
+import {useRouter} from "next/router";
 
 const LoginForm = ({returnToHome}) => {
 
 	const dispatch = useDispatch();
+	const router = useRouter();
 
 	const [login, setLogin] = useState();
 	const [password, setPassword] = useState();
 	const [passwordVisible, setPasswordVisible] = useState(false);
 	const {_isAuth, setIsAuth} = useContext(AuthContext);
-	const navigate = useNavigate();
 
 	const sendData = (event_) => {
 		event_.preventDefault();
@@ -30,8 +30,8 @@ const LoginForm = ({returnToHome}) => {
 					setIsAuth(true);
 					localStorage.setItem('auth', 'true');
 					localStorage.setItem('userId', body.user);
-					dispatch(setId(body.user))
-					navigate('/posts');
+					dispatch(setId(body.user));
+					router.push('/posts');
 				} else {
 					dispatch(parseError(body.error));
 				}
