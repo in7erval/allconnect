@@ -184,12 +184,14 @@ const UserPage = () => {
 							{isLoading ?
 								<Loader/> : (
 									<div className={cl.user_page__friends}>
-										<div className={cl.user_page__friends_header}>
-											<div>Друзья</div>
-											<div>
-												<p>{user?.friends?.length}</p>
+										<a href={`/friends/${isOwner ? "" : pageUserId}`}>
+											<div className={cl.user_page__friends_header}>
+												<div>Друзья</div>
+												<div>
+													<p>{user?.friends?.length}</p>
+												</div>
 											</div>
-										</div>
+										</a>
 										<div
 											className={cl.user_page__friends_imgs}
 											onClick={() => setShowAllFriends(!showAllFriends)}
@@ -206,7 +208,7 @@ const UserPage = () => {
 										</div>
 									</div>
 								)}
-							<div style={{flex: 1}}>
+							<div style={{flex: 5}}>
 								<div className={cl.user_page__posts_header}>
 									<div>
 										<p>Посты</p>

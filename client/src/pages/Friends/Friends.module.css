@@ -56,6 +56,11 @@
     background-color: #f1f1f1;
 }
 
+.main__header .active {
+    background-color: #81A9E1;
+    box-shadow: #4169E1AA 0 0 20px 5px ;
+}
+
 .main__form {
     background-color: #e0e0e0;
     width: 100%;

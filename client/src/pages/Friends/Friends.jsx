@@ -10,26 +10,41 @@ import Loader from "../../components/UI/Loader/Loader";
 import MyModal from "../../components/UI/MyModal/MyModal";
 import MessageInput from "../../components/Message/MessageInput";
 import MessageService from "../../API/MessageService";
+import {useParams} from "react-router-dom";
 
 const createRoomId = (firstId, secondId) => firstId > secondId ? `${firstId}:${secondId}` : `${secondId}:${firstId}`;
 
 const Friends = () => {
+
 	const loggedUserId = localStorage.getItem("userId");
+	const parameters = useParams();
+	const pageUserId = parameters.id ?? loggedUserId;
+
+	console.log("pageUserId:", pageUserId);
+	// const isOwner = pageUserId === loggedUserId;
 
 	const [visibleModal, setVisibleModal] = useState(false);
 	const [friends, setFriends] = useState([]);
 	const [inputName, setInputName] = useState("");
 	const [friendTo, setFriendTo] = useState({});
+	const [isGlobal, setIsGlobal] = useState(false);
 
 	const [fetchFriends, isLoading, _error] = useFetching(async () => {
-		let resp = await UserService.getFullById(loggedUserId);
-		setFriends(resp.body?.friends);
+		if (!isGlobal) {
+			let resp = await UserService.getFullById(pageUserId);
+			setFriends(resp.body?.friends);
+		} else {
+			// todo: pagination
+			let resp = await UserService.getAll(1000, 1);
+			// console.log(resp.body);
+			setFriends(resp.body);
+		}
 	});
 
 	useEffect(() => {
 		console.log("fetch friends");
 		fetchFriends();
-	}, []);
+	}, [isGlobal]);
 
 	const filteredFriends = useMemo(() => {
 		if (inputName.trim() === "") {
@@ -83,7 +98,7 @@ const Friends = () => {
 										</div>
 									</div>
 								</div>
-								<button>
+								<button onClick={() => setIsGlobal(!isGlobal)} className={isGlobal ? cl.active : ""}>
 									Найти друзей
 								</button>
 							</div>
@@ -93,7 +108,7 @@ const Friends = () => {
 									type="text"
 									src={inputName}
 									onChange={event_ => setInputName(event_.target.value)}
-									placeholder="Поиск друзей"
+									placeholder={(isGlobal ? "Глобальный п" : "П") + "оиск друзей"}
 								/>
 							</form>
 							<div className={cl.main__friends}>

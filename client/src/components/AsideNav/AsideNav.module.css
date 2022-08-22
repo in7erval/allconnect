@@ -55,6 +55,12 @@
     box-shadow: rgb(0 16 61 / 15%) 0px 0px 20px;
 }
 
+.aside_nav ul li.active {
+    /*background-color: #eeeeee;*/
+    cursor: pointer;
+    box-shadow: rgb(0 16 61 / 15%) 0px 0px 20px;
+}
+
 .aside_nav a:last-child {
     margin-bottom: 50px;
 }

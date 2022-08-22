@@ -5,7 +5,7 @@ const AsideNav = () => {
 	return (
 		<aside className={cl.aside_nav}>
 			<div className={cl.aside_nav__content}>
-				<Nav/>
+				<Nav activeClassName={cl.active}/>
 			</div>
 		</aside>
 	);

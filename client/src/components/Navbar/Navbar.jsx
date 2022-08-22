@@ -23,7 +23,7 @@ const Navbar = () => {
 
 				{isAuth &&
 					<div className={cl.show_menu}>
-						<Nav/>
+						<Nav activeClassName={cl.active}/>
 					</div>
 				}
 

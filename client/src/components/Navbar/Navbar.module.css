@@ -105,6 +105,10 @@ a {
     text-decoration: none;
 }
 
+.active {
+
+}
+
 @media (max-width: 700px) {
     .show_menu {
         display: flex;

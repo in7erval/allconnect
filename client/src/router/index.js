@@ -13,5 +13,6 @@ export const routes = [
 	{path: '/messages', element: isAuth => isAuth ? <Messages/> : <Login/>},
 	{path: '/messages/:id', element: isAuth => isAuth ? <MessageRoom/> : <Login/>},
 	{path: '/friends', element: isAuth => isAuth ? <Friends/> : <Login/>},
+	{path: '/friends/:id', element: isAuth => isAuth ? <Friends/> : <Login/>},
 	{path: '/', element: isAuth => isAuth ? <Navigate to="/posts"/> : <Login/>}
 ]
