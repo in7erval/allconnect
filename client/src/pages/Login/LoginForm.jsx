@@ -40,17 +40,21 @@ const LoginForm = ({returnToHome}) => {
 
 	return (
 		<div className={cl.login_page__login + " w-400 justify-content-start"}>
-			<div className={cl.login_page__login_title}>
-				Вход allconnect
-			</div>
 			<form className={cl.login_form} onSubmit={sendData}>
 				<div className={cl.login_form__input_group}>
-					<label>Логин</label>
-					<input type="text" autoFocus={true} onChange={event_ => setLogin(event_.target.value)}/>
+					<label htmlFor="username">Логин</label>
+					<input
+						id="username"
+						type="text"
+						autoFocus={true}
+						required={true}
+						autoComplete="username"
+						onChange={event_ => setLogin(event_.target.value)}
+					/>
 				</div>
 				<div className={cl.login_form__input_group}>
 					<div className={cl.login_form__password_and_img}>
-						<label>Пароль</label>
+						<label htmlFor="current-password">Пароль</label>
 						<img
 							src={passwordVisible ? passVisible : showPass}
 							alt="showpass"
@@ -58,6 +62,8 @@ const LoginForm = ({returnToHome}) => {
 						/>
 					</div>
 					<input
+						id="current-password"
+						required={true}
 						type={passwordVisible ? "text" : "password"}
 						onChange={event_ => setPassword(event_.target.value)}
 						className={passwordVisible ? "" : "ls-5"}
@@ -67,6 +73,7 @@ const LoginForm = ({returnToHome}) => {
 					type="submit"
 					className={cl.login_page__login_button}
 					disabled={!password || !login}
+					title={"Введите" + (!login ? " логин" : "") + (!login && !password ? " и" : "") + (!password ? " пароль" : "")}
 				>
 					Войти
 				</button>

@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<svg viewBox="0 0 162.909 161.386" xmlns="http://www.w3.org/2000/svg" xmlns:bx="https://boxy-svg.com">
-  <defs>
-    <style bx:fonts="Roboto">@import url(https://fonts.googleapis.com/css2?family=Roboto%3Aital%2Cwght%400%2C100%3B0%2C300%3B0%2C400%3B0%2C500%3B0%2C700%3B0%2C900%3B1%2C100%3B1%2C300%3B1%2C400%3B1%2C500%3B1%2C700%3B1%2C900&amp;display=swap);</style>
-  </defs>
-  <rect style="fill: rgb(65, 105, 225); stroke: rgb(65, 105, 225);" x="5" y="5" width="150" height="150" rx="20" ry="20"/>
-  <text style="fill: rgb(255, 255, 255); font-family: Roboto; font-size: 19.7px; font-weight: 900; white-space: pre;" transform="matrix(7.30978, 0, 0, 6.295804, -708.303406, -748.225464)" x="101.031" y="138.706">A</text>
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <rect style="fill: rgb(65, 105, 225); stroke: rgb(65, 105, 225);" width="64" height="64" rx="10" ry="10"/>
+  <path d="M 110.044 136.09 L 105.417 136.09 L 104.609 138.706 L 101.002 138.706 L 106.139 124.701 L 109.313 124.701 L 114.488 138.706 L 110.862 138.706 Z M 106.225 133.483 L 109.236 133.483 L 107.726 128.625 Z" transform="matrix(2.983331, 0, 0, 2.770978, -289.439209, -333.684662)" style="fill: rgb(255, 255, 255); white-space: pre;"/>
 </svg>

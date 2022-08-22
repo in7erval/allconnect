@@ -49,24 +49,43 @@ const RegistrationForm = ({returnToHome}) => {
 	return (
 		<div className={cl.login_page__registration + " w-400 justify-content-start"}>
 			<div className={cl.login_page__login_title}>
-				Вход allconnect
+				<h3>Регистрация в allconnect</h3>
 			</div>
 			<form className={cl.login_form} onSubmit={sendData}>
 				<div className={cl.login_form__input_group}>
-					<label>Имя</label>
-					<input type="text" autoFocus={true} onChange={event_ => setName(event_.target.value)}/>
+					<label htmlFor="firstname">Имя</label>
+					<input
+						id="firstname"
+						type="text"
+						autoFocus={true}
+						required
+
+						onChange={event_ => setName(event_.target.value)}
+					/>
 				</div>
 				<div className={cl.login_form__input_group}>
-					<label>Фамилия</label>
-					<input type="text" autoFocus={true} onChange={event_ => setSurname(event_.target.value)}/>
+					<label htmlFor="lastname">Фамилия</label>
+					<input
+						id="lastname"
+						type="text"
+						autoFocus={true}
+						required
+						onChange={event_ => setSurname(event_.target.value)}
+					/>
 				</div>
 				<div className={cl.login_form__input_group}>
-					<label>Логин</label>
-					<input type="text" autoFocus={true} onChange={event_ => setLogin(event_.target.value)}/>
+					<label htmlFor="username">Логин</label>
+					<input
+						id="username"
+						type="text"
+						autoFocus={true}
+						required
+						onChange={event_ => setLogin(event_.target.value)}
+					/>
 				</div>
 				<div className={cl.login_form__input_group}>
 					<div className={cl.login_form__password_and_img}>
-						<label>Пароль</label>
+						<label htmlFor="new-password">Пароль</label>
 						<img
 							src={passwordVisible ? passVisible : showPass}
 							alt="showpass"
@@ -74,6 +93,8 @@ const RegistrationForm = ({returnToHome}) => {
 						/>
 					</div>
 					<input
+						id="new-password"
+						required
 						type={passwordVisible ? "text" : "password"}
 						onChange={event_ => setPassword(event_.target.value)}
 						className={passwordVisible ? "" : "ls-5"}

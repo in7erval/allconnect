@@ -5,7 +5,6 @@ import PropTypes from "prop-types";
 const LoginDefault = ({setIsLoginOpen, setIsRegistrationOpen}) => {
 	return (
 		<div className={cl.login_page__login + " w-400"}>
-			{/** fixme: LOGO */}
 			<img src={logo} className={cl.logo} alt="logo"/>
 			{/*<div className={cl.logo}>A</div>*/}
 			<div className={cl.login_page__login_title}>

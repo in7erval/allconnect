@@ -45,7 +45,7 @@ const Login = () => {
 											setIsRegistrationOpen={setIsRegistrationOpen}/>}
 			{isLoginOpen ?
 				<LoginForm returnToHome={returnToHome}/>
-				: (isRegistrationOpen ? <RegistrationForm returnToHome={returnToHome}/> : null)
+				: (isRegistrationOpen && <RegistrationForm returnToHome={returnToHome}/>)
 			}
 		</div>
 	);
