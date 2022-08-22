@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import {Link} from "react-router-dom";
 
 
 const Nav = ({activeClassName}) => {
@@ -21,31 +22,31 @@ const Nav = ({activeClassName}) => {
 
 	return (
 		<ul>
-			<a href="/">
+			<Link to="/posts">
 				<li className={isActive("posts") ? activeClassName : ""}>
 					<i className="bi bi-newspaper"></i>
 					<div>Новости</div>
 				</li>
-			</a>
-			<a href={`/user${userId}`}>
+			</Link>
+			<Link to={`/user${userId}`}>
 				<li className={isActive("page") ? activeClassName : ""}>
 					<i className="bi bi-person"></i>
 					<div>Моя страница</div>
 				</li>
-			</a>
+			</Link>
 			{/*<a href="/posts"><li><div>Новости</div></li></a>*/}
-			<a href="/friends">
+			<Link to="/friends">
 				<li className={isActive("friends") ? activeClassName : ""}>
 					<i className="bi bi-people"></i>
 					<div>Друзья</div>
 				</li>
-			</a>
-			<a href="/messages">
+			</Link>
+			<Link to="/messages">
 				<li className={isActive("messages") ? activeClassName : ""}>
 					<i className="bi bi-chat-text"></i>
 					<div>Сообщения</div>
 				</li>
-			</a>
+			</Link>
 		</ul>
 	);
 };

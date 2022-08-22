@@ -5,6 +5,7 @@ import cl from "./Post.module.css";
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import PostService from "../../API/PostService";
 import PropTypes from "prop-types";
+import {Link} from "react-router-dom";
 
 const PostItem = ({post}) => {
 
@@ -46,14 +47,14 @@ const PostItem = ({post}) => {
 	}
 
 	return (<div className={cl.post}>
-			<a href={`/user${post.owner._id}`}>
+			<Link to={`/user${post.owner._id}`}>
 				<div className={cl.post__owner}>
 					<img src={post.owner.picture} alt="owner"/>
 					<p>
 						{`${post.owner.firstName} ${post.owner.lastName}`}
 					</p>
 				</div>
-			</a>
+			</Link>
 			<div>
 				<div className={cl.post__publish_date}>
 					{new Date(post.publishDate).toLocaleString()}

@@ -10,7 +10,7 @@ import Loader from "../../components/UI/Loader/Loader";
 import MyModal from "../../components/UI/MyModal/MyModal";
 import MessageInput from "../../components/Message/MessageInput";
 import MessageService from "../../API/MessageService";
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 
 const createRoomId = (firstId, secondId) => firstId > secondId ? `${firstId}:${secondId}` : `${secondId}:${firstId}`;
 
@@ -114,13 +114,13 @@ const Friends = () => {
 							<div className={cl.main__friends}>
 								{filteredFriends?.map(friend => (
 									<div key={friend._id} className={cl.main__friends_item}>
-										<a href={`/user${friend._id}`}>
+										<Link to={`/user${friend._id}`}>
 											<img src={friend.picture ?? userpic} alt={"pic for " + friend.firstName}/>
-										</a>
+										</Link>
 										<div className={cl.main__friends_item__info}>
-											<a href={`/user${friend._id}`}>
+											<Link to={`/user${friend._id}`}>
 												<p><b>{friend.firstName} {friend.lastName}</b></p>
-											</a>
+											</Link>
 											<div>
 												<button onClick={() => {
 													setFriendTo(friend);
@@ -139,12 +139,12 @@ const Friends = () => {
 					}
 					<MyModal setVisible={setVisibleModal} visible={visibleModal}>
 						<div className={cl.modal}>
-							<a href={`/user${friendTo._id}`}>
+							<Link to={`/user${friendTo._id}`}>
 								<div className={cl.modal_header}>
 									<img src={friendTo.picture ?? userpic} alt={"pic for " + friendTo.firstName}/>
 									<p><b>{friendTo.firstName} {friendTo.lastName}</b></p>
 								</div>
-							</a>
+							</Link>
 							<div className={cl.modal_message}>
 								<MessageInput sendMessage={(message) => {
 									console.log("addMessage", message);
@@ -157,9 +157,9 @@ const Friends = () => {
 								/>
 							</div>
 							<div className={cl.modal_link}>
-								<a href={`/messages/${createRoomId(friendTo._id, loggedUserId)}`}>
+								<Link to={`/messages/${createRoomId(friendTo._id, loggedUserId)}`}>
 									К диалогу
-								</a>
+								</Link>
 							</div>
 						</div>
 					</MyModal>

@@ -5,7 +5,7 @@ import cl from "./MessageRoom.module.css";
 import userpic from "../../assets/userpic.jpeg";
 import MessageContextMenu from "../../components/Message/MessageContextMenu/MessageContextMenu";
 import useChat from "../../hooks/useChat";
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import {USER_ID} from "../../constants";
 import {useFetching} from "../../hooks/useFetching";
 import UserService from "../../API/UserService";
@@ -163,12 +163,12 @@ const MessageRoom = () => {
 						</div>
 						:
 						<div style={{flex: 1}} onClick={() => setShowContextMenu(false)}>
-							<a href={`/user${user._id}`}>
+							<Link to={`/user${user._id}`}>
 								<div className={cl.to_user_card}>
 									{user.lastName} {user.firstName}
 									<img src={user.picture ?? userpic} alt={`pic for ${user.firstName}`}/>
 								</div>
-							</a>
+							</Link>
 							<div className={cl.messages} ref={referenceMessages}>
 								{messages && messages.length > 0 && [...messagesMap.keys()].map(key =>
 										(<div key={key}>

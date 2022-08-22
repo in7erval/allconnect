@@ -1,5 +1,6 @@
 import cl from './Comment.module.css';
 import PropTypes from "prop-types";
+import {Link} from "react-router-dom";
 
 const Comment = ({pic, ownerId, firstName, lastName, message, publishDate, continuous}) => {
 
@@ -23,7 +24,7 @@ const Comment = ({pic, ownerId, firstName, lastName, message, publishDate, conti
 				/>
 			}
 			<p className={commentClass}>
-				<a className={cl.name} href={`/user${ownerId}`}>{firstName + " " + lastName}</a>
+				<Link className={cl.name} to={`/user${ownerId}`}>{firstName + " " + lastName}</Link>
 				<span>
 					{message}
 					<span

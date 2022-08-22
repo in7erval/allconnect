@@ -1,5 +1,5 @@
 import {useEffect, useRef, useState} from 'react';
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import {useFetching} from "../../hooks/useFetching";
 import Loader from "../../components/UI/Loader/Loader";
 import UserService from "../../API/UserService";
@@ -184,24 +184,24 @@ const UserPage = () => {
 							{isLoading ?
 								<Loader/> : (
 									<div className={cl.user_page__friends}>
-										<a href={`/friends/${isOwner ? "" : pageUserId}`}>
+										<Link to={`/friends/${isOwner ? "" : pageUserId}`}>
 											<div className={cl.user_page__friends_header}>
 												<div>Друзья</div>
 												<div>
 													<p>{user?.friends?.length}</p>
 												</div>
 											</div>
-										</a>
+										</Link>
 										<div
 											className={cl.user_page__friends_imgs}
 											onClick={() => setShowAllFriends(!showAllFriends)}
 										>
 											{
 												user?.friends?.slice(0, indexForFriendsArray)?.map(element =>
-													(<a key={element._id} href={"/user" + element._id} className="tooltip">
+													(<Link key={element._id} to={"/user" + element._id} className="tooltip">
 															<span className="tooltiptext">{element.lastName} {element.firstName}</span>
 															<img src={element.picture ?? userpic} alt="pic"/>
-														</a>
+														</Link>
 													)
 												)
 											}

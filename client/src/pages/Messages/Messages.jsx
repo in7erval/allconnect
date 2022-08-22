@@ -8,6 +8,7 @@ import MessageRoomCard from "../../components/Message/MessageRoomCard/MessageRoo
 
 import cl from "./Messages.module.css";
 import MessageService from "../../API/MessageService";
+import {Link} from "react-router-dom";
 
 const createRoomId = (firstId, secondId) => firstId > secondId ? `${firstId}:${secondId}` : `${secondId}:${firstId}`;
 
@@ -90,22 +91,22 @@ const Messages = () => {
 
 							<div className={cl.messages_rooms}>
 								{friendsWithLastMessages?.map(element => (
-									<a key={element._id} href={`/messages/${createRoomId(loggedUserId, element._id)}`}>
+									<Link key={element._id} to={`/messages/${createRoomId(loggedUserId, element._id)}`}>
 										<MessageRoomCard
 											user={element}
 											id={element._id}
 											messagePreview={element.messagePreview}
 											messageTime={element.messageTime}
 										/>
-									</a>
+									</Link>
 								))}
 								{user?.friends?.filter(element => checkFriendNotInLastMessages(element, lastMessages)).map(element => (
-									<a key={element._id} href={`/messages/${createRoomId(loggedUserId, element._id)}`}>
+									<Link key={element._id} to={`/messages/${createRoomId(loggedUserId, element._id)}`}>
 										<MessageRoomCard
 											user={element}
 											id={element._id}
 										/>
-									</a>
+									</Link>
 								))}
 							</div>
 						</div>

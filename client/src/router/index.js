@@ -1,10 +1,12 @@
-import Posts from "../pages/Posts";
-import UserPage from "../pages/UserPage/UserPage";
-import Login from "../pages/Login/Login";
 import {Navigate} from "react-router-dom";
-import Messages from "../pages/Messages/Messages";
-import MessageRoom from "../pages/MessageRoom/MessageRoom";
-import Friends from "../pages/Friends/Friends";
+import {lazy} from "react";
+
+const Posts = lazy(() => import("../pages/Posts"));
+const UserPage = lazy(() => import("../pages/UserPage/UserPage"));
+const Login = lazy(() => import("../pages/Login/Login"));
+const Messages = lazy(() => import("../pages/Messages/Messages"));
+const MessageRoom = lazy(() => import("../pages/MessageRoom/MessageRoom"));
+const Friends = lazy(() => import("../pages/Friends/Friends"));
 
 export const routes = [
 	{path: '/posts', element: isAuth => isAuth ? <Posts/> : <Navigate to="/login"/>},
