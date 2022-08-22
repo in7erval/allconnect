@@ -84,9 +84,13 @@ const UserPage = () => {
 			}
 		});
 
-		const [fetchPosts, isPostsLoading, _postError] = useFetching(async () => {
+		const [fetchPosts, isPostsLoading, _postError] = useFetching(async (isAnotherId) => {
 			let response = await UserService.getUserPosts(pageUserId, LIMIT_POSTS, pagePost);
-			setPosts([...posts, ...response.body]);
+			if (isAnotherId) {
+				setPosts([...response.body]);
+			} else {
+				setPosts([...posts, ...response.body]);
+			}
 			const totalCount = response.count;
 			console.log("totalCount:", totalCount);
 			setTotalPosts(totalCount);
@@ -104,13 +108,18 @@ const UserPage = () => {
 		useEffect(() => {
 			console.log("fetch user for page");
 			fetchUserForPage();
-		}, []);
+		}, [pageUserId]);
 
 
 		useEffect(() => {
 			console.log("fetch posts");
 			fetchPosts();
 		}, [pagePost]);
+
+		useEffect(() => {
+			console.log("fetch posts with another id");
+			fetchPosts(true);
+		}, [pageUserId]);
 
 
 		const changeName = (event_) => {
