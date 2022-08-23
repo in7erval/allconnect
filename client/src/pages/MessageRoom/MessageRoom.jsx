@@ -81,16 +81,16 @@ const MessageRoom = () => {
 	const [id1, id2] = parseMessageRoomId(parameters.id);
 	let toUserId = (loggedUserId === id1) ? id2 : id1;
 
+
 	const referenceMessages = useRef();
 	const [user, setUser] = useState({});
-	const {messages, log, sendMessage, removeMessage} = useChat(parameters.id);
+	const {messages, sendMessage, removeMessage, addToSeenBy} = useChat(parameters.id);
 	const [showContextMenu, setShowContextMenu] = useState(false);
 	const contextMenuReference = useRef();
 	const [contextMenuFor, setContextMenuFor] = useState(null);
 
 	const messagesMap = useMemo(() => groupMessages(messages), [messages]);
 
-	console.log("SERVER_LOG:", log);
 	console.log("messages", messagesMap);
 
 	useEffect(() => {
@@ -171,31 +171,34 @@ const MessageRoom = () => {
 							</Link>
 							<div className={cl.messages} ref={referenceMessages}>
 								{messages && messages.length > 0 && [...messagesMap.keys()].map(key =>
-										(<div key={key}>
-												<div className={cl.message_date}>
-													{key}
-												</div>
-												{messagesMap.get(key).map(element => (
-													<Message
-														id={element._id}
-														key={element._id}
-														ownerId={element.user._id}
-														pic={element.user.picture ?? userpic}
-														firstName={element.user.firstName}
-														message={element.text}
-														createdAt={element.createdAt}
-														onContextMenu={onContextMenu}
-														continuous={element.continuous}
-														highlight={showContextMenu && contextMenuFor === element._id}
-													/>
-												))}
+									(<div key={key}>
+											<div className={cl.message_date}>
+												{key}
 											</div>
-										)
+											{messagesMap.get(key).map(element => (
+												<Message
+													id={element._id}
+													key={element._id}
+													ownerId={element.user._id}
+													pic={element.user.picture ?? userpic}
+													firstName={element.user.firstName}
+													message={element.text}
+													createdAt={element.createdAt}
+													onContextMenu={onContextMenu}
+													continuous={element.continuous}
+													seenBy={element.seenBy}
+													highlight={showContextMenu && contextMenuFor === element._id}
+													addToSeenBy={addToSeenBy}
+													toUserId={toUserId}
+												/>
+											))}
+										</div>
 									)
+								)
 								}
 							</div>
 							<div>
-								<MessageInput sendMessage={sendMessage}/>
+								<MessageInput sendMessage={sendMessage} message={{user: loggedUserId, roomId: parameters.id}}/>
 							</div>
 							<MessageContextMenu
 								isActive={showContextMenu}

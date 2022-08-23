@@ -1,25 +1,14 @@
 import {useState} from 'react';
-import storage from "../../utils/storage";
-import {USER_KEY} from "../../constants";
 import cl from './Message.module.css';
 import TextareaAutosize from "react-textarea-autosize";
 import arrow from "../../assets/send.svg";
 import PropTypes from "prop-types";
 
-const MessageInput = ({sendMessage}) => {
+const MessageInput = ({sendMessage, message}) => {
 	const [text, setText] = useState('');
-	const user = storage.get(USER_KEY);
 	const onSubmit = async (event_) => {
 		event_.preventDefault()
 		if (!text.trim()) return
-
-		// извлекаем данные пользователя и формируем начальное сообщение
-		const {userId, userName, roomId} = user
-		let message = {
-			user: userId,
-			userName,
-			roomId,
-		}
 
 		// if (!file) {
 		// типом сообщения является текст
@@ -99,7 +88,8 @@ const MessageInput = ({sendMessage}) => {
 };
 
 MessageInput.propTypes = {
-	sendMessage: PropTypes.func.isRequired
+	sendMessage: PropTypes.func.isRequired,
+	message: PropTypes.object.isRequired
 }
 
 export default MessageInput;

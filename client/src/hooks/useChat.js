@@ -4,24 +4,17 @@ import { io } from 'socket.io-client'
 import storage from "../utils/storage";
 
 export default function useChat(roomId) {
-	// извлекаем данные пользователя из локального хранилища
 	const user = {
 		userId: localStorage.getItem(USER_ID),
-		// userName: loggedUser.firstName,
 		roomId: roomId
 	};
 	storage.set(USER_KEY, user);
-	// локальное состояние для списка пользователей
-	// const [users, setUsers] = useState([])
-	// локальное состояние для списка сообщений
+
 	const [messages, setMessages] = useState([])
-	// состояние для системного сообщения
-	const [log, setLog] = useState(null)
-	// иммутабельное состояние для сокета
+
 	const { current: socket } = useRef(
 		io(SERVER_URI, {
 			query: {
-				// отправляем идентификатор комнаты и имя пользователя на сервер
 				roomId: user.roomId,
 				userId: user.userId,
 				action: "message"
@@ -29,41 +22,25 @@ export default function useChat(roomId) {
 		})
 	);
 
-
-	// регистрируем обработчики
 	useEffect(() => {
-		// сообщаем о подключении нового пользователя
-		// socket.emit('user:add', user);
-
-		// запрашиваем сообщения из БД
 		socket.emit('message:get')
 
-		// обрабатываем получение системного сообщения
-		socket.on('log', (log) => {
-			setLog(log);
-		})
-
-		// // обрабатываем получение обновленного списка пользователей
-		// socket.on('user_list:update', (users) => {
-		// 	setUsers(users);
-		// })
-
-		// обрабатываем получение обновленного списка сообщений
 		socket.on('message_list:update', (messages) => {
 			setMessages(messages);
 		})
 	}, [])
 
-	// метод для отправки сообщения
 	const sendMessage = (message) => {
 		socket.emit('message:add', message)
 	}
 
-	// метод для удаления сообщения
 	const removeMessage = (message) => {
 		socket.emit('message:remove', message)
 	}
 
-	return {messages, log, sendMessage, removeMessage };
+	const addToSeenBy = (messageId, userId) => {
+		socket.emit('message:addToSeenBy', {_id: messageId, user: userId});
+	}
 
+	return {messages, sendMessage, removeMessage, addToSeenBy};
 }

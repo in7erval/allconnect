@@ -47,7 +47,7 @@ const Comments = ({postId, setCommentsCount}) => {
 	const [commentMessage, setCommentMessage] = useState("");
 	const referenceComments = useRef();
 
-	const {comments, _log, sendComment, _removeComment} = useComments(postId);
+	const {comments, sendComment, _removeComment} = useComments(postId);
 
 	console.log(comments);
 

@@ -146,14 +146,9 @@ const Friends = () => {
 								</div>
 							</Link>
 							<div className={cl.modal_message}>
-								<MessageInput sendMessage={(message) => {
-									console.log("addMessage", message);
-									MessageService.addMessage({
-										user: loggedUserId,
-										text: message.text,
-										roomId: createRoomId(friendTo._id, loggedUserId)
-									});
-								}}
+								<MessageInput
+									sendMessage={(message) => MessageService.addMessage(message)}
+									message={{user: loggedUserId, roomId: createRoomId(friendTo._id, loggedUserId)}}
 								/>
 							</div>
 							<div className={cl.modal_link}>

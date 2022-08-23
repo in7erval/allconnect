@@ -66,7 +66,7 @@ const ImageUploader = ({currentImg}) => {
 						onChange={_handleImageChange}
 					/>
 					<button className={cl.submit} type="submit">
-						Upload Image
+						Загрузить
 					</button>
 				</form>
 			</div>
