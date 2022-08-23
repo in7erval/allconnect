@@ -6,6 +6,10 @@
     align-items: center;
 }
 
+.message i {
+    color: royalblue;
+}
+
 .message a {
     width: fit-content;
 }

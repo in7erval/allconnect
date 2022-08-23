@@ -81,8 +81,7 @@ const MessageRoom = () => {
 	const [id1, id2] = parseMessageRoomId(parameters.id);
 	let toUserId = (loggedUserId === id1) ? id2 : id1;
 
-
-	const referenceMessages = useRef();
+	const messagesEndReference = useRef();
 	const [user, setUser] = useState({});
 	const {messages, sendMessage, removeMessage, addToSeenBy} = useChat(parameters.id);
 	const [showContextMenu, setShowContextMenu] = useState(false);
@@ -94,10 +93,7 @@ const MessageRoom = () => {
 	console.log("messages", messagesMap);
 
 	useEffect(() => {
-		// скролл до низа при рендере
-		if (referenceMessages.current) {
-			referenceMessages.current.scrollTop = referenceMessages.current.scrollHeight;
-		}
+		scrollToBottom();
 	}, [messagesMap]);
 
 	const [fetchUserTo, isLoadingUserTo, _error] = useFetching(async () => {
@@ -114,6 +110,9 @@ const MessageRoom = () => {
 		fetchUserTo();
 	}, []);
 
+	const scrollToBottom = () => {
+		messagesEndReference.current?.scrollIntoView({behavior: 'smooth'});
+	}
 
 	const onContextMenu = (event_, messageId) => {
 		event_.preventDefault();
@@ -169,7 +168,7 @@ const MessageRoom = () => {
 									<img src={user.picture ?? userpic} alt={`pic for ${user.firstName}`}/>
 								</div>
 							</Link>
-							<div className={cl.messages} ref={referenceMessages}>
+							<div className={cl.messages}>
 								{messages && messages.length > 0 && [...messagesMap.keys()].map(key =>
 									(<div key={key}>
 											<div className={cl.message_date}>
@@ -177,16 +176,9 @@ const MessageRoom = () => {
 											</div>
 											{messagesMap.get(key).map(element => (
 												<Message
-													id={element._id}
 													key={element._id}
-													ownerId={element.user._id}
-													pic={element.user.picture ?? userpic}
-													firstName={element.user.firstName}
-													message={element.text}
-													createdAt={element.createdAt}
+													message={element}
 													onContextMenu={onContextMenu}
-													continuous={element.continuous}
-													seenBy={element.seenBy}
 													highlight={showContextMenu && contextMenuFor === element._id}
 													addToSeenBy={addToSeenBy}
 													toUserId={toUserId}
@@ -196,6 +188,7 @@ const MessageRoom = () => {
 									)
 								)
 								}
+								<div ref={messagesEndReference}/>
 							</div>
 							<div>
 								<MessageInput sendMessage={sendMessage} message={{user: loggedUserId, roomId: parameters.id}}/>

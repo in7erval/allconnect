@@ -1,25 +1,18 @@
 import cl from "./Message.module.css";
 import PropTypes from "prop-types";
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import {useInView} from "react-intersection-observer";
+import userpic from "../../assets/userpic.jpeg";
 
 const Message = (
 	{
-		pic,
-		id,
-		ownerId,
-		firstName,
 		message,
 		onContextMenu,
 		highlight,
-		createdAt,
-		continuous,
-		seenBy,
 		addToSeenBy,
 		toUserId
 	}
 ) => {
-
 	const currentUserId = localStorage.getItem('userId');
 	const {ref: reference, inView: isVisible} = useInView({
 		threshold: 0.5,
@@ -28,44 +21,43 @@ const Message = (
 		trackVisibility: true
 	});
 
-	const [seenBySave, setSeenBySave] = useState(seenBy);
+	const isCurrentUserMessage = message.user._id === currentUserId;
 
-	console.log(seenBySave, currentUserId);
-
-	//todo: если isVisible и не в seenBy,
-	// кидаем запрос на добавление текущего id в seenBy
-
-	const isCurrentUserMessage = ownerId === currentUserId;
-
-	const date = new Date(createdAt);
+	const date = new Date(message.createdAt);
 	const stringTime = date.toLocaleTimeString([], {timeStyle: 'short'});
 
-	const tail = continuous ? cl.no_tail : "";
+	const tail = message.continuous ? cl.no_tail : "";
 
 	let messageClass = (isCurrentUserMessage ? cl.from_me : cl.from_them) + " " + tail;
 
 	useEffect(() => {
-		if (isVisible && !isCurrentUserMessage && !seenBySave.includes(currentUserId)) {
-			console.log("message set seenBy", message, currentUserId);
-			addToSeenBy(id, currentUserId);
-			setSeenBySave([...seenBySave, currentUserId]);
+		if (isVisible && !isCurrentUserMessage && !message.seenBy.includes(currentUserId)) {
+			addToSeenBy(message._id, currentUserId);
+			message.seenBy.push(currentUserId);
 		}
 	}, [isVisible]);
+
+	console.log("Render message", message.text, message);
+
+	console.log("toUserId", toUserId);
+	console.log("isCurrentUserMessage", isCurrentUserMessage);
+	console.log("seenBy", message.seenBy);
 
 	return (
 		<div ref={reference}>
 			<div className={`${cl.message} ${messageClass} ${highlight ? cl.highlight : ""}`}>
 				{!isCurrentUserMessage &&
 					<img
-						src={pic}
+						src={message.user.picture ?? userpic}
 						alt={"comment owner"}
-						className={continuous ? cl.hide : ""}
+						className={message.continuous ? cl.hide : ""}
 					/>}
-				<button onContextMenu={(event_) => onContextMenu(event_, id)}>
+				<button onContextMenu={(event_) => onContextMenu(event_, message._id)}>
 					<p className={messageClass}>
-						{!isCurrentUserMessage && <a className={cl.name} href={`/user${ownerId}`}>{firstName}</a>}
+						{!isCurrentUserMessage &&
+							<a className={cl.name} href={`/user${message.user._id}`}>{message.user.firstName}</a>}
 						<span>
-							{message}
+							{message.text}
 							<span
 								style={{
 									margin: 0,
@@ -76,8 +68,9 @@ const Message = (
 								}}
 							>
 								{stringTime}
-								{seenBySave.includes(isCurrentUserMessage ? toUserId : currentUserId) ?
-									<i className="bi bi-check-all"></i> : <i className="bi bi-check"></i>}
+								{message.seenBy.includes(isCurrentUserMessage ? toUserId : currentUserId) ?
+									<i className="bi bi-check-all"></i> :
+									<i className="bi bi-check"></i>}
 							</span>
 					</span>
 					</p>
@@ -89,17 +82,10 @@ const Message = (
 };
 
 Message.propTypes = {
-	id: PropTypes.any.isRequired,
-	ownerId: PropTypes.string.isRequired,
+	message: PropTypes.object.isRequired,
 	toUserId: PropTypes.string.isRequired,
-	pic: PropTypes.string.isRequired,
-	continuous: PropTypes.bool.isRequired,
-	createdAt: PropTypes.string.isRequired,
-	firstName: PropTypes.string.isRequired,
-	message: PropTypes.string.isRequired,
 	onContextMenu: PropTypes.func.isRequired,
 	highlight: PropTypes.bool.isRequired,
-	seenBy: PropTypes.array.isRequired,
 	addToSeenBy: PropTypes.func.isRequired
 }
 

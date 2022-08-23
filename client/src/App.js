@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react';
 
 import './styles/App.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import {BrowserRouter} from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
 import AppRouter from "./components/AppRouter";
