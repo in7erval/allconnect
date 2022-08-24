@@ -11,17 +11,17 @@ const AppRouter = () => {
 	const [user, loading, _error] = useAuthState(auth);
 
 	useEffect(() => {
-		if (user) {
-			UserAuthService.getUserByUid(user.uid)
-				.then(response => {
-					if (!response.error) {
-						console.log("set USER_ID APPROUTER", response.user.user);
-						localStorage.setItem(USER_ID, response.user.user);
-					}
-				});
-		} else {
-			localStorage.removeItem(USER_ID);
-		}
+		(async () => {
+			if (user) {
+				await UserAuthService.getUserByUid(user.uid)
+					.then(response => {
+						if (!response.error) {
+							console.log("set USER_ID APPROUTER", response.user.user);
+							localStorage.setItem(USER_ID, response.user.user);
+						}
+					});
+			}
+		})();
 	}, [user]);
 
 	if (loading) {

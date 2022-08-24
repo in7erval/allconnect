@@ -1,4 +1,3 @@
-import AsideNav from "../../components/AsideNav/AsideNav";
 import {useFetching} from "../../hooks/useFetching";
 import UserService from "../../API/UserService";
 import {useEffect, useMemo, useState} from "react";
@@ -84,90 +83,85 @@ const Friends = () => {
 	}, [friends, inputName]);
 
 	return (
-		<div className="default_page">
-			<AsideNav/>
-			<div className="default_page__content">
-				<div className={cl.friends}>
-					{isLoading ? <Loader/> :
-						<div className={cl.main}>
-							<div className={cl.main__header}>
-								<div>
-									<div>
-										<div className={cl.main__header_info}>
-											Все друзья <span>{friends?.length}</span>
-										</div>
-									</div>
+		<div className={cl.friends}>
+			{isLoading ? <Loader/> :
+				<div className={cl.main}>
+					<div className={cl.main__header}>
+						<div>
+							<div>
+								<div className={cl.main__header_info}>
+									Все друзья <span>{friends?.length}</span>
 								</div>
-								<button onClick={() => setIsGlobal(!isGlobal)} className={isGlobal ? cl.active : ""}>
-									Найти друзей
-								</button>
 							</div>
-							<form className={cl.main__form}>
-								<i className="bi bi-search"></i>
-								<input
-									type="text"
-									src={inputName}
-									onChange={event_ => setInputName(event_.target.value)}
-									placeholder={(isGlobal ? "Глобальный п" : "П") + "оиск друзей"}
-								/>
-							</form>
-							<div className={cl.main__friends}>
-								{filteredFriends?.map(friend => (
-									<div key={friend._id} className={cl.main__friends_item}>
-										<Link to={`/user${friend._id}`}>
-											<img src={friend.picture ?? userpic} alt={"pic for " + friend.firstName}/>
-										</Link>
-										<div className={cl.main__friends_item__info}>
-											<Link to={`/user${friend._id}`}>
-												<p><b>{friend.firstName} {friend.lastName}</b></p>
-											</Link>
-											<div>
-												<button onClick={() => {
-													setFriendTo(friend);
-													setVisibleModal(true);
-												}}>Написать сообщение
-												</button>
-											</div>
-										</div>
-									</div>
-
-								))}
-
-							</div>
-
 						</div>
-					}
-					<MyModal setVisible={setVisibleModal} visible={visibleModal}>
-						<div className={cl.modal}>
-							<Link to={`/user${friendTo._id}`}>
-								<div className={cl.modal_header}>
-									<img src={friendTo.picture ?? userpic} alt={"pic for " + friendTo.firstName}/>
-									<p><b>{friendTo.firstName} {friendTo.lastName}</b></p>
-								</div>
-							</Link>
-							<div className={cl.modal_message}>
-								<MessageInput
-									sendMessage={(message) => MessageService.addMessage(message)}
-									message={{user: loggedUserId, roomId: createRoomId(friendTo._id, loggedUserId)}}
-								/>
-							</div>
-							<div className={cl.modal_link}>
-								<Link to={`/messages/${createRoomId(friendTo._id, loggedUserId)}`}>
-									К диалогу
+						<button onClick={() => setIsGlobal(!isGlobal)} className={isGlobal ? cl.active : ""}>
+							Найти друзей
+						</button>
+					</div>
+					<form className={cl.main__form}>
+						<i className="bi bi-search"></i>
+						<input
+							type="text"
+							src={inputName}
+							onChange={event_ => setInputName(event_.target.value)}
+							placeholder={(isGlobal ? "Глобальный п" : "П") + "оиск друзей"}
+						/>
+					</form>
+					<div className={cl.main__friends}>
+						{filteredFriends?.map(friend => (
+							<div key={friend._id} className={cl.main__friends_item}>
+								<Link to={`/user${friend._id}`}>
+									<img src={friend.picture ?? userpic} alt={"pic for " + friend.firstName}/>
 								</Link>
+								<div className={cl.main__friends_item__info}>
+									<Link to={`/user${friend._id}`}>
+										<p><b>{friend.firstName} {friend.lastName}</b></p>
+									</Link>
+									<div>
+										<button onClick={() => {
+											setFriendTo(friend);
+											setVisibleModal(true);
+										}}>Написать сообщение
+										</button>
+									</div>
+								</div>
 							</div>
-						</div>
-					</MyModal>
-					{/*<div className={cl.nav}>*/}
-					{/*	<ul>*/}
-					{/*		<li>Первое</li>*/}
-					{/*		<li>Второе</li>*/}
-					{/*		<li>Третье</li>*/}
-					{/*	</ul>*/}
 
-					{/*</div>*/}
+						))}
+
+					</div>
+
 				</div>
-			</div>
+			}
+			<MyModal setVisible={setVisibleModal} visible={visibleModal}>
+				<div className={cl.modal}>
+					<Link to={`/user${friendTo._id}`}>
+						<div className={cl.modal_header}>
+							<img src={friendTo.picture ?? userpic} alt={"pic for " + friendTo.firstName}/>
+							<p><b>{friendTo.firstName} {friendTo.lastName}</b></p>
+						</div>
+					</Link>
+					<div className={cl.modal_message}>
+						<MessageInput
+							sendMessage={(message) => MessageService.addMessage(message)}
+							message={{user: loggedUserId, roomId: createRoomId(friendTo._id, loggedUserId)}}
+						/>
+					</div>
+					<div className={cl.modal_link}>
+						<Link to={`/messages/${createRoomId(friendTo._id, loggedUserId)}`}>
+							К диалогу
+						</Link>
+					</div>
+				</div>
+			</MyModal>
+			{/*<div className={cl.nav}>*/}
+			{/*	<ul>*/}
+			{/*		<li>Первое</li>*/}
+			{/*		<li>Второе</li>*/}
+			{/*		<li>Третье</li>*/}
+			{/*	</ul>*/}
+
+			{/*</div>*/}
 		</div>
 	);
 };

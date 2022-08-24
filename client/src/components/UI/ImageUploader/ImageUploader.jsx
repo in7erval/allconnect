@@ -4,24 +4,26 @@ import UserService from "../../../API/UserService";
 import {useNavigate} from "react-router-dom";
 import Compress from "browser-image-compression";
 import PropTypes from "prop-types";
+import Loader from "../Loader/Loader";
 
 
 const ImageUploader = ({currentImg}) => {
 
 		const [file, setFile] = useState('');
 		const [imagePreviewUrl, setImagePreviewUrl] = useState(currentImg);
+		const [loading, setLoading] = useState(false);
 		const userId = localStorage.getItem("userId");
 		const navigate = useNavigate();
 
-		const _handleSubmit = (event_) => {
+		const _handleSubmit = async (event_) => {
 			event_.preventDefault();
 			console.log(event_);
 			console.log('handle uploading-', file);
-			UserService.savePhoto(userId, file);
+			await UserService.savePhoto(userId, file);
 			navigate(0);
 		}
 
-		const _handleImageChange = (event_) => {
+		const _handleImageChange = async (event_) => {
 			event_.preventDefault();
 
 			let file = event_.target.files[0];
@@ -30,12 +32,14 @@ const ImageUploader = ({currentImg}) => {
 			const options = {
 				maxSizeMB: 0.5,
 				useWebWorker: true
-			}
+			};
 
-			Compress(file, options)
+			setLoading(true);
+
+			await Compress(file, options)
 				.then(compressedBlob => {
-					console.log(compressedBlob)
-					compressedBlob.lastModifiedDate = new Date()
+					console.log(compressedBlob);
+					compressedBlob.lastModifiedDate = new Date();
 					const convertedBlobFile = new File([compressedBlob], file.name, {type: file.type, lastModified: Date.now()});
 					setFile(convertedBlobFile);
 					setImagePreviewUrl(URL.createObjectURL(compressedBlob));
@@ -44,12 +48,13 @@ const ImageUploader = ({currentImg}) => {
 					// Show the user a toast message or notification that something went wrong while compressing file
 				});
 
+			setLoading(false);
 		}
 
 		return (
 			<div className={cl.image_uploader}>
 				<div className={cl.preview}>
-					<img src={imagePreviewUrl} alt="pic"/>
+					{loading ? <Loader/> : <img src={imagePreviewUrl} alt="pic"/>}
 				</div>
 				<form onSubmit={_handleSubmit}>
 

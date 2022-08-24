@@ -3,7 +3,6 @@ import {Link, useParams} from "react-router-dom";
 import {useFetching} from "../../hooks/useFetching";
 import Loader from "../../components/UI/Loader/Loader";
 import UserService from "../../API/UserService";
-import AsideNav from "../../components/AsideNav/AsideNav";
 import PostList from "../../components/Post/PostList";
 import {getPageCount} from "../../utils/pages";
 import {useObserver} from "../../hooks/useObserver";
@@ -13,6 +12,7 @@ import cl from "./UserPage.module.css";
 import MyModal from "../../components/UI/MyModal/MyModal";
 import ImageUploader from "../../components/UI/ImageUploader/ImageUploader";
 import PostForm from "../../components/Post/PostForm/PostForm.jsx";
+import {USER_ID} from "../../constants";
 
 const determineIsFriend = (userFriendsId, friendId) => {
 	console.log(`determineIsFriend(${userFriendsId}, ${friendId})`);
@@ -32,8 +32,8 @@ const UserPage = () => {
 		const LIMIT_POSTS = 10;
 		const parameters = useParams();
 		const pageUserId = parameters.id;
-		console.log("pageUserId:", pageUserId, parameters);
-		const loggedUserId = localStorage.getItem("userId");
+		const loggedUserId = localStorage.getItem(USER_ID);
+		console.log("pageUserId:", pageUserId, parameters, loggedUserId);
 		const isOwner = pageUserId === loggedUserId;
 
 		const [user, setUser] = useState({});
@@ -51,14 +51,14 @@ const UserPage = () => {
 		const [editedFirstName, setEditedFirstName] = useState("");
 		const [editedLastName, setEditedLastName] = useState("");
 
-		const addFriend = () => {
-			UserService.addFriend(loggedUserId, pageUserId)
+		const addFriend = async  () => {
+			await UserService.addFriend(loggedUserId, pageUserId)
 				.then(() => console.debug("successfully added friend"));
 			setIsFriend(true);
 		};
 
-		const deleteFriend = () => {
-			UserService.deleteFriend(loggedUserId, pageUserId)
+		const deleteFriend = async () => {
+			await UserService.deleteFriend(loggedUserId, pageUserId)
 				.then(() => console.debug("successfully deleted friend"));
 			setIsFriend(false);
 		}
@@ -122,9 +122,9 @@ const UserPage = () => {
 		}, [pageUserId]);
 
 
-		const changeName = (event_) => {
+		const changeName = async (event_) => {
 			event_.preventDefault();
-			UserService.changeName(loggedUserId, editedFirstName, editedLastName)
+			await UserService.changeName(loggedUserId, editedFirstName, editedLastName)
 				.then(() => console.debug("name changed successfully"));
 		};
 
@@ -132,127 +132,116 @@ const UserPage = () => {
 
 		/* todo: fix loader */
 		return (
-			<div className="default_page">
-				<AsideNav/>
-				<div className="default_page__content justify-content-start">
-					<div className={cl.user_page}>
-						{isLoading ?
-							<Loader/> : (
-								<div className={cl.user_page__pic_name}>
-									<div className={cl.user_page__pic_and_btns}>
-										<div className={cl.user_pic}>
-											<img src={user.picture ?? userpic} alt={"pic"}/>
-										</div>
-										<div className={cl.user_pic_btns}>
-											{isOwner &&
-												<button onClick={() => setShowImageUploader(true)}>
-													Загрузить фото
-												</button>
-											}
-											{!isOwner && (!isFriend ?
-												(<button onClick={addFriend}>
-													Добавить в друзья
-												</button>) :
-												(<button className={cl.danger} onClick={deleteFriend}>
-													Удалить из друзей
-												</button>))
-											}
-										</div>
-									</div>
-									<div className={cl.user_page__info_stats}>
-										<div className={cl.user_page__info}>
-											{isOwner ? (
-													<form onSubmit={changeName}>
-														<FlexibleInput
-															content={editedLastName}
-															onChange={event_ => setEditedLastName(event_.target.value)}
-														/>
-														<FlexibleInput
-															content={editedFirstName}
-															onChange={event_ => setEditedFirstName(event_.target.value)}
-														/>
-														<button type="submit" hidden/>
-													</form>
-												) :
-												(<h1>{user.lastName} {user.firstName}</h1>)
-											}
-											<hr/>
-										</div>
-										<div className={cl.user_page__stats}>
-											Заготовка для статистики
-										</div>
-									</div>
+			<div className={cl.user_page + " justify-content-start"}>
+				{isLoading ?
+					<Loader/> : (
+						<div className={cl.user_page__pic_name}>
+							<div className={cl.user_page__pic_and_btns}>
+								<div className={cl.user_pic}>
+									<img src={user.picture ?? userpic} alt={"pic"}/>
 								</div>
-							)}
-
-						<div style={{
-							display: 'flex',
-							flexWrap: 'wrap',
-							justifyContent: 'center'
-						}}>
-							{isLoading ?
-								<Loader/> : (
-									<div className={cl.user_page__friends}>
-										<Link to={`/friends/${isOwner ? "" : pageUserId}`}>
-											<div className={cl.user_page__friends_header}>
-												<div>Друзья</div>
-												<div>
-													<p>{user?.friends?.length}</p>
-												</div>
-											</div>
-										</Link>
-										<div
-											className={cl.user_page__friends_imgs}
-											onClick={() => setShowAllFriends(!showAllFriends)}
-										>
-											{
-												user?.friends?.slice(0, indexForFriendsArray)?.map(element =>
-													(<Link key={element._id} to={"/user" + element._id} className="tooltip">
-															<span className="tooltiptext">{element.lastName} {element.firstName}</span>
-															<img src={element.picture ?? userpic} alt="pic"/>
-														</Link>
-													)
-												)
-											}
-										</div>
-									</div>
-								)}
-							<div style={{flex: 5}}>
-								<div className={cl.user_page__posts_header}>
-									<div>
-										<p>Посты</p>
-										<p>{totalPosts}</p>
-									</div>
-									{isOwner && <PostForm/>}
+								<div className={cl.user_pic_btns}>
+									{isOwner &&
+										<button onClick={() => setShowImageUploader(true)}>
+											Загрузить фото
+										</button>
+									}
+									{!isOwner && (!isFriend ?
+										(<button onClick={addFriend}>
+											Добавить в друзья
+										</button>) :
+										(<button className={cl.danger} onClick={deleteFriend}>
+											Удалить из друзей
+										</button>))
+									}
 								</div>
-								<div>
-									{isPostsLoading && <Loader/>}
-									<PostList
-										remove={Object.create(null)}
-										posts={posts}
-									/>
-									<div ref={lastElement} style={{height: 20}}/>
+							</div>
+							<div className={cl.user_page__info_stats}>
+								<div className={cl.user_page__info}>
+									{isOwner ? (
+											<form onSubmit={changeName}>
+												<FlexibleInput
+													content={editedLastName}
+													onChange={event_ => setEditedLastName(event_.target.value)}
+												/>
+												<FlexibleInput
+													content={editedFirstName}
+													onChange={event_ => setEditedFirstName(event_.target.value)}
+												/>
+												<button type="submit" hidden/>
+											</form>
+										) :
+										(<h1>{user.lastName} {user.firstName}</h1>)
+									}
+									<hr/>
+								</div>
+								<div className={cl.user_page__stats}>
+									Заготовка для статистики
 								</div>
 							</div>
 						</div>
+					)}
 
-
+				<div style={{
+					display: 'flex',
+					flexWrap: 'wrap',
+					justifyContent: 'center'
+				}}>
+					{isLoading ?
+						<Loader/> : (
+							<div className={cl.user_page__friends}>
+								<Link to={`/friends/${isOwner ? "" : pageUserId}`}>
+									<div className={cl.user_page__friends_header}>
+										<div>Друзья</div>
+										<div>
+											<p>{user?.friends?.length}</p>
+										</div>
+									</div>
+								</Link>
+								<div
+									className={cl.user_page__friends_imgs}
+									onClick={() => setShowAllFriends(!showAllFriends)}
+								>
+									{
+										user?.friends?.slice(0, indexForFriendsArray)?.map(element =>
+											(<Link key={element._id} to={"/user" + element._id} className="tooltip">
+													<span className="tooltiptext">{element.lastName} {element.firstName}</span>
+													<img src={element.picture ?? userpic} alt="pic"/>
+												</Link>
+											)
+										)
+									}
+								</div>
+							</div>
+						)}
+					<div style={{flex: 5}}>
+						<div className={cl.user_page__posts_header}>
+							<div>
+								<p>Посты</p>
+								<p>{totalPosts}</p>
+							</div>
+							{isOwner && <PostForm/>}
+						</div>
+						<div>
+							{isPostsLoading && <Loader/>}
+							<PostList
+								remove={Object.create(null)}
+								posts={posts}
+							/>
+							<div ref={lastElement} style={{height: 20}}/>
+						</div>
 					</div>
-
 				</div>
-
 				{isOwner && !isLoading &&
 					<MyModal
 						visible={showImageUploader}
 						setVisible={setShowImageUploader}
 					>
 						<ImageUploader
-							currentImg={user.picture === null || user.picture === undefined
-								? userpic : user.picture}
+							currentImg={user.picture ?? userpic}
 						/>
 					</MyModal>
 				}
-
 			</div>
 		);
 	}

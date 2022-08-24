@@ -10,7 +10,6 @@ import {USER_ID} from "../../constants";
 import {useFetching} from "../../hooks/useFetching";
 import UserService from "../../API/UserService";
 import Loader from "../../components/UI/Loader/Loader";
-import AsideNav from "../../components/AsideNav/AsideNav";
 
 const getPosition = (event_) => {
 	let posx = 0;
@@ -145,65 +144,59 @@ const MessageRoom = () => {
 	};
 
 	return (
-		<div className="default_page">
-			<AsideNav/>
-			<div className="default_page__content">
-				<div className={cl.main}>
-					{isLoadingUserTo ?
-						<div style={{
-							display: "flex",
-							justifyContent: 'center',
-							marginTop: 50
-						}}>
-							<Loader/>
-						</div>
-						:
-						<div style={{flex: 1}} onClick={() => setShowContextMenu(false)}>
-							<Link to={`/user${user._id}`}>
-								<div className={cl.to_user_card}>
-									{user.lastName} {user.firstName}
-									<img src={user.picture ?? userpic} alt={`pic for ${user.firstName}`}/>
-								</div>
-							</Link>
-							<div className={cl.messages}>
-								{messages && messages.length > 0 && [...messagesMap.keys()].map(key =>
-									(<div key={key}>
-											<div className={cl.message_date}>
-												{key}
-											</div>
-											{messagesMap.get(key).map(element => (
-												<Message
-													key={element._id}
-													message={element}
-													onContextMenu={onContextMenu}
-													highlight={showContextMenu && contextMenuFor === element._id}
-													addToSeenBy={addToSeenBy}
-													toUserId={toUserId}
-												/>
-											))}
-										</div>
-									)
-								)
-								}
-								<div ref={messagesEndReference}/>
-							</div>
-							<div>
-								<MessageInput sendMessage={sendMessage} message={{user: loggedUserId, roomId: parameters.id}}/>
-							</div>
-							<MessageContextMenu
-								isActive={showContextMenu}
-								reference={contextMenuReference}
-								liMap={[
-									// {onClick: () => console.log("delete me"), text: "Удалить у меня", isDanger: true},
-									{onClick: () => removeMessage(contextMenuFor), text: "Удалить у всех", isDanger: true}
-									// {onClick: () => () => setShowContextMenu(false), text: "Закрыть", isDanger: false}
-								]}
-							/>
-						</div>
-					}
+		<div className={cl.main}>
+			{isLoadingUserTo ?
+				<div style={{
+					display: "flex",
+					justifyContent: 'center',
+					marginTop: 50
+				}}>
+					<Loader/>
 				</div>
-				{/*<div ref={lastElement} style={{height: 20}}/>*/}
-			</div>
+				:
+				<div style={{flex: 1}} onClick={() => setShowContextMenu(false)}>
+					<Link to={`/user${user._id}`}>
+						<div className={cl.to_user_card}>
+							{user.lastName} {user.firstName}
+							<img src={user.picture ?? userpic} alt={`pic for ${user.firstName}`}/>
+						</div>
+					</Link>
+					<div className={cl.messages}>
+						{messages && messages.length > 0 && [...messagesMap.keys()].map(key =>
+							(<div key={key}>
+									<div className={cl.message_date}>
+										{key}
+									</div>
+									{messagesMap.get(key).map(element => (
+										<Message
+											key={element._id}
+											message={element}
+											onContextMenu={onContextMenu}
+											highlight={showContextMenu && contextMenuFor === element._id}
+											addToSeenBy={addToSeenBy}
+											toUserId={toUserId}
+										/>
+									))}
+								</div>
+							)
+						)
+						}
+						<div ref={messagesEndReference}/>
+					</div>
+					<div>
+						<MessageInput sendMessage={sendMessage} message={{user: loggedUserId, roomId: parameters.id}}/>
+					</div>
+					<MessageContextMenu
+						isActive={showContextMenu}
+						reference={contextMenuReference}
+						liMap={[
+							// {onClick: () => console.log("delete me"), text: "Удалить у меня", isDanger: true},
+							{onClick: () => removeMessage(contextMenuFor), text: "Удалить у всех", isDanger: true}
+							// {onClick: () => () => setShowContextMenu(false), text: "Закрыть", isDanger: false}
+						]}
+					/>
+				</div>
+			}
 		</div>
 	);
 };

@@ -6,7 +6,6 @@ const MessageRoomCard = ({user, id, messagePreview, messageTime}) => {
 
 	if (messagePreview && messagePreview.length > 50) {
 			messagePreview = messagePreview.slice(0, 50) + "...";
-
 	}
 
 	if (messageTime) {
@@ -14,6 +13,8 @@ const MessageRoomCard = ({user, id, messagePreview, messageTime}) => {
 	}
 
 	const classname = cl.message_card + " " + (messagePreview ? "" : cl.no_messages);
+
+	console.log("user", user);
 
 	return (
 		<div className={classname} key={id}>

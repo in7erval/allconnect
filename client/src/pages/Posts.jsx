@@ -5,7 +5,6 @@ import {getPageCount} from "../utils/pages";
 import Loader from "../components/UI/Loader/Loader";
 import PostList from "../components/Post/PostList";
 import {useObserver} from "../hooks/useObserver";
-import AsideNav from "../components/AsideNav/AsideNav";
 import {USER_ID} from "../constants";
 
 function Posts() {
@@ -45,26 +44,22 @@ function Posts() {
 		});
 
 	return (
-		<div className="default_page">
-			<AsideNav/>
-			<div className="default_page__content">
-				<PostList
-					remove={Object.create(null)}
-					posts={posts}
-				/>
-				{isPostsLoading &&
-					<div style={{
-						display: "flex",
-						justifyContent: 'center',
-						marginTop: 50
-					}}>
-						<Loader/>
-					</div>
-				}
-				<div ref={lastElement} style={{height: 20}}/>
-			</div>
+		<div>
+			<PostList
+				remove={Object.create(null)}
+				posts={posts}
+			/>
+			{isPostsLoading &&
+				<div style={{
+					display: "flex",
+					justifyContent: 'center',
+					marginTop: 50
+				}}>
+					<Loader/>
+				</div>
+			}
+			<div ref={lastElement} style={{height: 20}}/>
 		</div>
-
 	);
 }
 

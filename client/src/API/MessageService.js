@@ -22,4 +22,12 @@ export default class MessageService {
 		});
 	}
 
+	static async getAllRoomsForUser(userId) {
+		const response = await axios.get(`${API_URL}/api/messages/rooms`, {
+			params: {user: userId}
+		});
+		console.log("getAllRoomsForUser", response);
+		return response.data;
+	}
+
 }
