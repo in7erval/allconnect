@@ -99,10 +99,7 @@ const MessageRoom = () => {
 	const [fetchUserTo, isLoadingUserTo, _error] = useFetching(async () => {
 		await UserService.getFullById(toUserId)
 			.then(response => response.body)
-			.then(body => {
-				console.log("body", body);
-				setUser(body);
-			});
+			.then(body => setUser(body));
 	});
 
 	useEffect(() => {

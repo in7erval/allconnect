@@ -1,18 +1,25 @@
-import {useContext} from 'react';
 import {Link} from "react-router-dom";
-import {AuthContext} from "../../context";
 import Logo from "./Logo/Logo";
 import SearchNav from "./SearchNav/SearchNav";
 import cl from "./Navbar.module.css";
 import Nav from "../Nav";
+import {useAuthState} from "react-firebase-hooks/auth";
+import {auth} from "../../firebase";
+import {signOut} from "firebase/auth";
+import {useDispatch} from "react-redux";
+import {parseError} from "../../store/errorReducer";
 
 const Navbar = () => {
 
-	const {isAuth, setIsAuth} = useContext(AuthContext);
+	// const {isAuth, setIsAuth} = useContext(AuthContext);
+
+	const [user, _loading, _error] = useAuthState(auth);
+	const dispatch = useDispatch();
 
 	const logout = () => {
-		setIsAuth(false);
-		localStorage.removeItem('auth');
+		signOut(auth).then(() => {
+			console.log("logout");
+		}).catch(error => dispatch(parseError(error)));
 	}
 
 	return (
@@ -21,7 +28,7 @@ const Navbar = () => {
 				<Link to="/"><Logo/></Link>
 				<SearchNav/>
 
-				{isAuth &&
+				{user &&
 					<div className={cl.show_menu}>
 						<Nav activeClassName={cl.active}/>
 					</div>

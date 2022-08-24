@@ -1,18 +1,33 @@
-import {useContext} from 'react';
+import {Suspense, useEffect} from 'react';
 import {Route, Routes} from "react-router-dom";
-import {AuthContext} from "../context";
 import Loader from "./UI/Loader/Loader";
 import {routes} from "../router";
-import {Suspense} from "react";
+import {useAuthState} from "react-firebase-hooks/auth";
+import {auth} from "../firebase";
+import UserAuthService from "../API/UserAuthService";
+import {USER_ID} from "../constants";
 
 const AppRouter = () => {
+	const [user, loading, _error] = useAuthState(auth);
 
-	const {isAuth, isLoading} = useContext(AuthContext);
-	console.log(isAuth);
+	useEffect(() => {
+		if (user) {
+			UserAuthService.getUserByUid(user.uid)
+				.then(response => {
+					if (!response.error) {
+						console.log("set USER_ID APPROUTER", response.user.user);
+						localStorage.setItem(USER_ID, response.user.user);
+					}
+				});
+		} else {
+			localStorage.removeItem(USER_ID);
+		}
+	}, [user]);
 
-	if (isLoading) {
+	if (loading) {
 		return <Loader/>;
 	}
+	const isAuth = user;
 
 	return (
 		<Suspense fallback={

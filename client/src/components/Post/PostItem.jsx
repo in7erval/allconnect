@@ -6,10 +6,11 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import PostService from "../../API/PostService";
 import PropTypes from "prop-types";
 import {Link} from "react-router-dom";
+import {USER_ID} from "../../constants";
 
 const PostItem = ({post}) => {
 
-	const loggedUserId = localStorage.getItem("userId");
+	const loggedUserId = localStorage.getItem(USER_ID);
 	const [showComments, setShowComments] = useState(false);
 	const [isOwner, setIsOwner] = useState(false);
 	const [invertHeartIcon, setInvertHeartIcon] = useState(false); //fixme: это дно, пофикси
@@ -17,15 +18,11 @@ const PostItem = ({post}) => {
 	const [likesCount, setLikesCount] = useState(post.likes.length);
 	const [commentsCount, setCommentsCount] = useState(post.comments.length);
 
-	console.log("comments", post.comments);
+	// console.log("comments", post.comments);
 
 	useEffect(() => {
 		setIsOwner(loggedUserId === post.owner._id);
 	}, []);
-
-	const deletePost = () => {
-		console.log("delete post");
-	}
 
 	const addOrRemoveLike = async () => {
 		if (isLiked) {
@@ -99,7 +96,7 @@ const PostItem = ({post}) => {
 					</button>
 				</div>
 				{isOwner &&
-					<button onClick={deletePost} className={cl.post__btns_btn_delete}>
+					<button onClick={() => console.log("delete")} className={cl.post__btns_btn_delete}>
 						{/*Удалить*/}
 					</button>
 				}

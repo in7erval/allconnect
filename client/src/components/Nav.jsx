@@ -1,10 +1,11 @@
 import PropTypes from "prop-types";
 import {Link} from "react-router-dom";
+import {USER_ID} from "../constants";
 
 
 const Nav = ({activeClassName}) => {
 
-	const userId = localStorage.getItem('userId');
+	const userId = localStorage.getItem(USER_ID);
 
 	const link = window.location.pathname;
 	console.log("link", link);

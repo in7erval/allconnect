@@ -6,6 +6,7 @@ import Loader from "../components/UI/Loader/Loader";
 import PostList from "../components/Post/PostList";
 import {useObserver} from "../hooks/useObserver";
 import AsideNav from "../components/AsideNav/AsideNav";
+import {USER_ID} from "../constants";
 
 function Posts() {
 	const [posts, setPosts] = useState([]);
@@ -13,11 +14,17 @@ function Posts() {
 	const LIMIT_POSTS = 10;
 	const [page, setPage] = useState(1);
 	const lastElement = useRef();
-	const userId = localStorage.getItem("userId");
+	const userId = localStorage.getItem(USER_ID);
 
-	const [fetchPosts, isPostsLoading, _postError] = useFetching(async () => {
+	console.log(userId);
+
+	const [fetchPosts, isPostsLoading, _postError] = useFetching(async (isNew) => {
 		let response = await PostService.getAllForUser(LIMIT_POSTS, page, userId);
-		setPosts([...posts, ...response.body]);
+		if (isNew) {
+			setPosts([...response.body]);
+		} else {
+			setPosts([...posts, ...response.body])
+		}
 		const totalCount = response.count;
 		console.log("totalCount:", totalCount);
 		setTotalPages(getPageCount(totalCount, LIMIT_POSTS));
@@ -26,6 +33,10 @@ function Posts() {
 	useEffect(() => {
 		fetchPosts();
 	}, [page]);
+
+	useEffect(() => {
+		fetchPosts(true);
+	}, [userId]);
 
 	useObserver(lastElement, page < totalPages, isPostsLoading,
 		() => {

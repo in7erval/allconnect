@@ -5,21 +5,20 @@ export default class UserAuthService {
 
 	constructor() {}
 
-	static async checkLoginPassword(login, password) {
-
-		const response = await axios.post(`${API_URL}/api/auth`, {
-			login: login,
-			loginPass: btoa(`${login}:${password}`)
-		});
-		console.log("response", response.data);
-		return response.data;
-	}
-
 	static async registerUser(user) {
 		const response = await axios.post(`${API_URL}/api/register`, {
 			...user
 		});
 		console.log("response", response.data);
+		return response.data;
+	}
+
+	static async getUserByUid(uid) {
+		const response = await axios.get(`${API_URL}/api/auth`,
+			{
+				params: {uid: uid}
+			});
+		console.log("getUserIdByUid() response", response);
 		return response.data;
 	}
 

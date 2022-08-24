@@ -1,54 +1,51 @@
-import {useContext, useState} from 'react';
+import {useState} from 'react';
 import showPass from '../../assets/pass_show.png';
 import passVisible from '../../assets/pass_visible.png';
 import cl from './Login.module.css';
-import UserAuthService from "../../API/UserAuthService";
 import {parseError} from "../../store/errorReducer";
-import {AuthContext} from "../../context";
 import {useDispatch} from "react-redux";
-import {useNavigate} from "react-router-dom";
-import {setId} from "../../store/authReducer";
 import PropTypes from "prop-types";
+import {signInWithEmailPassword} from "../../firebase/index";
+import {USER_ID} from "../../constants";
+import {useNavigate} from "react-router-dom";
 
 const LoginForm = ({returnToHome}) => {
 
 	const dispatch = useDispatch();
 
-	const [login, setLogin] = useState();
+	const [email, setEmail] = useState();
 	const [password, setPassword] = useState();
 	const [passwordVisible, setPasswordVisible] = useState(false);
-	const {_isAuth, setIsAuth} = useContext(AuthContext);
 	const navigate = useNavigate();
 
-	const sendData = (event_) => {
+	const sendData = async (event_) => {
 		event_.preventDefault();
-		console.log('submit', login);
-		UserAuthService.checkLoginPassword(login, password)
+		console.log('submit', email);
+		await signInWithEmailPassword(email, password)
 			.then(response => {
 				if (response.error) {
 					dispatch(parseError(response.error));
 				} else {
-					setIsAuth(true);
-					localStorage.setItem('auth', 'true');
-					localStorage.setItem('userId', response.body.user);
-					dispatch(setId(response.body.user))
-					navigate('/posts');
+					console.log("set USER_ID", response.user.user);
+					localStorage.setItem(USER_ID, response.user.user);
+					navigate('/posts', {replace: true});
 				}
-			});
+			})
+			.catch(error => dispatch(parseError(error)));
 	}
 
 	return (
 		<div className={cl.login_page__login + " w-400 justify-content-start"}>
 			<form className={cl.login_form} onSubmit={sendData}>
 				<div className={cl.login_form__input_group}>
-					<label htmlFor="username">Логин</label>
+					<label htmlFor="email">email</label>
 					<input
-						id="username"
-						type="text"
+						id="email"
+						type="email"
 						autoFocus={true}
 						required={true}
-						autoComplete="username"
-						onChange={event_ => setLogin(event_.target.value)}
+						autoComplete="email"
+						onChange={event_ => setEmail(event_.target.value)}
 					/>
 				</div>
 				<div className={cl.login_form__input_group}>
@@ -71,8 +68,8 @@ const LoginForm = ({returnToHome}) => {
 				<button
 					type="submit"
 					className={cl.login_page__login_button}
-					disabled={!password || !login}
-					title={"Введите" + (!login ? " логин" : "") + (!login && !password ? " и" : "") + (!password ? " пароль" : "")}
+					disabled={!password || !email}
+					title={"Введите" + (!email ? " email" : "") + (!email && !password ? " и" : "") + (!password ? " пароль" : "")}
 				>
 					Войти
 				</button>

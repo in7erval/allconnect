@@ -1,48 +1,38 @@
-import {useContext, useState} from 'react';
+import {useState} from 'react';
 import showPass from '../../assets/pass_show.png';
 import passVisible from '../../assets/pass_visible.png';
 import cl from './Login.module.css';
-import UserAuthService from "../../API/UserAuthService";
-import {parseError} from "../../store/errorReducer";
-import {AuthContext} from "../../context";
 import {useDispatch} from "react-redux";
-import {useNavigate} from "react-router-dom";
-import {setId} from "../../store/authReducer";
 import PropTypes from 'prop-types';
+import {registerWithEmailAndPassword} from "../../firebase/index";
+import {parseError} from "../../store/errorReducer";
+import {USER_ID} from "../../constants";
+import {useNavigate} from "react-router-dom";
 
 const RegistrationForm = ({returnToHome}) => {
 
 	const dispatch = useDispatch();
 
-	const [login, setLogin] = useState();
+	const [email, setEmail] = useState();
 	const [name, setName] = useState();
 	const [surname, setSurname] = useState();
 	const [password, setPassword] = useState();
 	const [passwordVisible, setPasswordVisible] = useState(false);
-	const {_isAuth, setIsAuth} = useContext(AuthContext);
 	const navigate = useNavigate();
 
 	const sendData = (event_) => {
 		event_.preventDefault();
-		console.log('register', login);
-		UserAuthService.registerUser(
-			{
-				login,
-				loginPass: btoa(`${login}:${password}`),
-				firstName: name, lastName: surname
-			}
-		).then(response => {
-			console.log("registerResp", response);
-			if (response != null && response.body != null && response.body._id !== null) {
-				setIsAuth(true);
-				localStorage.setItem('auth', 'true');
-				localStorage.setItem('userId', response.body._id);
-				dispatch(setId(response.body._id));
-				navigate('/posts', {replace: true});
-			} else {
-				dispatch(parseError(response.error));
-			}
-		})
+		console.log('register', email, name, surname);
+		registerWithEmailAndPassword(name, surname, email, password)
+			.then(response => {
+				console.log("registerResp", response);
+				if (response != null && response.body != null && response.body._id !== null) {
+					localStorage.setItem(USER_ID, response.body._id);
+					navigate('/posts', {replace: true});
+				} else {
+					dispatch(parseError(response.error));
+				}
+			})
 			.catch(error => dispatch(parseError(error)));
 	}
 
@@ -74,13 +64,13 @@ const RegistrationForm = ({returnToHome}) => {
 					/>
 				</div>
 				<div className={cl.login_form__input_group}>
-					<label htmlFor="username">Логин</label>
+					<label htmlFor="username">Email</label>
 					<input
 						id="username"
-						type="text"
+						type="email"
 						autoFocus={true}
 						required
-						onChange={event_ => setLogin(event_.target.value)}
+						onChange={event_ => setEmail(event_.target.value)}
 					/>
 				</div>
 				<div className={cl.login_form__input_group}>
