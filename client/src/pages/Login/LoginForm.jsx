@@ -24,16 +24,15 @@ const LoginForm = ({returnToHome}) => {
 		event_.preventDefault();
 		console.log('submit', login);
 		UserAuthService.checkLoginPassword(login, password)
-			.then(response => response.body)
-			.then(body => {
-				if (body._id !== null) {
+			.then(response => {
+				if (response.error) {
+					dispatch(parseError(response.error));
+				} else {
 					setIsAuth(true);
 					localStorage.setItem('auth', 'true');
-					localStorage.setItem('userId', body.user);
-					dispatch(setId(body.user))
+					localStorage.setItem('userId', response.body.user);
+					dispatch(setId(response.body.user))
 					navigate('/posts');
-				} else {
-					dispatch(parseError(body.error));
 				}
 			});
 	}

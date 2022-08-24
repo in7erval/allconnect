@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from 'react';
+import {useEffect, useState} from 'react';
 import Comments from "./Comments/Comments.jsx";
 import cl from "./Post.module.css";
 
@@ -9,22 +9,18 @@ import {Link} from "react-router-dom";
 
 const PostItem = ({post}) => {
 
-	const [showComments, setShowComments] = useState(false);
-	const [showImage, setShowImage] = useState(false);
 	const loggedUserId = localStorage.getItem("userId");
+	const [showComments, setShowComments] = useState(false);
 	const [isOwner, setIsOwner] = useState(false);
-	const [invertHeartIcon, setInvertHeartIcon] = useState(false);
+	const [invertHeartIcon, setInvertHeartIcon] = useState(false); //fixme: это дно, пофикси
 	const [isLiked, setIsLiked] = useState(post.likes.includes(loggedUserId));
 	const [likesCount, setLikesCount] = useState(post.likes.length);
 	const [commentsCount, setCommentsCount] = useState(post.comments.length);
-	const reference = useRef();
 
 	console.log("comments", post.comments);
 
 	useEffect(() => {
 		setIsOwner(loggedUserId === post.owner._id);
-		const rand = Math.random() > 0.3;
-		setShowImage(rand);
 	}, []);
 
 	const deletePost = () => {
@@ -32,8 +28,6 @@ const PostItem = ({post}) => {
 	}
 
 	const addOrRemoveLike = async () => {
-		// reference.current.className = reference.current.className + " " + cl.pause;
-
 		if (isLiked) {
 			await PostService.deleteLike(post._id, loggedUserId);
 			setLikesCount(likesCount - 1);
@@ -41,7 +35,6 @@ const PostItem = ({post}) => {
 			await PostService.addLike(post._id, loggedUserId);
 			setLikesCount(likesCount + 1);
 		}
-
 		setIsLiked(!isLiked);
 		setInvertHeartIcon(false);
 	}
@@ -60,8 +53,7 @@ const PostItem = ({post}) => {
 					{new Date(post.publishDate).toLocaleString()}
 				</div>
 				<div className={cl.post__content}>
-					{/** FIXME: delete showImage! */}
-					{showImage && post.image && <img src={post.image} alt="Pic"/>}
+					{post.image && <img src={post.image} alt="Pic"/>}
 					<div>
 						{post.text}
 					</div>
@@ -80,22 +72,16 @@ const PostItem = ({post}) => {
 				{/*</MyButton>*/}
 				<div className={cl.post__btns__like_comment}>
 					<button className={cl.post__btns__like}
-									onMouseEnter={_event => {
-										console.log("enter");
-										setInvertHeartIcon(true);
-									}}
-									onMouseLeave={_event => {
-										console.log("leave");
-										setInvertHeartIcon(false);
-									}}
+									onMouseEnter={_event => setInvertHeartIcon(true)}
+									onMouseLeave={_event => setInvertHeartIcon(false)}
 									onClick={addOrRemoveLike}
-									ref={reference}
 					>
 						{isLiked ?
 							(!invertHeartIcon ?
 								<i className={"bi bi-heart-fill " + cl.heart_fill + " " + cl.bi_heart_fill_color}></i> :
 								<i className={"bi bi-heart"}></i>)
-							: (!invertHeartIcon ?
+							:
+							(!invertHeartIcon ?
 									<i className={"bi bi-heart"}></i> :
 									<i className={"bi bi-heart-fill " + cl.heart_fill + " " + cl.bi_heart_fill_color}></i>
 							)

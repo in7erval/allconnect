@@ -100,14 +100,14 @@ const Messages = () => {
 										/>
 									</Link>
 								))}
-								{user?.friends?.filter(element => checkFriendNotInLastMessages(element, lastMessages)).map(element => (
-									<Link key={element._id} to={`/messages/${createRoomId(loggedUserId, element._id)}`}>
-										<MessageRoomCard
-											user={element}
-											id={element._id}
-										/>
-									</Link>
-								))}
+								{/*{user?.friends?.filter(element => checkFriendNotInLastMessages(element, lastMessages)).map(element => (*/}
+								{/*	<Link key={element._id} to={`/messages/${createRoomId(loggedUserId, element._id)}`}>*/}
+								{/*		<MessageRoomCard*/}
+								{/*			user={element}*/}
+								{/*			id={element._id}*/}
+								{/*		/>*/}
+								{/*	</Link>*/}
+								{/*))}*/}
 							</div>
 						</div>
 					</div>
