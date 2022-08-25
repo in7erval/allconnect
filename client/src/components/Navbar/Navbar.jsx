@@ -17,9 +17,11 @@ const Navbar = () => {
 	const dispatch = useDispatch();
 
 	const logout = () => {
-		signOut(auth).then(() => {
-			console.log("logout");
-		}).catch(error => dispatch(parseError(error)));
+		signOut(auth)
+			.then(() => {
+				console.log("logout");
+			})
+			.catch(error => dispatch(parseError(error)));
 	}
 
 	return (

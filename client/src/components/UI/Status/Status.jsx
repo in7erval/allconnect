@@ -7,6 +7,8 @@ const Status = ({userId}) => {
 
 	const onlineUsers = useSelector(state => state.usersOnlineReducer.users);
 
+	console.log("onlineUsers", onlineUsers);
+
 	return (isUserOnline(onlineUsers, userId) ?
 			(<div className={cl.status + " " + cl.online}>
 				<p>онлайн</p>

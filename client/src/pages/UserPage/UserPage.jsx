@@ -159,7 +159,10 @@ const UserPage = () => {
 							<div className={cl.user_page__info_stats}>
 								<div className={cl.user_page__info}>
 									<div style={{display: "flex", flexDirection: "column"}}>
-										<Status userId={pageUserId}/>
+										<div style={{marginLeft: -15, marginTop: -15, height: 20}}>
+											<Status userId={pageUserId}/>
+										</div>
+
 										{isOwner ? (
 												<form onSubmit={changeName}>
 													<FlexibleInput
@@ -211,6 +214,7 @@ const UserPage = () => {
 											(<Link key={element._id} to={"/user" + element._id} className="tooltip">
 													<span className="tooltiptext">{element.lastName} {element.firstName}</span>
 													<img src={element.picture ?? userpic} alt="pic"/>
+													{/*<Status userId={element._id}/>*/}
 												</Link>
 											)
 										)

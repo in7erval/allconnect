@@ -37,11 +37,11 @@ const Message = (
 		}
 	}, [isVisible]);
 
-	console.log("Render message", message.text, message);
+	// console.log("Render message", message.text, message);
 
-	console.log("toUserId", toUserId);
-	console.log("isCurrentUserMessage", isCurrentUserMessage);
-	console.log("seenBy", message.seenBy);
+	// console.log("toUserId", toUserId);
+	// console.log("isCurrentUserMessage", isCurrentUserMessage);
+	// console.log("seenBy", message.seenBy);
 
 	return (
 		<div ref={reference}>

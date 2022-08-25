@@ -1,7 +1,7 @@
 .status {
     padding: 5px;
-    height: 10px;
-    width: 10px;
+    height: 15px;
+    width: 15px;
     border-radius: 50%;
     background-color: green;
     justify-content: center;
@@ -13,6 +13,7 @@
     animation-fill-mode: forwards;
     animation-timing-function: linear;
     animation-iteration-count: 1;
+    cursor: default;
 }
 
 .online {
@@ -26,7 +27,7 @@
 
 .status:hover {
     border-radius: 10px;
-    height: 20px;
+    height: 15px;
     width: auto;
     padding: 0 10px;
     animation-name: smooth-appear-status;
@@ -61,13 +62,13 @@
 
 @keyframes smooth-appear-status {
     from {
-        height: 10px;
-        width: 10px;
-        border-radius: 50%;
+        height: 15px;
+        width: 15px;
+        border-radius: 10px;
     }
     to {
         border-radius: 10px;
-        height: 20px;
+        height: 15px;
         width: fit-content;
         padding: 0 10px;
     }
@@ -75,13 +76,13 @@
 
 @keyframes smooth-disappear-status {
     to {
-        height: 10px;
-        width: 10px;
+        height: 15px;
+        width: 15px;
         border-radius: 50%;
     }
     from {
         border-radius: 10px;
-        height: 20px;
+        height: 15px;
         width: fit-content;
         padding: 0 10px;
     }
