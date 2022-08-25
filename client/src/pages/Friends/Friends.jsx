@@ -10,6 +10,7 @@ import MyModal from "../../components/UI/MyModal/MyModal";
 import MessageInput from "../../components/Message/MessageInput";
 import MessageService from "../../API/MessageService";
 import {Link, useParams} from "react-router-dom";
+import Status from "../../components/UI/Status/Status";
 
 const createRoomId = (firstId, secondId) => firstId > secondId ? `${firstId}:${secondId}` : `${secondId}:${firstId}`;
 
@@ -117,6 +118,7 @@ const Friends = () => {
 									<Link to={`/user${friend._id}`}>
 										<p><b>{friend.firstName} {friend.lastName}</b></p>
 									</Link>
+									<Status userId={friend._id}/>
 									<div>
 										<button onClick={() => {
 											setFriendTo(friend);

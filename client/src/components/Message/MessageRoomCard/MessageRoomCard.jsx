@@ -1,11 +1,12 @@
 import cl from "./MessageRoomCard.module.css";
 import userpic from "../../../assets/userpic.jpeg";
 import PropTypes from "prop-types";
+import Status from "../../UI/Status/Status";
 
 const MessageRoomCard = ({user, id, messagePreview, messageTime}) => {
 
 	if (messagePreview && messagePreview.length > 50) {
-			messagePreview = messagePreview.slice(0, 50) + "...";
+		messagePreview = messagePreview.slice(0, 50) + "...";
 	}
 
 	if (messageTime) {
@@ -20,8 +21,14 @@ const MessageRoomCard = ({user, id, messagePreview, messageTime}) => {
 		<div className={classname} key={id}>
 			<img src={user.picture ?? userpic} alt={`pic for ${user.firstName}`}/>
 			<div className={cl.message_card_name}>
-				<p>{user.lastName} {user.firstName}</p>
+				<div style={{display: "flex", alignItems: "center"}}>
+					<p>{user.lastName} {user.firstName}</p>
+					<div style={{marginLeft: 10}}>
+						<Status userId={user._id}/>
+					</div>
+				</div>
 				<p className={cl.message_preview}>{messagePreview}</p>
+
 			</div>
 			<div className={cl.message_time}>
 				<p>{messageTime}</p>

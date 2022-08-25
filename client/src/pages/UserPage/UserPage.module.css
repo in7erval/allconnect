@@ -112,8 +112,9 @@
 
 .user_page__info form {
     display: flex;
-    width: 100%;
+    width: auto;
     margin-bottom: 20px;
+    flex-grow: 1;
 }
 
 .user_page__stats {

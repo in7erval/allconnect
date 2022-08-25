@@ -13,9 +13,10 @@ import MyModal from "../../components/UI/MyModal/MyModal";
 import ImageUploader from "../../components/UI/ImageUploader/ImageUploader";
 import PostForm from "../../components/Post/PostForm/PostForm.jsx";
 import {USER_ID} from "../../constants";
+import Status from "../../components/UI/Status/Status";
 
 const determineIsFriend = (userFriendsId, friendId) => {
-	console.log(`determineIsFriend(${userFriendsId}, ${friendId})`);
+	// console.log(`determineIsFriend(${userFriendsId}, ${friendId})`);
 	if (userFriendsId.length === 0) {
 		return false;
 	}
@@ -28,7 +29,6 @@ const determineIsFriend = (userFriendsId, friendId) => {
 }
 
 const UserPage = () => {
-
 		const LIMIT_POSTS = 10;
 		const parameters = useParams();
 		const pageUserId = parameters.id;
@@ -51,7 +51,7 @@ const UserPage = () => {
 		const [editedFirstName, setEditedFirstName] = useState("");
 		const [editedLastName, setEditedLastName] = useState("");
 
-		const addFriend = async  () => {
+		const addFriend = async () => {
 			await UserService.addFriend(loggedUserId, pageUserId)
 				.then(() => console.debug("successfully added friend"));
 			setIsFriend(true);
@@ -158,21 +158,25 @@ const UserPage = () => {
 							</div>
 							<div className={cl.user_page__info_stats}>
 								<div className={cl.user_page__info}>
-									{isOwner ? (
-											<form onSubmit={changeName}>
-												<FlexibleInput
-													content={editedLastName}
-													onChange={event_ => setEditedLastName(event_.target.value)}
-												/>
-												<FlexibleInput
-													content={editedFirstName}
-													onChange={event_ => setEditedFirstName(event_.target.value)}
-												/>
-												<button type="submit" hidden/>
-											</form>
-										) :
-										(<h1>{user.lastName} {user.firstName}</h1>)
-									}
+									<div style={{display: "flex", flexDirection: "column"}}>
+										<Status userId={pageUserId}/>
+										{isOwner ? (
+												<form onSubmit={changeName}>
+													<FlexibleInput
+														content={editedLastName}
+														onChange={event_ => setEditedLastName(event_.target.value)}
+													/>
+													<FlexibleInput
+														content={editedFirstName}
+														onChange={event_ => setEditedFirstName(event_.target.value)}
+													/>
+													<button type="submit" hidden/>
+												</form>
+											) :
+											(<h1>{user.lastName} {user.firstName}</h1>)
+										}
+
+									</div>
 									<hr/>
 								</div>
 								<div className={cl.user_page__stats}>

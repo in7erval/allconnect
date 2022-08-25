@@ -10,6 +10,7 @@ import {USER_ID} from "../../constants";
 import {useFetching} from "../../hooks/useFetching";
 import UserService from "../../API/UserService";
 import Loader from "../../components/UI/Loader/Loader";
+import Status from "../../components/UI/Status/Status";
 
 const getPosition = (event_) => {
 	let posx = 0;
@@ -157,7 +158,12 @@ const MessageRoom = () => {
 				<div style={{flex: 1}} onClick={() => setShowContextMenu(false)}>
 					<Link to={`/user${user._id}`}>
 						<div className={cl.to_user_card}>
-							{user.lastName} {user.firstName}
+							<div style={{display: "flex", alignItems: "center", justifyContent: "space-evenly"}}>
+								{user.lastName} {user.firstName}
+								<div style={{marginLeft: 10}}>
+									<Status userId={user._id}/>
+								</div>
+							</div>
 							<img src={user.picture ?? userpic} alt={`pic for ${user.firstName}`}/>
 						</div>
 					</Link>
