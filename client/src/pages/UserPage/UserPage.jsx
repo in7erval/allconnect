@@ -159,7 +159,7 @@ const UserPage = () => {
 							<div className={cl.user_page__info_stats}>
 								<div className={cl.user_page__info}>
 									<div style={{display: "flex", flexDirection: "column"}}>
-										<div style={{marginLeft: -15, marginTop: -15, height: 20}}>
+										<div style={{marginRight: -15, marginTop: -15, height: 20, alignSelf: "flex-end"}}>
 											<Status userId={pageUserId}/>
 										</div>
 
@@ -214,7 +214,9 @@ const UserPage = () => {
 											(<Link key={element._id} to={"/user" + element._id} className="tooltip">
 													<span className="tooltiptext">{element.lastName} {element.firstName}</span>
 													<img src={element.picture ?? userpic} alt="pic"/>
-													{/*<Status userId={element._id}/>*/}
+													<div style={{position: "relative", top: -20, right: -40}}>
+														<Status userId={element._id} disableHover={true}/>
+													</div>
 												</Link>
 											)
 										)

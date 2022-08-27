@@ -7,6 +7,7 @@ import PostService from "../../API/PostService";
 import PropTypes from "prop-types";
 import {Link} from "react-router-dom";
 import {USER_ID} from "../../constants";
+import Status from "../UI/Status/Status";
 
 const PostItem = ({post}) => {
 
@@ -40,9 +41,19 @@ const PostItem = ({post}) => {
 			<Link to={`/user${post.owner._id}`}>
 				<div className={cl.post__owner}>
 					<img src={post.owner.picture} alt="owner"/>
-					<p>
-						{`${post.owner.firstName} ${post.owner.lastName}`}
-					</p>
+					<div
+						style={{
+							display: "flex",
+							flexDirection: "column",
+							justifyContent: "space-around",
+							alignItems: "flex-start",
+							height: "50px"
+						}}>
+						<p>
+							{`${post.owner.firstName} ${post.owner.lastName}`}
+						</p>
+						<Status userId={post.owner._id}/>
+					</div>
 				</div>
 			</Link>
 			<div>

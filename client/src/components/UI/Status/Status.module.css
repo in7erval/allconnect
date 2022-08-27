@@ -8,10 +8,11 @@
     align-items: center;
     object-fit: cover;
     display: flex;
-    animation-name: smooth-disappear-status;
-    animation-duration: 0.3s;
+    animation-name: smooth-appear-status;
+    animation-duration: 0.5s;
     animation-fill-mode: forwards;
-    animation-timing-function: linear;
+    animation-direction: reverse;
+    animation-timing-function: ease-in-out;
     animation-iteration-count: 1;
     cursor: default;
 }
@@ -31,9 +32,10 @@
     width: auto;
     padding: 0 10px;
     animation-name: smooth-appear-status;
-    animation-duration: 0.3s;
+    animation-duration: 0.5s;
+    animation-direction: normal;
     animation-fill-mode: forwards;
-    animation-timing-function: linear;
+    animation-timing-function: ease-in-out;
     animation-iteration-count: 1;
 }
 
@@ -42,10 +44,11 @@
     color: transparent;
     line-height: 1rem;
     display: none;
-    animation-name: smooth-disappear-status-text;
+    animation-name: smooth-appear-status-text;
     animation-timing-function: ease-in-out;
-    animation-delay: 0.3s;
+    animation-delay: 0.5s;
     animation-duration: 0.1s;
+    animation-direction: reverse;
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
 }
@@ -54,10 +57,15 @@
     display: block;
     animation-name: smooth-appear-status-text;
     animation-timing-function: ease-in-out;
-    animation-delay: 0.3s;
+    animation-delay: 0.5s;
     animation-duration: 0.1s;
     animation-fill-mode: forwards;
+    animation-direction: normal;
     animation-iteration-count: 1;
+}
+
+.no_hover {
+    pointer-events: none;
 }
 
 @keyframes smooth-appear-status {
@@ -74,37 +82,12 @@
     }
 }
 
-@keyframes smooth-disappear-status {
-    to {
-        height: 15px;
-        width: 15px;
-        border-radius: 50%;
-    }
-    from {
-        border-radius: 10px;
-        height: 15px;
-        width: fit-content;
-        padding: 0 10px;
-    }
-}
-
 @keyframes smooth-appear-status-text {
     from {
         display: none;
         color: transparent;
     }
     to {
-        display: block;
-        color: white;
-    }
-}
-
-@keyframes smooth-disappear-status-text {
-    to {
-        display: none;
-        color: transparent;
-    }
-    from {
         display: block;
         color: white;
     }

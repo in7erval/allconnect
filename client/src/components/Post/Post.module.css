@@ -19,7 +19,7 @@
     box-shadow: rgb(0 16 61 / 7%) 0 6px 20px;
     border-top-right-radius: 5px;
     border-top-left-radius: 5px;
-    justify-content: space-between;
+    /*justify-content: space-between;*/
 }
 
 .post__owner:hover {
@@ -37,10 +37,10 @@
     object-fit: cover;
     margin-left: 0;
     border: 3px solid #eeeeee;
+    margin-right: 10px;
 }
 
-.post__owner > p {
-    margin-left: 20px;
+.post__owner > div > p {
     font-weight: bold;
     color: #222222;
 }

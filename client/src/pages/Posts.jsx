@@ -18,7 +18,7 @@ function Posts() {
 	console.log(userId);
 
 	const [fetchPosts, isPostsLoading, _postError] = useFetching(async (isNew) => {
-		let response = await PostService.getAllForUser(LIMIT_POSTS, page, userId);
+		let response = await PostService.getAllForUser(userId, LIMIT_POSTS, page);
 		if (isNew) {
 			setPosts([...response.body]);
 		} else {

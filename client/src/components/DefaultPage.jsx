@@ -16,7 +16,6 @@ const DefaultPage = ({children}) => {
 
 	useEffect(() => {
 		dispatch(setUsers(users));
-		// localStorage.setItem(USERS, JSON.stringify(users));
 	}, [users]);
 
 	return (

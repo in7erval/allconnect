@@ -12,22 +12,6 @@ function App() {
 	const errors = useSelector(state => state.errorReducer.errors);
 	useSelector(state => console.log(state));
 
-	// const [isAuth, setIsAuth] = useState(false);
-	// const [isLoading, setLoading] = useState(true);
-
-
-	// useEffect(() => {
-	// 	if (user) {
-	// 		setIsAuth(true);
-	// 	}
-	// 	setLoading(false);
-	// 	// // или какойто запрос на сервер
-	// 	// if (localStorage.getItem('auth')) {
-	// 	// 	setIsAuth(true);
-	// 	// }
-	// 	// setLoading(false);
-	// }, []);
-
 	console.log("errors", errors);
 
 	return (
