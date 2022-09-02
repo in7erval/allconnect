@@ -11,13 +11,11 @@ const DefaultPage = ({children}) => {
 	const loggedUserId = store.userId;
 	console.log("LOGGED USERID", loggedUserId);
 
-	if (loggedUserId !== null && loggedUserId !== undefined) {
-		const {users} = useUser(loggedUserId);
-		console.log("USERS", users);
-		useEffect(() => {
-			store.setOnlineUsers(users);
-		}, [users]);
-	}
+	const {users} = useUser(loggedUserId);
+	console.log("USERS", users);
+	useEffect(() => {
+		store.setOnlineUsers(users);
+	}, [users]);
 
 	return (
 		<div className="default_page">

@@ -30,7 +30,7 @@ const Nav = ({activeClassName}) => {
 
 	useEffect(() => {
 		if (!isLoading) {
-			setCount(data.length);
+			setCount(data?.length);
 			store.setUnreadMessages(data);
 		}
 	}, [isLoading, data]);
