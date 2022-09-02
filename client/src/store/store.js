@@ -7,7 +7,7 @@ import {TOKEN} from "../constants";
 export default class Store {
 	user = {};
 	isAuth = false;
-	isLoading = true;
+	isLoading = false;
 	errors = [];
 	onlineUsers = [];
 	unreadMessages = [];
