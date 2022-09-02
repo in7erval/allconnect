@@ -1,11 +1,13 @@
-import {SERVER_URI, USER_ID, USER_KEY} from '../constants';
-import { useEffect, useRef, useState } from 'react'
-import { io } from 'socket.io-client'
+import {SERVER_URI, USER_KEY} from '../constants';
+import {useContext, useEffect, useRef, useState} from 'react'
+import {io} from 'socket.io-client'
 import storage from "../utils/storage";
+import {Context} from "../index";
 
 export default function useChat(roomId) {
+	const {store} = useContext(Context);
 	const user = {
-		userId: localStorage.getItem(USER_ID),
+		userId: store.userId,
 		roomId: roomId
 	};
 	storage.set(USER_KEY, user);

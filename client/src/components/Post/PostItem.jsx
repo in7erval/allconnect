@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import Comments from "./Comments/Comments.jsx";
 import cl from "./Post.module.css";
 
@@ -6,12 +6,14 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import PostService from "../../API/PostService";
 import PropTypes from "prop-types";
 import {Link} from "react-router-dom";
-import {USER_ID} from "../../constants";
 import Status from "../UI/Status/Status";
+import {Context} from "../../index";
+import {observer} from "mobx-react-lite";
 
 const PostItem = ({post}) => {
 
-	const loggedUserId = localStorage.getItem(USER_ID);
+	const {store} = useContext(Context);
+	const loggedUserId = store.userId;
 	const [showComments, setShowComments] = useState(false);
 	const [isOwner, setIsOwner] = useState(false);
 	const [invertHeartIcon, setInvertHeartIcon] = useState(false); //fixme: это дно, пофикси
@@ -27,10 +29,10 @@ const PostItem = ({post}) => {
 
 	const addOrRemoveLike = async () => {
 		if (isLiked) {
-			await PostService.deleteLike(post._id, loggedUserId);
+			await PostService.deleteLike(post._id, loggedUserId).catch(error => store.addError(error));
 			setLikesCount(likesCount - 1);
 		} else {
-			await PostService.addLike(post._id, loggedUserId);
+			await PostService.addLike(post._id, loggedUserId).catch(error => store.addError(error));
 			setLikesCount(likesCount + 1);
 		}
 		setIsLiked(!isLiked);
@@ -40,7 +42,7 @@ const PostItem = ({post}) => {
 	return (<div className={cl.post}>
 			<Link to={`/user${post.owner._id}`}>
 				<div className={cl.post__owner}>
-					<img src={post.owner.picture} alt="owner"/>
+					<img src={post.owner.picture} alt="Изображение недоступно"/>
 					<div
 						style={{
 							display: "flex",
@@ -120,4 +122,4 @@ PostItem.propTypes = {
 	post: PropTypes.object.isRequired
 }
 
-export default PostItem;
+export default observer(PostItem);

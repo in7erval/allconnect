@@ -1,10 +1,9 @@
-import axios from "axios";
-import {API_URL} from "../config";
+import $api from "./index";
 
 const PostService = {
 
-	getAllForUser: async (userId, limit = 10, page = 1) => {
-		const response = await axios.get(`${API_URL}/api/posts`, {
+	getAllForUser: (userId, limit = 10, page = 1) => {
+		return $api.get(`/posts`, {
 			params: {
 				limit: limit,
 				page: page,
@@ -13,35 +12,27 @@ const PostService = {
 				userId: userId
 			}
 		});
-		console.log("posts", response.data);
-		return response.data;
 	},
 
 	addNewPost: async (userId, text) => {
-		const post = {
+		return $api.post(`/posts`, {
 			text, owner: userId
-		};
-
-		const response = await axios.post(`${API_URL}/api/posts`, post);
-
-		return response.data;
+		});
 	},
 
 	addLike: async (postId, userLikedId) => {
-		const response = await axios.post(`${API_URL}/api/posts/${postId}/likes?add`,
+		return $api.post(`/posts/${postId}/likes?add`,
 			{
 				_id: postId,
 				userId: userLikedId
 			});
-		return response.data;
 	},
 
 	deleteLike: async (postId, userLikedId) => {
-		const response = await axios.post(`${API_URL}/api/posts/${postId}/likes?delete`,
+		return $api.post(`/posts/${postId}/likes?delete`,
 			{
 				userId: userLikedId
 			});
-		return response.data;
 	}
 
 };

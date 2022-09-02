@@ -1,53 +1,74 @@
 import PropTypes from "prop-types";
-import {Link} from "react-router-dom";
-import {USER_ID} from "../constants";
+import {NavLink} from "react-router-dom";
+import {useQuery} from "@tanstack/react-query";
+import MessageService from "../API/MessageService";
+import {useContext, useEffect, useState} from "react";
+import {observer} from "mobx-react-lite";
+import {Context} from "../index";
 
 
 const Nav = ({activeClassName}) => {
 
-	const userId = localStorage.getItem(USER_ID);
+	const {store} = useContext(Context);
+	const userId = store.userId;
 
-	const link = window.location.pathname;
-	console.log("link", link);
+	const fetchUnread = () => MessageService.countUnread(userId).catch(error => store.addError(error));
+	const [count, setCount] = useState(0);
 
-	const navMap = new Map([
-		["posts", {paths: [/^\/$/, /^\/posts$/]}],
-		["page", {paths: [new RegExp(`^/user${userId}$`)]}],
-		["friends", {paths: [/^\/friends$/]}],
-		["messages", {paths: [/^\/messages/]}]
-	]);
+	const {
+		isLoading,
+		data,
+		refetch
+	} = useQuery(['navQuery'], fetchUnread,
+		{
+			refetchInterval: 1000,
+			refetchIntervalInBackground: true,
+			select: data1 => data1.data,
+			enabled: !!userId
+		}
+	);
 
-	const isActive = (name) => {
-		return navMap.get(name).paths.some(element => element.test(link));
-	}
+	useEffect(() => {
+		if (!isLoading) {
+			setCount(data.length);
+			store.setUnreadMessages(data);
+		}
+	}, [isLoading, data]);
+
+	useEffect(() => {
+		if (userId) {
+			refetch();
+		}
+	}, [userId]);
 
 	return (
 		<ul>
-			<Link to="/posts">
-				<li className={isActive("posts") ? activeClassName : ""}>
+			<li>
+				<NavLink to="/posts"  className={({isActive}) => isActive ? activeClassName : ""}>
 					<i className="bi bi-newspaper"></i>
 					<div>Новости</div>
-				</li>
-			</Link>
-			<Link to={`/user${userId}`}>
-				<li className={isActive("page") ? activeClassName : ""}>
+				</NavLink>
+			</li>
+			<li>
+				<NavLink to={`/user${userId}`} className={({isActive}) => isActive ? activeClassName : ""}>
 					<i className="bi bi-person"></i>
 					<div>Моя страница</div>
-				</li>
-			</Link>
+				</NavLink>
+			</li>
 			{/*<a href="/posts"><li><div>Новости</div></li></a>*/}
-			<Link to="/friends">
-				<li className={isActive("friends") ? activeClassName : ""}>
+			<li>
+				<NavLink to="/friends"  className={({isActive}) => isActive ? activeClassName : ""}>
 					<i className="bi bi-people"></i>
 					<div>Друзья</div>
-				</li>
-			</Link>
-			<Link to="/messages">
-				<li className={isActive("messages") ? activeClassName : ""}>
+				</NavLink>
+			</li>
+			<li>
+				<NavLink to="/messages" className={({isActive}) => isActive ? activeClassName : ""}>
 					<i className="bi bi-chat-text"></i>
 					<div>Сообщения</div>
-				</li>
-			</Link>
+					<p>{isLoading ? "..." : (count > 0 ? count : "")}</p>
+				</NavLink>
+			</li>
 		</ul>
 	);
 };
@@ -56,4 +77,4 @@ Nav.propTypes = {
 	activeClassName: PropTypes.string.isRequired
 }
 
-export default Nav;
+export default observer(Nav);

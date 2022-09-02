@@ -1,131 +1,112 @@
-import {useEffect, useRef, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Link, useParams} from "react-router-dom";
-import {useFetching} from "../../hooks/useFetching";
 import Loader from "../../components/UI/Loader/Loader";
 import UserService from "../../API/UserService";
 import PostList from "../../components/Post/PostList";
-import {getPageCount} from "../../utils/pages";
-import {useObserver} from "../../hooks/useObserver";
 import userpic from "../../assets/userpic.jpeg";
 import FlexibleInput from "../../components/UI/FlexibleInput/FlexibleInput.jsx";
 import cl from "./UserPage.module.css";
 import MyModal from "../../components/UI/MyModal/MyModal";
 import ImageUploader from "../../components/UI/ImageUploader/ImageUploader";
 import PostForm from "../../components/Post/PostForm/PostForm.jsx";
-import {USER_ID} from "../../constants";
 import Status from "../../components/UI/Status/Status";
+import {useInView} from "react-intersection-observer";
+import {useInfiniteQuery, useQuery} from "@tanstack/react-query";
+import {Context} from "../../index";
+import {observer} from "mobx-react-lite";
 
 const determineIsFriend = (userFriendsId, friendId) => {
-	// console.log(`determineIsFriend(${userFriendsId}, ${friendId})`);
-	if (userFriendsId.length === 0) {
-		return false;
-	}
-	for (let userFriendId of userFriendsId) {
-		if (userFriendId === friendId) {
-			return true;
-		}
-	}
-	return false;
+	return userFriendsId.map(element => element._id).includes(friendId);
 }
 
 const UserPage = () => {
 		const LIMIT_POSTS = 10;
-		const parameters = useParams();
-		const pageUserId = parameters.id;
-		const loggedUserId = localStorage.getItem(USER_ID);
-		console.log("pageUserId:", pageUserId, parameters, loggedUserId);
+		const pageUserId = useParams().id;
+		const {store} = useContext(Context);
+		// store.setActivePage(USER_PAGE);
+		const loggedUserId = store.userId;
 		const isOwner = pageUserId === loggedUserId;
-
-		const [user, setUser] = useState({});
 		const [showAllFriends, setShowAllFriends] = useState(false);
-		const [pagePost, setPagePost] = useState(1);
-		const [posts, setPosts] = useState([]);
-		const [totalPosts, setTotalPosts] = useState(0);
-		const [totalPages, setTotalPages] = useState(0);
 		const [isFriend, setIsFriend] = useState(false);
-		const lastElement = useRef();
-
+		const {ref: lastElement, inView} = useInView();
 		const [showImageUploader, setShowImageUploader] = useState(false);
-
-
 		const [editedFirstName, setEditedFirstName] = useState("");
 		const [editedLastName, setEditedLastName] = useState("");
 
 		const addFriend = async () => {
 			await UserService.addFriend(loggedUserId, pageUserId)
-				.then(() => console.debug("successfully added friend"));
+				.then(() => console.debug("successfully added friend"))
+				.catch(error => store.addError(error));
 			setIsFriend(true);
 		};
 
 		const deleteFriend = async () => {
 			await UserService.deleteFriend(loggedUserId, pageUserId)
-				.then(() => console.debug("successfully deleted friend"));
+				.then(() => console.debug("successfully deleted friend"))
+				.catch(error => store.addError(error));
 			setIsFriend(false);
 		}
 
-		const [fetchUserForPage, isLoading, _error] = useFetching(async () => {
-			let resp = await UserService.getFullById(pageUserId);
-			let user = resp.body;
+		const fetchUser = async () => {
+			return UserService.getFullById(pageUserId);
+		}
 
-			setUser(user);
-
-			if (!isOwner) {
-				let resp = await UserService.getById(loggedUserId);
-				let loggedUser = resp.body;
-				console.debug("logged user:", loggedUser);
-				const _isFriend = determineIsFriend(loggedUser.friends, pageUserId);
-				console.debug("isFriend", _isFriend);
-				setIsFriend(_isFriend);
-			} else {
-				console.debug("Owner page, welcome!");
-				console.debug(`editedFirstName=${user.firstName}, editedLastName=${user.lastName}`);
-				setEditedFirstName(user.firstName);
-				setEditedLastName(user.lastName);
-			}
-		});
-
-		const [fetchPosts, isPostsLoading, _postError] = useFetching(async (isAnotherId) => {
-			let response = await UserService.getUserPosts(pageUserId, LIMIT_POSTS, pagePost);
-			if (isAnotherId) {
-				setPosts([...response.body]);
-			} else {
-				setPosts([...posts, ...response.body]);
-			}
-			const totalCount = response.count;
-			console.log("totalCount:", totalCount);
-			setTotalPosts(totalCount);
-			setTotalPages(getPageCount(totalCount, LIMIT_POSTS));
-		});
-
-		useObserver(lastElement, pagePost < totalPages, isPostsLoading,
-			() => {
-				setPagePost(pagePost + 1);
-
-				console.debug('useObserver');
-				console.debug('pagePost', pagePost + 1);
-			});
+		const {
+			isLoading: isLoadingUser,
+			isFetching,
+			data: userResponse,
+			refetch: refetchUser
+		} = useQuery([`user${pageUserId}`], fetchUser);
 
 		useEffect(() => {
-			console.log("fetch user for page");
-			fetchUserForPage();
-		}, [pageUserId]);
+			if (!isFetching) {
+				console.log(userResponse);
+				if (!isOwner) {
+					setIsFriend(determineIsFriend(userResponse.data.friends, loggedUserId));
+				} else {
+					console.debug("Owner page, welcome!");
+					console.debug(`editedFirstName=${userResponse.data.firstName}, editedLastName=${userResponse.data.lastName}`);
+					setEditedFirstName(userResponse.data.firstName);
+					setEditedLastName(userResponse.data.lastName);
+				}
+			}
+		}, [isFetching]);
 
+		const fetchPosts = ({pageParam: pageParameter = 1}) => {
+			return UserService.getUserPosts(pageUserId, LIMIT_POSTS, pageParameter);
+		}
 
-		useEffect(() => {
-			console.log("fetch posts");
-			fetchPosts();
-		}, [pagePost]);
+		const {
+			isLoading: isLoadingPosts,
+			data: postsData,
+			fetchNextPage,
+			hasNextPage,
+			refetch
+		} = useInfiniteQuery(['userPosts'], fetchPosts, {
+			getNextPageParam: (lastPage, _pages) => {
+				let lastPageNumber = lastPage.config.params.page;
+				return LIMIT_POSTS * lastPageNumber < lastPage.data.count ? lastPageNumber + 1 : undefined;
+			},
+		});
 
 		useEffect(() => {
 			console.log("fetch posts with another id");
-			fetchPosts(true);
+			refetch();
+			refetchUser();
 		}, [pageUserId]);
+
+		useEffect(() => {
+			if (inView && hasNextPage) {
+				fetchNextPage();
+			}
+		}, [inView]);
 
 
 		const changeName = async (event_) => {
 			event_.preventDefault();
 			await UserService.changeName(loggedUserId, editedFirstName, editedLastName)
-				.then(() => console.debug("name changed successfully"));
+				.then(() => console.debug("name changed successfully"))
+				.catch(error => store.addError(error));
 		};
 
 		const indexForFriendsArray = showAllFriends ? undefined : 6;
@@ -133,12 +114,12 @@ const UserPage = () => {
 		/* todo: fix loader */
 		return (
 			<div className={cl.user_page + " justify-content-start"}>
-				{isLoading ?
+				{isLoadingUser ?
 					<Loader/> : (
 						<div className={cl.user_page__pic_name}>
 							<div className={cl.user_page__pic_and_btns}>
 								<div className={cl.user_pic}>
-									<img src={user.picture ?? userpic} alt={"pic"}/>
+									<img src={userResponse.data.picture ?? userpic} alt={"Изображение недоступно"}/>
 								</div>
 								<div className={cl.user_pic_btns}>
 									{isOwner &&
@@ -176,7 +157,7 @@ const UserPage = () => {
 													<button type="submit" hidden/>
 												</form>
 											) :
-											(<h1>{user.lastName} {user.firstName}</h1>)
+											(<h1>{userResponse.data.lastName} {userResponse.data.firstName}</h1>)
 										}
 
 									</div>
@@ -194,61 +175,68 @@ const UserPage = () => {
 					flexWrap: 'wrap',
 					justifyContent: 'center'
 				}}>
-					{isLoading ?
+					{isLoadingUser ?
 						<Loader/> : (
 							<div className={cl.user_page__friends}>
 								<Link to={`/friends/${isOwner ? "" : pageUserId}`}>
 									<div className={cl.user_page__friends_header}>
 										<div>Друзья</div>
 										<div>
-											<p>{user?.friends?.length}</p>
+											<p>{userResponse.data?.friends?.length}</p>
 										</div>
 									</div>
 								</Link>
-								<div
-									className={cl.user_page__friends_imgs}
-									onClick={() => setShowAllFriends(!showAllFriends)}
-								>
-									{
-										user?.friends?.slice(0, indexForFriendsArray)?.map(element =>
-											(<Link key={element._id} to={"/user" + element._id} className="tooltip">
-													<span className="tooltiptext">{element.lastName} {element.firstName}</span>
-													<img src={element.picture ?? userpic} alt="pic"/>
-													<div style={{position: "relative", top: -20, right: -40}}>
-														<Status userId={element._id} disableHover={true}/>
-													</div>
-												</Link>
-											)
+								<div className={cl.user_page__friends_imgs}>
+									{userResponse.data?.friends?.slice(0, indexForFriendsArray)?.map(element =>
+										(<Link key={element._id} to={"/user" + element._id} className="tooltip">
+												<span className="tooltiptext">{element.lastName} {element.firstName}</span>
+												<img src={element.picture ?? userpic} alt="Изображение недоступно"/>
+												<div style={{position: "relative", top: -20, right: 10}}>
+													<Status userId={element._id} disableHover={true}/>
+												</div>
+											</Link>
 										)
+									)
 									}
 								</div>
+								{userResponse.data?.friends?.length > 6 &&
+									<button className={cl.user_page__friends_imgs__helper_btn}
+													onClick={() => setShowAllFriends(!showAllFriends)}>
+										{showAllFriends ? "Скрыть" : "Показать всех"}
+									</button>
+								}
 							</div>
 						)}
+
 					<div style={{flex: 5}}>
 						<div className={cl.user_page__posts_header}>
 							<div>
 								<p>Посты</p>
-								<p>{totalPosts}</p>
+								<p>{isLoadingPosts ? "загрузка..." : postsData.pages[0].data.count}</p>
 							</div>
 							{isOwner && <PostForm/>}
 						</div>
 						<div>
-							{isPostsLoading && <Loader/>}
-							<PostList
-								remove={Object.create(null)}
-								posts={posts}
-							/>
+							{isLoadingPosts ? <Loader/> : postsData.pages.map((group, index) => (
+								<React.Fragment key={index}>
+									<PostList
+										remove={() => console.log("remove")}
+										posts={group.data.body}
+									/>
+								</React.Fragment>
+							))}
 							<div ref={lastElement} style={{height: 20}}/>
 						</div>
 					</div>
+
 				</div>
-				{isOwner && !isLoading &&
+				{isOwner && !isLoadingUser &&
 					<MyModal
 						visible={showImageUploader}
 						setVisible={setShowImageUploader}
 					>
 						<ImageUploader
-							currentImg={user.picture ?? userpic}
+							currentImg={userResponse.data?.picture ?? userpic}
 						/>
 					</MyModal>
 				}
@@ -257,4 +245,4 @@ const UserPage = () => {
 	}
 ;
 
-export default UserPage;
+export default observer(UserPage);

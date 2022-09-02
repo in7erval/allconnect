@@ -1,19 +1,20 @@
-import axios from "axios";
-import {API_URL} from "../config";
+import $api from "./index";
 
 const MessageService = {
 	addMessage: async (message) => {
-		await axios.post(`${API_URL}/api/messages`, {
+		return $api.post(`/messages`, {
 			...message
 		});
 	},
 
 	getAllRoomsForUser: async (userId) => {
-		const response = await axios.get(`${API_URL}/api/messages/rooms`, {
+		return $api.get(`/messages/rooms`, {
 			params: {user: userId}
 		});
-		console.log("getAllRoomsForUser", response);
-		return response.data;
+	},
+
+	countUnread: (userId) => {
+		return $api.get(`/messages/unread`, {params: {user: userId}});
 	}
 };
 

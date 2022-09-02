@@ -1,24 +1,21 @@
-import axios from "axios";
-import {API_URL} from "../config";
+import $api from './index';
 
 const UserAuthService = {
 
-	registerUser: async (user) => {
-		const response = await axios.post(`${API_URL}/api/register`, {
-			...user
-		});
-		console.log("response", response.data);
-		return response.data;
+	/*
+		{accessToken, refreshToken, user: {firstName, lastName, email, id}}
+	 */
+	login: async (email, password) => {
+		return $api.post('/login', {email, password});
 	},
 
-	getUserByUid: async (uid) => {
-		const response = await axios.get(`${API_URL}/api/auth`,
-			{
-				params: {uid: uid}
-			});
-		console.log("getUserIdByUid() response", response);
-		return response.data;
-	}
+	registration: async (email, password, firstName, lastName) => {
+		return $api.post('/registration', {email, password, firstName, lastName});
+	},
+
+	logout: async () => {
+		return $api.post('/logout');
+	},
 
 };
 

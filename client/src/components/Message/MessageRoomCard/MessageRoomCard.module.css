@@ -1,7 +1,7 @@
 .message_card {
     width: 100%;
     min-height: 60px;
-    background-color: #D1D9F1;
+    background-color: #D1D9F155;
     padding: 0 10px;
     border-radius: 5px;
     display: flex;
@@ -32,6 +32,12 @@
     object-fit: cover;
     border: 2px solid #B1B9F1;
     margin-right: 25px;
+    font-size: 0.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color: #eeeeee;
 }
 
 .message_card_name {
@@ -57,6 +63,14 @@
     animation-duration: 0.25s;
     animation-timing-function: ease-in-out;
     animation-fill-mode: forwards;
+}
+
+.unread {
+    background-color: #D1D9F1;
+}
+
+.unread p {
+    font-weight: bold;
 }
 
 @keyframes smooth-scale {

@@ -1,10 +1,11 @@
-import {SERVER_URI, USER_ID} from '../constants';
-import {useEffect, useRef, useState} from 'react'
+import {SERVER_URI} from '../constants';
+import {useContext, useEffect, useRef, useState} from 'react'
 import {io} from 'socket.io-client'
+import {Context} from "../index";
 
 export default function useComments(postId) {
-	const loggedUserId = localStorage.getItem(USER_ID);
-	console.log()
+	const {store} = useContext(Context);
+	const loggedUserId = store.userId;
 
 	const [comments, setComments] = useState([])
 	const {current: socket} = useRef(

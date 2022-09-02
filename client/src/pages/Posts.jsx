@@ -1,55 +1,49 @@
-import {useEffect, useRef, useState} from 'react';
-import {useFetching} from "../hooks/useFetching";
-import PostService from "../API/PostService";
-import {getPageCount} from "../utils/pages";
+import React, {useContext, useEffect} from 'react';
 import Loader from "../components/UI/Loader/Loader";
 import PostList from "../components/Post/PostList";
-import {useObserver} from "../hooks/useObserver";
-import {USER_ID} from "../constants";
+import PostService from "../API/PostService";
+import {useInfiniteQuery} from "@tanstack/react-query";
+import {useInView} from "react-intersection-observer";
+import {Context} from "../index";
+import {observer} from "mobx-react-lite";
 
 function Posts() {
-	const [posts, setPosts] = useState([]);
-	const [totalPages, setTotalPages] = useState(0);
 	const LIMIT_POSTS = 10;
-	const [page, setPage] = useState(1);
-	const lastElement = useRef();
-	const userId = localStorage.getItem(USER_ID);
+	const {store} = useContext(Context);
+	// store.setActivePage(POSTS_PAGE);
+	const userId = store.userId;
+	const {ref: lastElement, inView} = useInView();
 
-	console.log(userId);
+	const fetchPosts = ({pageParam: pageParameter = 1}) => {
+		return PostService.getAllForUser(userId, LIMIT_POSTS, pageParameter);
+	}
 
-	const [fetchPosts, isPostsLoading, _postError] = useFetching(async (isNew) => {
-		let response = await PostService.getAllForUser(userId, LIMIT_POSTS, page);
-		if (isNew) {
-			setPosts([...response.body]);
-		} else {
-			setPosts([...posts, ...response.body])
-		}
-		const totalCount = response.count;
-		console.log("totalCount:", totalCount);
-		setTotalPages(getPageCount(totalCount, LIMIT_POSTS));
+	const {
+		isLoading,
+		data,
+		fetchNextPage,
+		hasNextPage,
+		refetch
+	} = useInfiniteQuery(['posts'], fetchPosts, {
+		getNextPageParam: (lastPage, _pages) => {
+			let lastPageNumber = lastPage.config.params.page;
+			return LIMIT_POSTS * lastPageNumber < lastPage.data.count ? lastPageNumber + 1 : undefined;
+		},
 	});
 
 	useEffect(() => {
-		fetchPosts();
-	}, [page]);
-
-	useEffect(() => {
-		fetchPosts(true);
+		refetch();
 	}, [userId]);
 
-	useObserver(lastElement, page < totalPages, isPostsLoading,
-		() => {
-			setPage(page + 1);
-			console.log('useObser');
-		});
+	useEffect(() => {
+		if (inView && hasNextPage) {
+			fetchNextPage();
+		}
+	}, [inView]);
 
 	return (
-		<div>
-			<PostList
-				remove={Object.create(null)}
-				posts={posts}
-			/>
-			{isPostsLoading &&
+		<div style={{width: '100%'}}>
+			{isLoading ?
 				<div style={{
 					display: "flex",
 					justifyContent: 'center',
@@ -57,10 +51,19 @@ function Posts() {
 				}}>
 					<Loader/>
 				</div>
+				:
+				data.pages.map((group, index) => (
+					<React.Fragment key={index}>
+						<PostList
+							remove={() => console.log("remove")}
+							posts={group.data.body}
+						/>
+					</React.Fragment>
+				))
 			}
 			<div ref={lastElement} style={{height: 20}}/>
 		</div>
 	);
 }
 
-export default Posts;
+export default observer(Posts);

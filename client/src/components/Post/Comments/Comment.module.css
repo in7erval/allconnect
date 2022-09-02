@@ -61,6 +61,12 @@
     margin-right: 10px;
     align-self: end;
     object-fit: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 0.3rem;
+    background-color: #eeeeee;
 }
 
 .name {

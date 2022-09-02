@@ -20,6 +20,8 @@
     background-color: white;
     border-top-right-radius: 5px;
     border-top-left-radius: 5px;
+    min-width: 230px;
+    min-height: 200px;
 }
 
 
@@ -65,6 +67,13 @@
 .user_pic img {
     width: 200px;
     border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    background-color: #eeeeee;
+    object-fit: cover;
+    /*padding: 10px;*/
 }
 
 .user_page__info_stats {
@@ -138,6 +147,8 @@
     flex-direction: column;
 }
 
+
+
 .user_page__friends_header {
     display: flex;
     align-items: center;
@@ -146,6 +157,10 @@
     background-color: #dddddd;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
+}
+
+.user_page__friends_header:hover {
+    background-color: #cccccc;
 }
 
 .user_page__friends_header div {
@@ -166,28 +181,46 @@
     align-items: center;
     align-content: flex-start;
     height: fit-content;
-    padding: 10px 10px 20px;
-}
-
-.user_page__friends_imgs:hover {
-    cursor: pointer;
     padding: 10px 10px 0;
-    border-bottom: 20px solid #dddddd;
 }
 
+.user_page__friends_imgs__helper_btn {
+    width: 100%;
+    background-color: #cccccc;
+    height: 30px;
+    outline: none;
+    font-weight: bold;
+    font-family: "Roboto", sans-serif;
+    font-size: 0.8rem;
+    border: none;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
 
 .user_page__friends_imgs a {
     margin: auto auto 10px;
     width: 60px;
     height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .user_page__friends_imgs a img {
+    min-width: 60px;
     width: 60px;
     height: 60px;
     object-fit: cover;
     border-radius: 50%;
     border: 3px solid #aaaaaa;
+    text-align: center;
+    font-size: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .user_page__friends_imgs a img:hover {

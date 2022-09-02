@@ -87,7 +87,6 @@ a:hover {
 
 .show_menu ul li {
     margin: 10px 0;
-    padding: 5px 10px;
     border-radius: 5px;
     height: 32px;
     display: flex;
@@ -99,6 +98,17 @@ a:hover {
 
 .show_menu ul li div {
     margin-left: 10px;
+}
+
+.show_menu ul li p {
+    display: inline;
+    margin-left: 10px;
+}
+
+.show_menu ul li a {
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
 }
 
 a {

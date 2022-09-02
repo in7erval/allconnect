@@ -119,6 +119,12 @@
     animation-duration: 0.5s;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 0.5rem;
+    background-color: #eeeeee;
 }
 
 .main__friends img:hover {

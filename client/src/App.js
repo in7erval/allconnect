@@ -2,26 +2,23 @@ import './styles/App.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import {BrowserRouter} from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
-import AppRouter from "./components/AppRouter";
-import {useSelector} from "react-redux";
-import Popup from './components/UI/Popup/Popup.jsx';
-import "./firebase/index";
+import AppRouter from "./router/AppRouter";
+import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
+import {ReactQueryDevtools} from '@tanstack/react-query-devtools'
+import PopupErrors from "./components/UI/Popup/PopupErrors";
+
+const queryClient = new QueryClient()
 
 function App() {
-
-	const errors = useSelector(state => state.errorReducer.errors);
-	useSelector(state => console.log(state));
-
-	console.log("errors", errors);
-
 	return (
-		// <AuthContext.Provider value={{isAuth, setIsAuth, isLoading}}>
-		<BrowserRouter>
-			<Navbar/>
-			<AppRouter/>
-			<Popup errors={errors}/>
-		</BrowserRouter>
-		// </AuthContext.Provider>
+		<QueryClientProvider client={queryClient}>
+			<BrowserRouter>
+				<Navbar/>
+				<AppRouter/>
+				<PopupErrors/>
+			</BrowserRouter>
+			<ReactQueryDevtools initialIsOpen/>
+		</QueryClientProvider>
 	)
 }
 

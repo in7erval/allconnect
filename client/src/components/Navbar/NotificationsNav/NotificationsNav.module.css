@@ -1,0 +1,63 @@
+.main {
+    margin-left: 30px;
+}
+
+.main button {
+    outline: none;
+    border: none;
+    color: black;
+    font-family: "Roboto", sans-serif;
+    font-size: 0.95rem;
+    padding: 5px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.active {
+    background-color: #dddddd;
+}
+
+.active:hover {
+    background-color: #eeeeee;
+}
+
+.not_active {
+    background-color: #eeeeee;
+}
+
+.not_active:hover {
+    background-color: #dddddd;
+}
+
+.notifications {
+    position: absolute;
+    top: 60px;
+    left: 100px;
+    right: auto;
+
+    padding: 10px;
+    background-color: white;
+    /*border: 1px solid black;*/
+    border-radius: 10px;
+    width: 300px;
+    box-shadow: #aaaaaa 0 30px 60px 5px;
+
+    display: flex;
+    flex-direction: column
+}
+
+.behind {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    /*background-color: black;*/
+}
+
+@media (max-width: 500px) {
+    .notifications {
+        left: 50px;
+        right: auto;
+    }
+}

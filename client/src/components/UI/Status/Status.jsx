@@ -1,19 +1,16 @@
-import {getOfflineInfo, isUserOnline} from "../../../utils/users";
 import cl from "./Status.module.css";
 import PropTypes from "prop-types";
-import {useSelector} from "react-redux";
+import {useContext} from "react";
+import {Context} from "../../../index";
+import {getOfflineInfo, isUserOnline} from "../../../utils/users";
+import {observer} from "mobx-react-lite";
 
 const Status = ({userId, disableHover}) => {
-
-	if (disableHover) {
-		console.log("Hover disabled");
-	}
-
-	const onlineUsers = useSelector(state => state.usersOnlineReducer.users);
+	const {store} = useContext(Context);
+	const onlineUsers = store.onlineUsers;
 
 	const disableHoverClassName = disableHover ? (" " + cl.no_hover) : "";
-
-	console.log("onlineUsers", onlineUsers);
+	// console.log(userId, disableHoverClassName);
 
 	return (isUserOnline(onlineUsers, userId) ?
 			(<div className={cl.status + " " + cl.online + disableHoverClassName}>
@@ -31,4 +28,4 @@ Status.propTypes = {
 	disableHover: PropTypes.bool
 }
 
-export default Status;
+export default observer(Status);

@@ -1,4 +1,4 @@
-import {useEffect, useMemo, useRef, useState} from 'react';
+import {useContext, useEffect, useMemo, useRef, useState} from 'react';
 import MessageInput from "../../components/Message/MessageInput";
 import Message from "../../components/Message/Message.jsx";
 import cl from "./MessageRoom.module.css";
@@ -6,11 +6,12 @@ import userpic from "../../assets/userpic.jpeg";
 import MessageContextMenu from "../../components/Message/MessageContextMenu/MessageContextMenu";
 import useChat from "../../hooks/useChat";
 import {Link, useParams} from "react-router-dom";
-import {USER_ID} from "../../constants";
 import {useFetching} from "../../hooks/useFetching";
 import UserService from "../../API/UserService";
 import Loader from "../../components/UI/Loader/Loader";
 import Status from "../../components/UI/Status/Status";
+import {Context} from "../../index";
+import {observer} from "mobx-react-lite";
 
 const getPosition = (event_) => {
 	let posx = 0;
@@ -77,7 +78,9 @@ const parseMessageRoomId = (messageRoomId) => {
 const MessageRoom = () => {
 
 	const parameters = useParams();
-	const loggedUserId = localStorage.getItem(USER_ID);
+	const {store} = useContext(Context);
+	// store.setActivePage(MESSAGES_PAGE);
+	const loggedUserId = store.userId;
 	const [id1, id2] = parseMessageRoomId(parameters.id);
 	let toUserId = (loggedUserId === id1) ? id2 : id1;
 
@@ -98,8 +101,8 @@ const MessageRoom = () => {
 
 	const [fetchUserTo, isLoadingUserTo, _error] = useFetching(async () => {
 		await UserService.getFullById(toUserId)
-			.then(response => response.body)
-			.then(body => setUser(body));
+			.then(response => setUser(response.data))
+			.catch(error => store.addError(error));
 	});
 
 	useEffect(() => {
@@ -164,7 +167,7 @@ const MessageRoom = () => {
 									<Status userId={user._id}/>
 								</div>
 							</div>
-							<img src={user.picture ?? userpic} alt={`pic for ${user.firstName}`}/>
+							<img src={user.picture ?? userpic} alt="Изображение недоступно"/>
 						</div>
 					</Link>
 					<div className={cl.messages}>
@@ -206,4 +209,4 @@ const MessageRoom = () => {
 		</div>
 	);
 };
-export default MessageRoom;
+export default observer(MessageRoom);

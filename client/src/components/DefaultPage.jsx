@@ -1,22 +1,23 @@
 import AsideNav from "./AsideNav/AsideNav";
 import PropTypes from "prop-types";
 import useUser from "../hooks/useUser";
-import {USER_ID} from "../constants";
-import {useEffect} from "react";
-import {useDispatch} from "react-redux";
-import {setUsers} from "../store/usersOnlineReducer";
+import {useContext, useEffect} from "react";
+import {Context} from "../index";
+import {observer} from "mobx-react-lite";
 
 const DefaultPage = ({children}) => {
 
-	const loggedUserId = localStorage.getItem(USER_ID);
-	const dispatch = useDispatch();
+	const {store} = useContext(Context);
+	const loggedUserId = store.userId;
+	console.log("LOGGED USERID", loggedUserId);
 
-	const {users} = useUser(loggedUserId);
-	console.log("USERS", users);
-
-	useEffect(() => {
-		dispatch(setUsers(users));
-	}, [users]);
+	if (loggedUserId !== null && loggedUserId !== undefined) {
+		const {users} = useUser(loggedUserId);
+		console.log("USERS", users);
+		useEffect(() => {
+			store.setOnlineUsers(users);
+		}, [users]);
+	}
 
 	return (
 		<div className="default_page">
@@ -32,4 +33,4 @@ DefaultPage.propTypes = {
 	children: PropTypes.element
 }
 
-export default DefaultPage;
+export default observer(DefaultPage);

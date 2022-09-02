@@ -1,10 +1,11 @@
-import {useState} from 'react';
+import {useContext, useState} from 'react';
 import cl from './ImageUploader.module.css';
 import UserService from "../../../API/UserService";
 import {useNavigate} from "react-router-dom";
 import Compress from "browser-image-compression";
 import PropTypes from "prop-types";
 import Loader from "../Loader/Loader";
+import {Context} from "../../../index";
 
 
 const ImageUploader = ({currentImg}) => {
@@ -12,7 +13,8 @@ const ImageUploader = ({currentImg}) => {
 		const [file, setFile] = useState('');
 		const [imagePreviewUrl, setImagePreviewUrl] = useState(currentImg);
 		const [loading, setLoading] = useState(false);
-		const userId = localStorage.getItem("userId");
+		const {store} = useContext(Context);
+		const userId = store.userId;
 		const navigate = useNavigate();
 
 		const _handleSubmit = async (event_) => {

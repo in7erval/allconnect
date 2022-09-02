@@ -1,14 +1,14 @@
-import {useState} from 'react';
+import {useContext, useState} from 'react';
 import cl from "./SearchNav.module.css";
 import UserService from "../../../API/UserService";
-import {parseError} from "../../../store/errorReducer";
-import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
+import {Context} from "../../../index";
+import {observer} from "mobx-react-lite";
 
 const SearchNav = () => {
 
 		const [searchInput, setSearchInput] = useState("");
-		const dispatch = useDispatch();
+		const {store} = useContext(Context);
 		const navigate = useNavigate();
 
 		const searchUser = event_ => {
@@ -24,7 +24,7 @@ const SearchNav = () => {
 							navigate(`/user${response.body._id}`, {replace: true});
 							navigate(0);
 						} else {
-							dispatch(parseError({code: 101, msg: `User ${searchInput} not found`}));
+							store.addError(`User ${searchInput} not found`);
 						}
 					}
 				)
@@ -46,4 +46,4 @@ const SearchNav = () => {
 	}
 ;
 
-export default SearchNav;
+export default observer(SearchNav);

@@ -1,8 +1,10 @@
 import cl from "./Message.module.css";
 import PropTypes from "prop-types";
-import {useEffect} from "react";
+import {useContext, useEffect} from "react";
 import {useInView} from "react-intersection-observer";
 import userpic from "../../assets/userpic.jpeg";
+import {Context} from "../../index";
+import {observer} from "mobx-react-lite";
 
 const Message = (
 	{
@@ -13,7 +15,9 @@ const Message = (
 		toUserId
 	}
 ) => {
-	const currentUserId = localStorage.getItem('userId');
+	const {store} = useContext(Context);
+	const userId = store.userId;
+
 	const {ref: reference, inView: isVisible} = useInView({
 		threshold: 0.5,
 		triggerOnce: true,
@@ -21,7 +25,7 @@ const Message = (
 		trackVisibility: true
 	});
 
-	const isCurrentUserMessage = message.user._id === currentUserId;
+	const isCurrentUserMessage = message.user._id === userId;
 
 	const date = new Date(message.createdAt);
 	const stringTime = date.toLocaleTimeString([], {timeStyle: 'short'});
@@ -31,9 +35,9 @@ const Message = (
 	let messageClass = (isCurrentUserMessage ? cl.from_me : cl.from_them) + " " + tail;
 
 	useEffect(() => {
-		if (isVisible && !isCurrentUserMessage && !message.seenBy.includes(currentUserId)) {
-			addToSeenBy(message._id, currentUserId);
-			message.seenBy.push(currentUserId);
+		if (isVisible && !isCurrentUserMessage && !message.seenBy.includes(userId)) {
+			addToSeenBy(message._id, userId);
+			message.seenBy.push(userId);
 		}
 	}, [isVisible]);
 
@@ -49,7 +53,7 @@ const Message = (
 				{!isCurrentUserMessage &&
 					<img
 						src={message.user.picture ?? userpic}
-						alt={"comment owner"}
+						alt="Изображение недоступно"
 						className={message.continuous ? cl.hide : ""}
 					/>}
 				<button onContextMenu={(event_) => onContextMenu(event_, message._id)}>
@@ -68,7 +72,7 @@ const Message = (
 								}}
 							>
 								{stringTime}
-								{message.seenBy.includes(isCurrentUserMessage ? toUserId : currentUserId) ?
+								{message.seenBy.includes(isCurrentUserMessage ? toUserId : userId) ?
 									<i className="bi bi-check-all"></i> :
 									<i className="bi bi-check"></i>}
 							</span>
@@ -89,4 +93,4 @@ Message.propTypes = {
 	addToSeenBy: PropTypes.func.isRequired
 }
 
-export default Message;
+export default observer(Message);

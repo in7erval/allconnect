@@ -1,10 +1,14 @@
 import cl from './Comment.module.css';
 import PropTypes from "prop-types";
 import {Link} from "react-router-dom";
+import {useContext} from "react";
+import {Context} from "../../../index";
+import {observer} from "mobx-react-lite";
 
 const Comment = ({pic, ownerId, firstName, lastName, message, publishDate, continuous}) => {
 
-	const currentUserId = localStorage.getItem('userId');
+	const {store} = useContext(Context);
+	const currentUserId = store.userId;
 
 	const isCurrentUserComment = ownerId === currentUserId;
 
@@ -19,7 +23,7 @@ const Comment = ({pic, ownerId, firstName, lastName, message, publishDate, conti
 			{!isCurrentUserComment &&
 				<img
 					src={pic}
-					alt={"comment owner"}
+					alt="Изображение недоступно"
 					className={continuous ? cl.hide : ""}
 				/>
 			}
@@ -54,4 +58,4 @@ Comment.propTypes = {
 	continuous: PropTypes.bool.isRequired
 }
 
-export default Comment;
+export default observer(Comment);

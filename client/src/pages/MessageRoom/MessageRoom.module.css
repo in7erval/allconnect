@@ -35,6 +35,13 @@
     height: 50px;
     border-radius: 50%;
     object-fit: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #eeeeee;
+    font-size: 0.4rem;
+    text-align: center;
+
 }
 
 .message_date {

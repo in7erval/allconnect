@@ -1,42 +1,31 @@
-import axios from "axios";
-import {API_URL} from "../config";
+import $api from "./index";
 
 const UserService = {
+
 	getAll: async (limit = 10, page = 1) => {
-		const response = await axios.get(`${API_URL}/api/users`, {
+		return $api.get(`/users`, {
 			params: {
 				limit: limit,
 				page: page
 			}
 		});
-		console.log("users", response.data);
-		return response.data;
+
 	},
 
 	getFullById: async (id) => {
-		console.debug(`getFullById(${id})`);
-		const response = await axios.get(`${API_URL}/api/users/${id}`, {
+		return $api.get(`/users/${id}`, {
 			params: {
 				friends: true
 			}
 		});
-
-		let data = {
-			...response.data
-		};
-
-		console.log("usersFull: getById", data);
-		return data;
 	},
 
 	getById: async (id) => {
-		const response = await axios.get(`${API_URL}/api/users/${id}`);
-		console.log("users: getById", response.data);
-		return response.data;
+		return $api.get(`/users/${id}`);
 	},
 
-	getUserPosts: async (userId, limit, page) => {
-		const response = await axios.get(`${API_URL}/api/users/${userId}/posts`, {
+	getUserPosts: (userId, limit, page) => {
+		return $api.get(`/users/${userId}/posts`, {
 			params: {
 				limit: limit,
 				page: page,
@@ -44,48 +33,36 @@ const UserService = {
 				comments: true
 			}
 		});
-
-		console.log("userService: getUserPosts", response.data);
-		return response.data;
 	},
 
 	getByName: async (firstName, lastName) => {
-		const response = await axios.get(`${API_URL}/api/getUserByName`, {
+		return $api.get(`/users/getUserByName`, {
 			params: {
 				firstName, lastName
 			}
 		});
-
-		console.log("userService: getByName", response.data);
-		return response.data;
 	},
 
 	addFriend: async (userId, friendId) => {
-		await axios.get(`${API_URL}/api/addFriend`, {
+		return $api.get(`/users/addFriend`, {
 			params: {
 				userId, friendId
 			}
 		});
-
-		console.log("userService: addFriend");
 	},
 
 	deleteFriend: async (userId, friendId) => {
-		await axios.get(`${API_URL}/api/deleteFriend`, {
+		return $api.get(`/users/deleteFriend`, {
 			params: {
 				userId, friendId
 			}
 		});
-
-		console.log("userService: deleteFriend");
 	},
 
 	changeName: async (userId, firstName, lastName) => {
-		await axios.post(`${API_URL}/api/users/update`, {
+		return $api.post(`/users/update`, {
 			userId, firstName, lastName
 		});
-
-		console.log("userService: changeName");
 	},
 
 	savePhoto: async (userId, data) => {
@@ -93,15 +70,13 @@ const UserService = {
 		formData.append('image', data);
 		console.log("data", data);
 
-		await axios.post(`${API_URL}/api/user/${userId}/image`, formData,
+		return $api.post(`/users/${userId}/image`, formData,
 			{
 				headers: {
 					"Content-Type": "multipart/form-data"
 				}
 			}
 		);
-
-		console.log("userService: setPhoto");
 	}
 
 };

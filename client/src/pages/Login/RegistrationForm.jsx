@@ -1,39 +1,23 @@
-import {useState} from 'react';
+import {useContext, useState} from 'react';
 import showPass from '../../assets/pass_show.png';
 import passVisible from '../../assets/pass_visible.png';
 import cl from './Login.module.css';
-import {useDispatch} from "react-redux";
 import PropTypes from 'prop-types';
-import {registerWithEmailAndPassword} from "../../firebase/index";
-import {parseError} from "../../store/errorReducer";
-import {USER_ID} from "../../constants";
-import {useNavigate} from "react-router-dom";
+import {Context} from "../../index";
+import {observer} from "mobx-react-lite";
 
 const RegistrationForm = ({returnToHome}) => {
-
-	const dispatch = useDispatch();
 
 	const [email, setEmail] = useState();
 	const [name, setName] = useState();
 	const [surname, setSurname] = useState();
 	const [password, setPassword] = useState();
 	const [passwordVisible, setPasswordVisible] = useState(false);
-	const navigate = useNavigate();
+	const {store} = useContext(Context);
 
-	const sendData = (event_) => {
+	const sendData = async (event_) => {
 		event_.preventDefault();
-		console.log('register', email, name, surname);
-		registerWithEmailAndPassword(name, surname, email, password)
-			.then(response => {
-				console.log("registerResp", response);
-				if (response != null && response.body != null && response.body._id !== null) {
-					localStorage.setItem(USER_ID, response.body._id);
-					navigate('/posts', {replace: true});
-				} else {
-					dispatch(parseError(response.error));
-				}
-			})
-			.catch(error => dispatch(parseError(error)));
+		await store.registration(email, password, name, surname);
 	}
 
 	return (
@@ -112,4 +96,4 @@ RegistrationForm.propTypes = {
 	returnToHome: PropTypes.func.isRequired
 }
 
-export default RegistrationForm;
+export default observer(RegistrationForm);

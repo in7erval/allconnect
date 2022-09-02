@@ -12,7 +12,7 @@ const Friends = lazy(() => import("../pages/Friends/Friends"));
 export const routes = [
 	{path: '/posts', element: isAuth => isAuth ? <DefaultPage><Posts/></DefaultPage> : <Navigate to="/login"/>},
 	{path: '/user:id', element: isAuth => isAuth ? <DefaultPage><UserPage/></DefaultPage> : <Navigate to="/login"/>},
-	{path: '/Login', element: isAuth => isAuth ? <Navigate to="/posts"/> : <Login/>},
+	{path: '/login', element: isAuth => isAuth ? <Navigate to="/posts"/> : <Login/>},
 	{path: '/messages', element: isAuth => isAuth ? <DefaultPage><Messages/></DefaultPage> : <Login/>},
 	{path: '/messages/:id', element: isAuth => isAuth ? <DefaultPage><MessageRoom/></DefaultPage> : <Login/>},
 	{path: '/friends', element: isAuth => isAuth ? <DefaultPage><Friends/></DefaultPage> : <Login/>},

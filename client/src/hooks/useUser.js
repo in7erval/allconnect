@@ -3,7 +3,7 @@ import {useEffect, useRef, useState} from 'react'
 import {io} from 'socket.io-client'
 
 export default function useUser(userId) {
-	const [users, setUsers] = useState([])
+	const [users, setUsers] = useState([]);
 
 	const {current: socket} = useRef(
 		io(SERVER_URI, {

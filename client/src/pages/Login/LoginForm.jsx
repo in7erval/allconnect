@@ -1,37 +1,23 @@
-import {useState} from 'react';
+import {useContext, useState} from 'react';
 import showPass from '../../assets/pass_show.png';
 import passVisible from '../../assets/pass_visible.png';
 import cl from './Login.module.css';
-import {parseError} from "../../store/errorReducer";
-import {useDispatch} from "react-redux";
 import PropTypes from "prop-types";
-import {signInWithEmailPassword} from "../../firebase/index";
-import {USER_ID} from "../../constants";
-import {useNavigate} from "react-router-dom";
+import {Context} from "../../index";
+import {observer} from "mobx-react-lite";
 
 const LoginForm = ({returnToHome}) => {
 
-	const dispatch = useDispatch();
+	// const _dispatch = useDispatch();
 
 	const [email, setEmail] = useState();
 	const [password, setPassword] = useState();
 	const [passwordVisible, setPasswordVisible] = useState(false);
-	const navigate = useNavigate();
+	const {store} = useContext(Context);
 
 	const sendData = async (event_) => {
 		event_.preventDefault();
-		console.log('submit', email);
-		await signInWithEmailPassword(email, password)
-			.then(response => {
-				if (response.error) {
-					dispatch(parseError(response.error));
-				} else {
-					console.log("set USER_ID", response.user.user);
-					localStorage.setItem(USER_ID, response.user.user);
-					navigate('/posts', {replace: true});
-				}
-			})
-			.catch(error => dispatch(parseError(error)));
+		await store.login(email, password);
 	}
 
 	return (
@@ -45,6 +31,7 @@ const LoginForm = ({returnToHome}) => {
 						autoFocus={true}
 						required={true}
 						autoComplete="email"
+						value={email}
 						onChange={event_ => setEmail(event_.target.value)}
 					/>
 				</div>
@@ -63,6 +50,7 @@ const LoginForm = ({returnToHome}) => {
 						type={passwordVisible ? "text" : "password"}
 						onChange={event_ => setPassword(event_.target.value)}
 						className={passwordVisible ? "" : "ls-5"}
+						value={password}
 					/>
 				</div>
 				<button
@@ -89,4 +77,4 @@ LoginForm.propTypes = {
 	returnToHome: PropTypes.func.isRequired
 }
 
-export default LoginForm;
+export default observer(LoginForm);
