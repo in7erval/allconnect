@@ -26,7 +26,7 @@ const Navbar = () => {
 					</div>
 				}
 
-				{store.isAuth && <NotificationsNav/>}
+				{store.isAuth && <NotificationsNav />}
 
 				<div className={cl.navbar__links}>
 					<a className={cl.navbar_link} onClick={logout}>

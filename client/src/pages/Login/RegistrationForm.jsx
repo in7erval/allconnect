@@ -8,10 +8,10 @@ import {observer} from "mobx-react-lite";
 
 const RegistrationForm = ({returnToHome}) => {
 
-	const [email, setEmail] = useState();
-	const [name, setName] = useState();
-	const [surname, setSurname] = useState();
-	const [password, setPassword] = useState();
+	const [email, setEmail] = useState('');
+	const [name, setName] = useState('');
+	const [surname, setSurname] = useState('');
+	const [password, setPassword] = useState('');
 	const [passwordVisible, setPasswordVisible] = useState(false);
 	const {store} = useContext(Context);
 

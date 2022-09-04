@@ -23,7 +23,6 @@ const UserPage = () => {
 		const LIMIT_POSTS = 10;
 		const pageUserId = useParams().id;
 		const {store} = useContext(Context);
-		// store.setActivePage(USER_PAGE);
 		const loggedUserId = store.userId;
 		const isOwner = pageUserId === loggedUserId;
 		const [showAllFriends, setShowAllFriends] = useState(false);
@@ -60,12 +59,9 @@ const UserPage = () => {
 
 		useEffect(() => {
 			if (!isFetching) {
-				console.log(userResponse);
 				if (!isOwner) {
 					setIsFriend(determineIsFriend(userResponse.data.friends, loggedUserId));
 				} else {
-					console.debug("Owner page, welcome!");
-					console.debug(`editedFirstName=${userResponse.data.firstName}, editedLastName=${userResponse.data.lastName}`);
 					setEditedFirstName(userResponse.data.firstName);
 					setEditedLastName(userResponse.data.lastName);
 				}

@@ -1,32 +1,36 @@
 .status {
-    padding: 5px;
     height: 15px;
-    width: 15px;
-    border-radius: 50%;
     background-color: green;
-    justify-content: center;
     align-items: center;
     object-fit: cover;
     display: flex;
+    font-size: 0.7rem;
+    cursor: default;
+    width: fit-content;
+}
+
+.online {
+    background-color: green;
+    padding: 5px;
+    width: 15px;
+    border-radius: 50%;
     animation-name: smooth-appear-status;
     animation-duration: 0.5s;
     animation-fill-mode: forwards;
     animation-direction: reverse;
     animation-timing-function: ease-in-out;
     animation-iteration-count: 1;
-    cursor: default;
-}
-
-.online {
-    background-color: green;
-
+    border: 2px solid #559955;
 }
 
 .offline {
     background-color: gray;
+    border-radius: 10px;
+    padding: 0 10px;
+    border: 2px solid #777777;
 }
 
-.status:hover {
+.online:hover {
     border-radius: 10px;
     height: 15px;
     width: auto;
@@ -39,7 +43,7 @@
     animation-iteration-count: 1;
 }
 
-.status p {
+.online p {
     font-size: 10px;
     color: transparent;
     line-height: 1rem;
@@ -53,7 +57,12 @@
     animation-iteration-count: 1;
 }
 
-.status:hover p {
+.offline p {
+    display: block;
+    color: white;
+}
+
+.online:hover p {
     display: block;
     animation-name: smooth-appear-status-text;
     animation-timing-function: ease-in-out;
@@ -66,6 +75,14 @@
 
 .no_hover {
     pointer-events: none;
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+    padding: 0;
+}
+
+.no_hover p {
+    display: none;
 }
 
 @keyframes smooth-appear-status {

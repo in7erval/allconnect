@@ -1,18 +1,32 @@
-import {useEffect, useState, useRef, useMemo} from 'react';
+import {useContext, useEffect, useMemo, useRef, useState} from 'react';
 import Comment from "./Comment.jsx";
 import cl from './Comment.module.css';
 import TextareaAutosize from "react-textarea-autosize";
 import arrow from "../../../assets/send.svg";
-import useComments from "../../../hooks/useComments";
 import PropTypes from "prop-types";
+import CommentsService from "../../../API/CommentsService";
+import {observer} from "mobx-react-lite";
+import {Context} from "../../../index";
 
 const datetimeToDate = datetime => new Date(datetime).toLocaleDateString();
+
+const sortDate = (dateString1, dateString2) => {
+	let firstDate = new Date(dateString1);
+	let secondDate = new Date(dateString2);
+	return firstDate - secondDate;
+}
+
+const sortDateParsed = (dateString1, dateString2) => {
+	let firstDate = Date.parse(dateString1.replace('.', '-'));
+	let secondDate = Date.parse(dateString2.replace('.', '-'));
+	return firstDate - secondDate;
+}
 
 const groupComments = (comments) => {
 	let commentsMap = new Map();
 
 	for (let element of comments) {
-		let date = datetimeToDate(element.publishDate);
+		let date = new Date(element.publishDate).toDateString();
 		let newElement = {...element, continuous: false};
 		if (commentsMap.has(date)) {
 			commentsMap.get(date).push(newElement);
@@ -23,9 +37,7 @@ const groupComments = (comments) => {
 
 	for (let elements of commentsMap.values()) {
 		elements.sort((firstElement, secondElement) => {
-			let firstDate = new Date(firstElement.publishDate);
-			let secondDate = new Date(secondElement.publishDate);
-			return firstDate - secondDate;
+			return sortDate(firstElement.publishDate, secondElement.publishDate);
 		});
 	}
 
@@ -44,16 +56,49 @@ const groupComments = (comments) => {
 
 const Comments = ({postId, setCommentsCount}) => {
 
+	const {store} = useContext(Context);
 	const [commentMessage, setCommentMessage] = useState("");
 	const referenceComments = useRef();
 
-	const {comments, sendComment, _removeComment} = useComments(postId);
+	const [comments, setComments] = useState([]);
 
-	console.log(comments);
+	// const {comments, sendComment, _removeComment} = useComments(postId);
+
+	useEffect(() => {
+		initComments();
+		subscribe()
+	}, []);
+
+	const initComments = async () => {
+		const {data} = await CommentsService.getAll(postId);
+		setComments(data.body);
+	}
+
+	const subscribe = async () => {
+		try {
+			const {data} = await CommentsService.getOne();
+			console.log(data);
+			setComments(previous => [data.body, ...previous]);
+			await subscribe();
+		} catch (_error) {
+			console.error(_error);
+			setTimeout(() => {
+				subscribe()
+			}, 500);
+		}
+	}
+
+	const sendComment = async () => {
+		await CommentsService.add({
+			text: commentMessage,
+			userId: store.userId,
+			postId
+		})
+	}
 
 	const sendCommentAction = () => {
 		if (commentMessage !== "") {
-			sendComment(commentMessage);
+			sendComment();
 			setCommentMessage("");
 		}
 	};
@@ -77,6 +122,7 @@ const Comments = ({postId, setCommentsCount}) => {
 
 	const commentsMap = useMemo(() => groupComments(comments), [comments]);
 
+
 	console.log(commentsMap);
 
 	return (
@@ -84,10 +130,10 @@ const Comments = ({postId, setCommentsCount}) => {
 			{comments.length > 0 &&
 				<div className={cl.comments} ref={referenceComments}>
 
-					{[...commentsMap.keys()].map(key =>
+					{[...commentsMap.keys()].sort(sortDateParsed).map(key =>
 						(<div key={key}>
 								<div className={cl.comment_date}>
-									{key}
+									{datetimeToDate(key)}
 								</div>
 								{commentsMap.get(key).map(element => (
 									<Comment
@@ -103,8 +149,7 @@ const Comments = ({postId, setCommentsCount}) => {
 								))}
 							</div>
 						)
-					)
-					}
+					)}
 				</div>
 			}
 
@@ -136,4 +181,4 @@ Comments.propTypes = {
 	setCommentsCount: PropTypes.func.isRequired
 }
 
-export default Comments;
+export default observer(Comments);

@@ -9,24 +9,10 @@ import {Link} from "react-router-dom";
 import {Context} from "../../index";
 import {observer} from "mobx-react-lite";
 
-// const createRoomId = (firstId, secondId) => firstId > secondId ? `${firstId}:${secondId}` : `${secondId}:${firstId}`;
-//
-// const checkFriendNotInLastMessages = (friend, lastMessages) => {
-// 	for (let message of lastMessages) {
-// 		if (message.roomId.includes(friend._id)) {
-// 			return false;
-// 		}
-// 	}
-// 	return true;
-// }
-
 const Messages = () => {
-	// const [user, setUser] = useState({});
-	// const [lastMessages, setLastMessages] = useState([]);
 	const [lastMessages, setLastMessages] = useState([]);
 
 	const {store} = useContext(Context);
-	// store.setActivePage(MESSAGES_PAGE);
 	const loggedUserId = store.userId;
 	const unreadMessages = store.unreadMessages;
 
@@ -40,14 +26,9 @@ const Messages = () => {
 			.catch(error => store.addError(error));
 	})
 
-	console.log(lastMessages);
-
-
 	useEffect(() => {
-		console.log("fetch messages for page");
 		fetchMessagesForPage();
 	}, []);
-
 
 	return (
 		<div style={{flex: 1, width: "100%", maxWidth: 600}}>

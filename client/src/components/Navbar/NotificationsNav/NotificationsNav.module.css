@@ -30,7 +30,7 @@
 }
 
 .notifications {
-    position: absolute;
+    position: sticky;
     top: 60px;
     left: 100px;
     right: auto;
@@ -41,17 +41,24 @@
     border-radius: 10px;
     width: 300px;
     box-shadow: #aaaaaa 0 30px 60px 5px;
+    max-height: 400px;
+    min-height: min-content;
 
     display: flex;
-    flex-direction: column
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
 }
 
 .behind {
-    position: absolute;
-    top: 0;
+    position: sticky;
+    top: 30;
     bottom: 0;
     left: 0;
     right: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 1;
     /*background-color: black;*/
 }
 
@@ -60,4 +67,15 @@
         left: 50px;
         right: auto;
     }
+}
+
+.notifications_content > div {
+    height: 60px;
+    min-height: min-content;
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+    background-color: #eeeeee;
+    margin-bottom: 5px;
+    padding: 10px;
 }

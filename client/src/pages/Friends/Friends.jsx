@@ -19,13 +19,9 @@ const createRoomId = (firstId, secondId) => firstId > secondId ? `${firstId}:${s
 const Friends = () => {
 
 	const {store} = useContext(Context);
-	// store.setActivePage(FRIENDS_PAGE);
 	const loggedUserId = store.userId;
 	const parameters = useParams();
 	const pageUserId = parameters.id ?? loggedUserId;
-
-	console.log("pageUserId:", pageUserId);
-	// const isOwner = pageUserId === loggedUserId;
 
 	const [visibleModal, setVisibleModal] = useState(false);
 	const [friends, setFriends] = useState([]);
@@ -40,13 +36,11 @@ const Friends = () => {
 		} else {
 			// todo: pagination
 			let resp = await UserService.getAll(1000, 1).catch(error => store.addError(error));
-			// console.log(resp.body);
 			setFriends(resp?.data);
 		}
 	});
 
 	useEffect(() => {
-		console.log("fetch friends");
 		fetchFriends();
 	}, [isGlobal]);
 

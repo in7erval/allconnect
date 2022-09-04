@@ -11,6 +11,7 @@ export default class Store {
 	errors = [];
 	onlineUsers = [];
 	unreadMessages = [];
+	notifications = [];
 
 	constructor() {
 		makeAutoObservable(this);
@@ -22,6 +23,20 @@ export default class Store {
 
 	setUnreadMessages(messages) {
 		this.unreadMessages = messages;
+	}
+
+	get countUnreadMessages() {
+		return this.unreadMessages.length;
+	}
+
+	setNotifications(notifications) {
+		this.notifications = notifications;
+	}
+
+	addNotification(notification) {
+		if (!this.notifications.some(value => value._id === notification._id)) {
+			this.notifications = [notification, ...this.notifications];
+		}
 	}
 
 	setLoading(bool) {

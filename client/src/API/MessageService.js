@@ -13,8 +13,12 @@ const MessageService = {
 		});
 	},
 
-	countUnread: (userId) => {
+	getUnreadInit: (userId) => {
 		return $api.get(`/messages/unread`, {params: {user: userId}});
+	},
+
+	getUnread: (userId) => {
+		return $api.get(`/messages/unread/subscribe`, {params: {user: userId}});
 	}
 };
 

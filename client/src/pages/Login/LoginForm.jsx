@@ -10,8 +10,8 @@ const LoginForm = ({returnToHome}) => {
 
 	// const _dispatch = useDispatch();
 
-	const [email, setEmail] = useState();
-	const [password, setPassword] = useState();
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
 	const [passwordVisible, setPasswordVisible] = useState(false);
 	const {store} = useContext(Context);
 

@@ -39,7 +39,7 @@ const PostForm = () => {
 				}}
 			/>
 			{/*<input type="file"/>*/}
-			{textareaFocused &&
+			{(textareaFocused || postMessage) &&
 				<button type="submit">Поделиться</button>
 			}
 		</form>

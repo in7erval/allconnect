@@ -10,5 +10,31 @@
 </p>
 
 Next-gen social platform.
-
 >In progress...
+
+## Используемые технологии
+
+### Frontend
+
+- React
+- ~~Redux~~ (перешёл на Mobx)
+- React Scripts
+- React Router
+- Socket.io Client
+- Axios
+- Mobx
+- Flexbox
+- Long Polling
+
+
+### Backend
+
+- Express
+- MongoDB (mongoose)
+- Axios
+- JWT (для авторизации)
+- Multer (получение и хранение файлов)
+- Socket.io
+
+> Списки пополняются и обновляются ..
+

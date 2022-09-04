@@ -10,7 +10,6 @@ import {observer} from "mobx-react-lite";
 function Posts() {
 	const LIMIT_POSTS = 10;
 	const {store} = useContext(Context);
-	// store.setActivePage(POSTS_PAGE);
 	const userId = store.userId;
 	const {ref: lastElement, inView} = useInView();
 
@@ -29,6 +28,9 @@ function Posts() {
 			let lastPageNumber = lastPage.config.params.page;
 			return LIMIT_POSTS * lastPageNumber < lastPage.data.count ? lastPageNumber + 1 : undefined;
 		},
+		// refetchInterval: 1000,
+		// refetchIntervalInBackground: true,
+		// enabled: !!userId
 	});
 
 	useEffect(() => {
@@ -42,7 +44,7 @@ function Posts() {
 	}, [inView]);
 
 	return (
-		<div style={{width: '100%'}}>
+		<>
 			{isLoading ?
 				<div style={{
 					display: "flex",
@@ -62,7 +64,7 @@ function Posts() {
 				))
 			}
 			<div ref={lastElement} style={{height: 20}}/>
-		</div>
+		</>
 	);
 }
 
