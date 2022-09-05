@@ -1,0 +1,6 @@
+[submodule "allconnect-client"]
+	path = allconnect-client
+	url = https://github.com/in7erval/allconnect-client.git
+[submodule "allconnect-server"]
+	path = allconnect-server
+	url = https://github.com/in7erval/allconnect-server.git
