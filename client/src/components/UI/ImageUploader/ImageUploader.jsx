@@ -6,6 +6,7 @@ import Compress from "browser-image-compression";
 import PropTypes from "prop-types";
 import Loader from "../Loader/Loader";
 import {Context} from "../../../index";
+import convert from 'heic2any';
 
 
 const ImageUploader = ({currentImg}) => {
@@ -30,6 +31,7 @@ const ImageUploader = ({currentImg}) => {
 
 			let file = event_.target.files[0];
 			console.log("file", file);
+			const filename = file.name;
 
 			const options = {
 				maxSizeMB: 0.5,
@@ -38,15 +40,31 @@ const ImageUploader = ({currentImg}) => {
 
 			setLoading(true);
 
+			if (file.type.toLowerCase() === "image/heic" ||
+				file.name.toLowerCase().endsWith('.heic')) {
+				console.log("HEIC detected");
+				file = await convert({
+					blob: file,
+					toType: 'image/jpeg',
+					quality: 1
+				});
+			}
+
 			await Compress(file, options)
 				.then(compressedBlob => {
-					console.log(compressedBlob);
 					compressedBlob.lastModifiedDate = new Date();
-					const convertedBlobFile = new File([compressedBlob], file.name, {type: file.type, lastModified: Date.now()});
+					const convertedBlobFile = new File([compressedBlob],
+						filename.toLowerCase().replace('.heic', '.jpg'),
+						{
+							type: file.type,
+							lastModified: Date.now()
+						});
+					console.log(convertedBlobFile);
 					setFile(convertedBlobFile);
 					setImagePreviewUrl(URL.createObjectURL(compressedBlob));
 				})
 				.catch(_error => {
+					console.log("error while reading", _error);
 					// Show the user a toast message or notification that something went wrong while compressing file
 				});
 

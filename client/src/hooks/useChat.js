@@ -32,7 +32,7 @@ export default function useChat(roomId) {
 		})
 	}, [])
 
-	const sendMessage = (message) => {
+	const sendMessage = async (message) => {
 		socket.emit('message:add', message)
 	}
 

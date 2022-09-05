@@ -34,9 +34,9 @@ const Friends = () => {
 			let resp = await UserService.getFullById(pageUserId).catch(error => store.addError(error));
 			setFriends(resp?.data?.friends);
 		} else {
-			// todo: pagination
+			// todo: pagination (затык с фильтрацией на фронте, перенести в back)
 			let resp = await UserService.getAll(1000, 1).catch(error => store.addError(error));
-			setFriends(resp?.data);
+			setFriends(resp?.data?.body);
 		}
 	});
 
@@ -89,7 +89,7 @@ const Friends = () => {
 						<div>
 							<div>
 								<div className={cl.main__header_info}>
-									Все друзья <span>{friends?.length}</span>
+									Все {isGlobal ? "люди" : "друзья"} <span>{friends?.length}</span>
 								</div>
 							</div>
 						</div>

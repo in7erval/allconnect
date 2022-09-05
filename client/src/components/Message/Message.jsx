@@ -49,23 +49,40 @@ const Message = (
 
 	return (
 		<div ref={reference}>
-			<div className={`${cl.message} ${messageClass} ${highlight ? cl.highlight : ""}`}>
+			<div
+				className={`${cl.message} ${highlight ? cl.highlight : ""}`}
+				style={{
+					justifyContent: `${isCurrentUserMessage ? "right" : "left"}`
+				}}
+			>
 				{!isCurrentUserMessage &&
 					<img
 						src={message.user.picture ?? userpic}
 						alt="Изображение недоступно"
 						className={message.continuous ? cl.hide : ""}
 					/>}
-				<button onContextMenu={(event_) => onContextMenu(event_, message._id)}>
-					<p className={messageClass}>
-						{!isCurrentUserMessage &&
-							<a className={cl.name} href={`/user${message.user._id}`}>{message.user.firstName}</a>}
-						<span>
-							{message.text}
-							<span
+				<div
+					onContextMenu={(event_) => onContextMenu(event_, message._id)}
+					className={messageClass + " " + cl.message_content}
+				>
+					{!isCurrentUserMessage &&
+						<a className={cl.name} href={`/user${message.user._id}`}>{message.user.firstName}</a>}
+					<div style={{
+						flexDirection: 'column',
+					}}>
+						{message.picture &&
+							<img
+								src={message.picture}
+								alt="Изображение недоступно"
+								style={{maxWidth: '100%', borderRadius: 10, alignSelf: 'center', objectFit: 'cover', maxHeight: '300px'}}
+							/>
+						}
+						<div>
+							{message.text && <p>{message.text}</p>}
+							<div
 								style={{
 									margin: 0,
-									padding: "0 0 0 10px",
+									// padding: "0 0 0 10px",
 									fontSize: 11,
 									alignSelf: "end",
 									display: "flex"
@@ -75,11 +92,11 @@ const Message = (
 								{message.seenBy.includes(isCurrentUserMessage ? toUserId : userId) ?
 									<i className="bi bi-check-all"></i> :
 									<i className="bi bi-check"></i>}
-							</span>
-					</span>
-					</p>
+							</div>
+						</div>
+					</div>
 
-				</button>
+				</div>
 			</div>
 		</div>
 	);

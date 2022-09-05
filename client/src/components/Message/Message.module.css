@@ -1,13 +1,13 @@
 
 .message {
     display: flex;
-    flex-direction: row;
     margin: 10px 0;
     align-items: center;
 }
 
 .message i {
     color: royalblue;
+    z-index: 1;
 }
 
 .message a {
@@ -51,8 +51,8 @@
     font-size: 0.75rem;
     font-weight: bold;
     display: block;
-    margin-bottom: 0.25rem;
     color: #000000;
+    padding: .2rem .5rem;
 }
 
 
@@ -61,27 +61,34 @@
     color: #00000099;
 }
 
-/** */
-.message p {
-    border-radius: 1.15rem;
-    line-height: 1.25;
-    /*max-width: 75%;*/
-    padding: 0.5rem .875rem;
+.message_content {
+    border-radius: 0.8rem;
+    line-height: 1;
+    max-width: 75%;
+    /*padding: 0.5rem .875rem;*/
+    padding: .2rem .3rem;
     position: relative;
     word-wrap: break-word;
+    display: flex;
+    flex-direction: column;
     animation-name: message-appear;
     animation-duration: 1s;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
-    /*min-width: 10%;*/
+    width: fit-content;
+    min-width: 10%;
 }
 
-.message span {
+.message_content div {
     display: flex;
     align-items: end;
     justify-content: flex-end;
     flex-wrap: wrap;
     overflow-wrap: anywhere;
+}
+
+.message_content p {
+    padding: .2rem .5rem;
 }
 
 @keyframes message-appear {
@@ -93,33 +100,33 @@
     }
 }
 
-.message p::before,
-.message p::after {
+.message_content::before,
+.message_content::after {
     bottom: -0.1rem;
     content: "";
     height: 1rem;
     position: absolute;
 }
 
-p.from_me {
+div.from_me {
     align-self: flex-end;
     background-color: #ddddff;
     color: black;
 }
 
-.highlight p.from_me {
+.highlight div.from_me {
     background-color: #aaaaff;
     box-shadow: 0 0 20px 5px #aaaaff;
 }
 
-p.from_me::before {
+div.from_me::before {
     border-bottom-left-radius: 0.8rem 0.7rem;
     border-right: 1rem solid #ddddff;
     right: -0.35rem;
     transform: translate(0, -0.1rem);
 }
 
-p.from_me::after {
+div.from_me::after {
     background-color: white;
     border-bottom-left-radius: 0.5rem;
     right: -40px;
@@ -127,54 +134,54 @@ p.from_me::after {
     width: 10px;
 }
 
-.highlight p.from_me::after {
+.highlight div.from_me::after {
     width: 0;
 }
 
-.highlight p.from_me::before {
+.highlight div.from_me::before {
     border-right: none;
 }
 
-p[class^="from_"] {
+div[class^="from_"] {
     margin: 0.5rem 0;
     width: fit-content;
 }
 
-p.from_me ~ p.from_me {
+div.from_me ~ div.from_me {
     margin: 0.25rem 0 0;
 }
 
-p.from_me ~ p.from_me:not(:last-child) {
+div.from_me ~ div.from_me:not(:last-child) {
     margin: 0.25rem 0 0;
 }
 
-p.from_me ~ p.from_me:last-child {
+div.from_me ~ div.from_me:last-child {
     margin-bottom: 0.5rem;
 }
 
-p.from_them {
+div.from_them {
     align-items: flex-start;
     background-color: #e5e5ea;
     color: #000;
 }
 
-.highlight p.from_them {
+.highlight div.from_them {
     background-color: #d5d5d5;
     box-shadow: 0 0 20px 5px #d5d5d5;
 }
 
-p.from_them::before {
+div.from_them::before {
     border-bottom-right-radius: 0.8rem 0.7rem;
     border-left: 1rem solid #e5e5ea;
     left: -0.35rem;
     transform: translate(0, -0.1rem);
 }
 
-.highlight p.from_them::before {
+.highlight div.from_them::before {
     display: none;
 }
 
-p.from_them::after {
+div.from_them::after {
     background-color: white;
     border-bottom-right-radius: 0.5rem;
     left: 20px;
@@ -182,20 +189,20 @@ p.from_them::after {
     width: 10px;
 }
 
-.highlight p.from_them::after {
+.highlight div.from_them::after {
     width: 0;
 }
 
-p[class^="from_"].emoji {
+div[class^="from_"].emoji {
     background: none;
     font-size: 2.5rem;
 }
 
-p[class^="from_"].emoji::before {
+div[class^="from_"].emoji::before {
     content: none;
 }
 
-.no_tail p::before {
+.no_tail div::before {
     display: none;
 }
 
@@ -278,7 +285,8 @@ p[class^="from_"].emoji::before {
     background: #eeeeee;
     border-top: 3px solid #eeeeee;
     display: flex;
-    align-items: flex-end;
+    align-items: center;
+    justify-content: center;
 }
 
 .message__input textarea {
@@ -297,24 +305,22 @@ p[class^="from_"].emoji::before {
     background-color: #dddddd;
 }
 
-.message__input img {
-    width: 30px;
-    margin: 5px;
-    background-color: #be961e;
-    padding: 7px;
-    border-radius: 50%;
-    filter: invert(100%);
-}
-
-.message__input_img {
-    min-height: 50px;
+.message__input_pic {
     display: flex;
-    align-items: flex-end;
     border: none;
-    background-color: #eeeeee;
+    color: royalblue;
+    margin-left: 10px;
+    align-items: center;
+    justify-content: center;
+    min-height: 50px;
+    background-color: transparent;
 }
 
-.message__input_img:hover img {
+.message__input_pic i {
+    font-size: 1.5rem;
+}
+
+.message__input_pic:hover i {
     animation-duration: 1s;
     animation-timing-function: ease-in-out;
     animation-name: slidetop;
