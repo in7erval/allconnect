@@ -1,9 +1,9 @@
-import $api from "./index";
+import {$authApi} from "./index";
 
 const PostService = {
 
 	getAllForUser: (userId, limit = 10, page = 1) => {
-		return $api.get(`/posts`, {
+		return $authApi.get(`/posts`, {
 			params: {
 				limit: limit,
 				page: page,
@@ -15,13 +15,13 @@ const PostService = {
 	},
 
 	addNewPost: async (userId, text) => {
-		return $api.post(`/posts`, {
+		return $authApi.post(`/posts`, {
 			text, owner: userId
 		});
 	},
 
 	addLike: async (postId, userLikedId) => {
-		return $api.post(`/posts/${postId}/likes?add`,
+		return $authApi.post(`/posts/${postId}/likes?add`,
 			{
 				_id: postId,
 				userId: userLikedId
@@ -29,7 +29,7 @@ const PostService = {
 	},
 
 	deleteLike: async (postId, userLikedId) => {
-		return $api.post(`/posts/${postId}/likes?delete`,
+		return $authApi.post(`/posts/${postId}/likes?delete`,
 			{
 				userId: userLikedId
 			});

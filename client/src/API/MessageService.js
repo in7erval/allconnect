@@ -1,24 +1,24 @@
-import $api from "./index";
+import {$authApi} from "./index";
 
 const MessageService = {
 	addMessage: async (message) => {
-		return $api.post(`/messages`, {
+		return $authApi.post(`/messages`, {
 			...message
 		});
 	},
 
 	getAllRoomsForUser: async (userId) => {
-		return $api.get(`/messages/rooms`, {
+		return $authApi.get(`/messages/rooms`, {
 			params: {user: userId}
 		});
 	},
 
 	getUnreadInit: (userId) => {
-		return $api.get(`/messages/unread`, {params: {user: userId}});
+		return $authApi.get(`/messages/unread`, {params: {user: userId}});
 	},
 
 	getUnread: (userId) => {
-		return $api.get(`/messages/unread/subscribe`, {params: {user: userId}});
+		return $authApi.get(`/messages/unread/subscribe`, {params: {user: userId}});
 	}
 };
 

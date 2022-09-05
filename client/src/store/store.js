@@ -1,9 +1,9 @@
 import {makeAutoObservable} from "mobx";
 import UserAuthService from "../API/UserAuthService";
 import axios from 'axios';
-import {API_URL} from "../config";
-import {TOKEN} from "../constants";
+import {SERVER_URI, TOKEN} from "../constants";
 import Cookies from "universal-cookie/es6";
+
 
 export default class Store {
 	user = {};
@@ -76,6 +76,7 @@ export default class Store {
 			this.setAuth(true);
 			this.setUser(response.data.user);
 		} catch (error) {
+			console.error("ERROR", error);
 			console.error(error.response?.data?.message);
 		}
 	}
@@ -112,7 +113,7 @@ export default class Store {
 	async checkAuth() {
 		this.setLoading(true);
 		try {
-			const response = await axios.get(`${API_URL}/api/refresh`,
+			const response = await axios.get(`${SERVER_URI}/api/refresh`,
 				{withCredentials: true}
 			);
 			console.log("checkAuth", response);

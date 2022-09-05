@@ -1,9 +1,9 @@
-import $api from "./index";
+import {$authApi} from "./index";
 
 const NotificationService = {
 
 	getAllById: (userId, limit = 10, page = 1) => {
-		return $api.get(`/notifications`, {
+		return $authApi.get(`/notifications`, {
 			params: {
 				limit: limit,
 				page: page,
@@ -13,7 +13,7 @@ const NotificationService = {
 	},
 
 	getOne: (userId) => {
-		return $api.get(`/notification`, {
+		return $authApi.get(`/notification`, {
 			params: {
 				id: userId
 			}

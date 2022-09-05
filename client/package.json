@@ -43,7 +43,7 @@
     "workbox-streams": "^6.5.4"
   },
   "scripts": {
-    "start": "BROWSER=none react-scripts start",
+    "start": "sudo BROWSER=none PORT=3000 HTTPS=true SSL_CRT_FILE=./sslcerts/certificate.crt SSL_KEY_FILE=./sslcerts/private.key react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

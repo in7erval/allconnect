@@ -1,26 +1,29 @@
 import axios from 'axios';
 
-import {TOKEN} from "../constants";
-import {API_URL} from "../config";
+import {SERVER_URI, TOKEN} from "../constants";
 
-const $api = axios.create({
-	withCredentials: true,
-	baseURL: `${API_URL}/api`,
+console.log(SERVER_URI);
+
+export const $api = axios.create({
+	baseURL: `${SERVER_URI}/api`,
 });
 
-$api.interceptors.request.use(config => {
+export const $authApi = axios.create({
+	baseURL: `${SERVER_URI}/api`,
+	withCredentials: true
+});
+
+$authApi.interceptors.request.use(config => {
 	config.headers.Authorization = `Bearer ${localStorage.getItem(TOKEN)}`;
 	return config;
 });
 
-$api.interceptors.response.use((config) => {
-	return config;
-}, async error => {
+const authInterceptorOnRejected = async error => {
 	const originalRequest = error.config;
 	if (error.response.status == 401 && error.config && !error.config._isRetry) {
 		originalRequest._isRetry = true;
 		try {
-			const response = await axios.get(`${API_URL}/api/refresh`,
+			const response = await axios.get(`${SERVER_URI}/api/refresh`,
 				{withCredentials: true}
 			);
 			localStorage.setItem('token', response.data.accessToken);
@@ -30,6 +33,7 @@ $api.interceptors.response.use((config) => {
 		}
 		throw error;
 	}
-})
+}
 
-export default $api;
+$authApi.interceptors.response.use(config => config, authInterceptorOnRejected);
+$api.interceptors.response.use(config => config, authInterceptorOnRejected);

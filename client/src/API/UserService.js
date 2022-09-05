@@ -1,9 +1,9 @@
-import $api from "./index";
+import {$authApi} from "./index";
 
 const UserService = {
 
 	getAll: async (limit = 10, page = 1) => {
-		return $api.get(`/users`, {
+		return $authApi.get(`/users`, {
 			params: {
 				limit: limit,
 				page: page
@@ -13,7 +13,7 @@ const UserService = {
 	},
 
 	getFullById: async (id) => {
-		return $api.get(`/users/${id}`, {
+		return $authApi.get(`/users/${id}`, {
 			params: {
 				friends: true
 			}
@@ -21,11 +21,11 @@ const UserService = {
 	},
 
 	getById: async (id) => {
-		return $api.get(`/users/${id}`);
+		return $authApi.get(`/users/${id}`);
 	},
 
 	getUserPosts: (userId, limit, page) => {
-		return $api.get(`/users/${userId}/posts`, {
+		return $authApi.get(`/users/${userId}/posts`, {
 			params: {
 				limit: limit,
 				page: page,
@@ -36,7 +36,7 @@ const UserService = {
 	},
 
 	getByName: async (firstName, lastName) => {
-		return $api.get(`/users/getUserByName`, {
+		return $authApi.get(`/users/getUserByName`, {
 			params: {
 				firstName, lastName
 			}
@@ -44,7 +44,7 @@ const UserService = {
 	},
 
 	addFriend: async (userId, friendId) => {
-		return $api.get(`/users/addFriend`, {
+		return $authApi.get(`/users/addFriend`, {
 			params: {
 				userId, friendId
 			}
@@ -52,7 +52,7 @@ const UserService = {
 	},
 
 	deleteFriend: async (userId, friendId) => {
-		return $api.get(`/users/deleteFriend`, {
+		return $authApi.get(`/users/deleteFriend`, {
 			params: {
 				userId, friendId
 			}
@@ -60,7 +60,7 @@ const UserService = {
 	},
 
 	changeName: async (userId, firstName, lastName) => {
-		return $api.post(`/users/update`, {
+		return $authApi.post(`/users/update`, {
 			userId, firstName, lastName
 		});
 	},
@@ -70,7 +70,7 @@ const UserService = {
 		formData.append('image', data);
 		console.log("data", data);
 
-		return $api.post(`/users/${userId}/image`, formData,
+		return $authApi.post(`/users/${userId}/image`, formData,
 			{
 				headers: {
 					"Content-Type": "multipart/form-data"

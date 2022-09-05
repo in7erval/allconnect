@@ -1,13 +1,13 @@
-import $api from "./index";
+import {$authApi} from "./index";
 
 const CommentsService = {
 
 	getOne: async () => {
-		return $api.get("/comment");
+		return $authApi.get("/comment");
 	},
 
 	getAll: async (postId) => {
-		return $api.get("/comments", {
+		return $authApi.get("/comments", {
 			params: {
 				limit: 1000,
 				page: 1,
@@ -18,7 +18,7 @@ const CommentsService = {
 	},
 
 	add: async (comment) => {
-		await $api.post('/comments', comment);
+		await $authApi.post('/comments', comment);
 	}
 
 };

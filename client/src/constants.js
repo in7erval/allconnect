@@ -1,3 +1,3 @@
 export const TOKEN = 'token';
 export const USER_KEY = "user";
-export {API_URL as SERVER_URI} from "./config";
+export const SERVER_URI = process.env.REACT_APP_API_URL;
