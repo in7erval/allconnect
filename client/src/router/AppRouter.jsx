@@ -19,7 +19,8 @@ const AppRouter = () => {
 		return <Loader/>;
 	}
 
-	return (
+	return (store.isLoading ? <Loader/>
+			:
 		<Suspense fallback={
 			<div style={{
 				display: "flex",

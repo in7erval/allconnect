@@ -3,6 +3,7 @@ import UserAuthService from "../API/UserAuthService";
 import axios from 'axios';
 import {API_URL} from "../config";
 import {TOKEN} from "../constants";
+import Cookies from "universal-cookie/es6";
 
 export default class Store {
 	user = {};
@@ -68,6 +69,10 @@ export default class Store {
 			const response = await UserAuthService.login(email, password);
 			console.log('login', response);
 			localStorage.setItem(TOKEN, response.data.accessToken);
+			const cookies = new Cookies();
+			cookies.set("refreshToken", response.data.accessToken,
+				{httpOnly: true, maxAge: 30 * 24 * 60 * 60 * 1000});
+			console.log("setCookie", cookies);
 			this.setAuth(true);
 			this.setUser(response.data.user);
 		} catch (error) {
@@ -80,6 +85,10 @@ export default class Store {
 			const response = await UserAuthService.registration(email, password, firstName, lastName);
 			console.log('registration', response);
 			localStorage.setItem(TOKEN, response.data.accessToken);
+			const cookies = new Cookies();
+			cookies.set("refreshToken", response.data.accessToken,
+				{httpOnly: true, maxAge: 30 * 24 * 60 * 60 * 1000});
+			console.log("setCookie", cookies);
 			this.setAuth(true);
 			this.setUser(response.data.user);
 		} catch (error) {
@@ -108,6 +117,10 @@ export default class Store {
 			);
 			console.log("checkAuth", response);
 			localStorage.setItem(TOKEN, response.data.accessToken);
+			const cookies = new Cookies();
+			cookies.set("refreshToken", response.data.accessToken,
+				{httpOnly: true, maxAge: 30 * 24 * 60 * 60 * 1000});
+			console.log("setCookie", cookies);
 			this.setAuth(true);
 			this.setUser(response.data.user);
 		} catch (error) {

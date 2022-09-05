@@ -22,8 +22,10 @@ const ImageUploader = ({currentImg}) => {
 			event_.preventDefault();
 			console.log(event_);
 			console.log('handle uploading-', file);
+			setLoading(true);
 			await UserService.savePhoto(userId, file);
 			navigate(0);
+			setLoading(false);
 		}
 
 		const _handleImageChange = async (event_) => {

@@ -27,6 +27,7 @@
     "react-textarea-autosize": "8.3.4",
     "react-transition-group": "^4.4.2",
     "socket.io-client": "4.5.1",
+    "universal-cookie": "4.0.4",
     "web-vitals": "^2.1.4",
     "workbox-background-sync": "^6.5.4",
     "workbox-broadcast-update": "^6.5.4",
