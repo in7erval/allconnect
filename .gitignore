@@ -42,3 +42,5 @@ packages/react-devtools-timeline/dist
 /client/sslcerts/
 /client/yandex_c4a93b25b58a8032.html
 /server/sslcerts/
+/client/.env.development
+/client/.env.production

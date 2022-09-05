@@ -9,7 +9,7 @@ const certificate = fs.readFileSync('sslcerts/certificate.crt', 'utf8')
 const credentials = {key: privateKey, cert: certificate};
 
 
-const PORT = process.env.PORT || 80;
+const PORT = process.env.PORT || 8080;
 const SSL_PORT = process.env.SSL_PORT || 443;
 
 const app = express();

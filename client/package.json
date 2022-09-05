@@ -2,7 +2,7 @@
   "name": "allconnect",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:3001",
+  "proxy": "https://109.120.191.219:3001",
   "dependencies": {
     "@tanstack/react-query": "4.2.3",
     "@testing-library/jest-dom": "^5.16.4",
@@ -43,7 +43,7 @@
     "workbox-streams": "^6.5.4"
   },
   "scripts": {
-    "start": "sudo BROWSER=none PORT=3000 HTTPS=true SSL_CRT_FILE=./sslcerts/certificate.crt SSL_KEY_FILE=./sslcerts/private.key react-scripts start",
+    "start": "BROWSER=none PORT=3000 HTTPS=true SSL_CRT_FILE=./sslcerts/certificate.crt SSL_KEY_FILE=./sslcerts/private.key react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
