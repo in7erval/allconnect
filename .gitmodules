@@ -4,3 +4,6 @@
 [submodule "allconnect-server"]
 	path = allconnect-server
 	url = https://github.com/in7erval/allconnect-server.git
+[submodule "allconnect-telebot"]
+	path = allconnect-telebot
+	url = https://github.com/in7erval/allconnect-telebot.git
